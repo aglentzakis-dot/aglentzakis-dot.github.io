@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.aglentzakis_dot.fishinglog",
-        "sha256_cert_fingerprints": ["12:D4:22:91:EB:16:E2:06:60:F6:20:BD:C4:13:0F:67:D6:8E:8F:41:E0:5F:C0:D0:E8:91:D8:50:8F:13:DD:12"]
-      }
-    }]
