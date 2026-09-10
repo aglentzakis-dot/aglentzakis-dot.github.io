@@ -1,8 +1,11 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "io.github.aglentzakis_dot.fishinglog",
-    "sha256_cert_fingerprints": ["12:D4:22:91:EB:16:E2:06:60:F6:20:BD:C4:13:0F:67:D6:8E:8F:41:E0:5F:C0:D0:E8:91:D8:50:8F:13:DD:12"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.aglentzakisdot.fishiq",
+      "sha256_cert_fingerprints":
+        ["A0:D5:95:C7:7F:D6:6C:62:52:15:80:7D:26:C1:D5:65:73:59:DA:0B:3C:A2:0E:C8:78:BF:04:A9:94:4D:BE:92"]
+    }
   }
-}]
+]
