@@ -1,0 +1,56 @@
+{
+  "_odigies": "Η λίστα «Οι εφαρμογές μας» για όλες τις εφαρμογές. id: σταθερό όνομα (ίδιο με το app της εφαρμογής). icon: ένα emoji ή σύνδεσμος εικόνας https. text: μία πρόταση. url: Google Play ή σελίδα (μόνο https). showIn: [\"*\"] = σε όλες, ή π.χ. [\"dromologio\",\"fotometra\"]. hideIn: σε ποιες να ΜΗ φαίνεται (η ΦωτοΜέτρα είναι ήδη μέσα στο Δρομολόγιο). active: false = κρυφή παντού. en: αγγλικά (και de, fr, it, es, ro, bg, sq αν θέλεις).",
+  "apps": [
+    {
+      "id": "dromologio",
+      "name": "Δρομολόγιο",
+      "icon": "https://aglentzakis-dot.github.io/dromologio/icon-192.png",
+      "text": "Πελάτες, δουλειές, υπενθυμίσεις και ταμείο για μάστορες, με διαδρομή που πιάνει τις κοντινές δουλειές.",
+      "url": "https://aglentzakis-dot.github.io/dromologio/",
+      "showIn": ["*"],
+      "active": true,
+      "en": { "name": "Route", "text": "Clients, jobs, reminders and cash book for tradespeople, with a route that picks up nearby jobs." }
+    },
+    {
+      "id": "fotometra",
+      "name": "ΦωτοΜέτρα",
+      "icon": "📐",
+      "text": "Σημειώσεις, ίσιες γραμμές και διαστάσεις πάνω στις φωτογραφίες σου.",
+      "url": "https://aglentzakis-dot.github.io/fotometra/",
+      "showIn": ["*"],
+      "hideIn": ["dromologio"],
+      "active": true,
+      "en": { "name": "PhotoMeasure", "text": "Notes, straight lines and dimensions on your photos." }
+    },
+    {
+      "id": "kontamou",
+      "name": "Κοντά μου",
+      "icon": "📍",
+      "text": "Μάστορες και συνεργάτες στον χάρτη — σε βρίσκουν οι πελάτες της περιοχής σου.",
+      "url": "https://aglentzakis-dot.github.io/kontamou/",
+      "showIn": ["*"],
+      "active": true,
+      "en": { "name": "Near me", "text": "Tradespeople and partners on the map — customers in your area find you." }
+    },
+    {
+      "id": "fishiq",
+      "name": "Fish IQ",
+      "icon": "🎣",
+      "text": "Ημερολόγιο ψαρέματος με καιρό, στατιστικά και σκορ ημέρας.",
+      "url": "https://aglentzakis-dot.github.io/fishing-log/",
+      "showIn": ["*"],
+      "active": false,
+      "en": { "name": "Fish IQ", "text": "Fishing log with weather, statistics and a daily score." }
+    },
+    {
+      "id": "identify-ai",
+      "name": "Identify-AI",
+      "icon": "🔩",
+      "text": "Φωτογράφισε ένα εξάρτημα και μάθε τι είναι και πού μπαίνει.",
+      "url": "https://aglentzakis-dot.github.io/Identify-AI/",
+      "showIn": ["*"],
+      "active": false,
+      "en": { "name": "Identify-AI", "text": "Photograph a part and find out what it is and where it goes." }
+    }
+  ]
+}
