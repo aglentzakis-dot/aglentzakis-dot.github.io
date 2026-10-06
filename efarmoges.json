@@ -7,9 +7,14 @@
       "icon": "https://aglentzakis-dot.github.io/dromologio/icon-192.png",
       "text": "Πελάτες, δουλειές, υπενθυμίσεις και ταμείο για μάστορες, με διαδρομή που πιάνει τις κοντινές δουλειές.",
       "url": "https://aglentzakis-dot.github.io/dromologio/",
-      "showIn": ["*"],
+      "showIn": [
+        "*"
+      ],
       "active": true,
-      "en": { "name": "Route", "text": "Clients, jobs, reminders and cash book for tradespeople, with a route that picks up nearby jobs." }
+      "en": {
+        "name": "Route",
+        "text": "Clients, jobs, reminders and cash book for tradespeople, with a route that picks up nearby jobs."
+      }
     },
     {
       "id": "fotometra",
@@ -17,10 +22,17 @@
       "icon": "📐",
       "text": "Σημειώσεις, ίσιες γραμμές και διαστάσεις πάνω στις φωτογραφίες σου.",
       "url": "https://aglentzakis-dot.github.io/fotometra/",
-      "showIn": ["*"],
-      "hideIn": ["dromologio"],
+      "showIn": [
+        "*"
+      ],
+      "hideIn": [
+        "dromologio"
+      ],
       "active": true,
-      "en": { "name": "PhotoMeasure", "text": "Notes, straight lines and dimensions on your photos." }
+      "en": {
+        "name": "PhotoMeasure",
+        "text": "Notes, straight lines and dimensions on your photos."
+      }
     },
     {
       "id": "kontamou",
@@ -28,9 +40,29 @@
       "icon": "📍",
       "text": "Μάστορες και συνεργάτες στον χάρτη — σε βρίσκουν οι πελάτες της περιοχής σου.",
       "url": "https://aglentzakis-dot.github.io/kontamou/",
-      "showIn": ["*"],
+      "showIn": [
+        "*"
+      ],
       "active": true,
-      "en": { "name": "Near me", "text": "Tradespeople and partners on the map — customers in your area find you." }
+      "en": {
+        "name": "Near me",
+        "text": "Tradespeople and partners on the map — customers in your area find you."
+      }
+    },
+    {
+      "id": "imerologio",
+      "name": "Ημερολόγιο",
+      "icon": "https://aglentzakis-dot.github.io/imerologio/icon-192.png",
+      "text": "Ραντεβού για κάθε επάγγελμα: πρώτο ελεύθερο κενό, υπενθυμίσεις με SMS, προσωπικό και χάρτης πελατών.",
+      "url": "https://aglentzakis-dot.github.io/imerologio/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "Calendar",
+        "text": "Appointments for every profession: first free slot, SMS reminders, staff and a client map."
+      }
     },
     {
       "id": "fishiq",
@@ -38,9 +70,14 @@
       "icon": "🎣",
       "text": "Ημερολόγιο ψαρέματος με καιρό, στατιστικά και σκορ ημέρας.",
       "url": "https://aglentzakis-dot.github.io/fishing-log/",
-      "showIn": ["*"],
+      "showIn": [
+        "*"
+      ],
       "active": false,
-      "en": { "name": "Fish IQ", "text": "Fishing log with weather, statistics and a daily score." }
+      "en": {
+        "name": "Fish IQ",
+        "text": "Fishing log with weather, statistics and a daily score."
+      }
     },
     {
       "id": "identify-ai",
@@ -48,9 +85,14 @@
       "icon": "🔩",
       "text": "Φωτογράφισε ένα εξάρτημα και μάθε τι είναι και πού μπαίνει.",
       "url": "https://aglentzakis-dot.github.io/Identify-AI/",
-      "showIn": ["*"],
+      "showIn": [
+        "*"
+      ],
       "active": false,
-      "en": { "name": "Identify-AI", "text": "Photograph a part and find out what it is and where it goes." }
+      "en": {
+        "name": "Identify-AI",
+        "text": "Photograph a part and find out what it is and where it goes."
+      }
     }
   ]
 }
