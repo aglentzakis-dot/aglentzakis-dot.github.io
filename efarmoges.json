@@ -17,6 +17,36 @@
       }
     },
     {
+      "id": "kontamou",
+      "name": "Κοντά μου",
+      "icon": "📍",
+      "text": "Μάστορες και συνεργάτες στον χάρτη — σε βρίσκουν οι πελάτες της περιοχής σου.",
+      "url": "https://aglentzakis-dot.github.io/kontamou/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "Near me",
+        "text": "Tradespeople and partners on the map — customers in your area find you."
+      }
+    },
+    {
+      "id": "tameia",
+      "name": "Ταμεία",
+      "icon": "https://aglentzakis-dot.github.io/tameia/icon-192.png",
+      "text": "Προσωπικά, εταιρεία και κοινόχρηστα σε ένα μέρος — με πάγια, προϋπολογισμό και αρχείο για τον λογιστή.",
+      "url": "https://aglentzakis-dot.github.io/tameia/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "Cash books",
+        "text": "Personal, business and building expenses in one place — with fixed costs, budget and an export for your accountant."
+      }
+    },
+    {
       "id": "fotometra",
       "name": "ΦωτοΜέτρα",
       "icon": "📐",
@@ -32,21 +62,6 @@
       "en": {
         "name": "PhotoMeasure",
         "text": "Notes, straight lines and dimensions on your photos."
-      }
-    },
-    {
-      "id": "kontamou",
-      "name": "Κοντά μου",
-      "icon": "📍",
-      "text": "Μάστορες και συνεργάτες στον χάρτη — σε βρίσκουν οι πελάτες της περιοχής σου.",
-      "url": "https://aglentzakis-dot.github.io/kontamou/",
-      "showIn": [
-        "*"
-      ],
-      "active": true,
-      "en": {
-        "name": "Near me",
-        "text": "Tradespeople and partners on the map — customers in your area find you."
       }
     },
     {
@@ -92,6 +107,21 @@
       "en": {
         "name": "Identify-AI",
         "text": "Photograph a part and find out what it is and where it goes."
+      }
+    },
+    {
+      "id": "glenread",
+      "name": "GlenRead",
+      "icon": "https://aglentzakis-dot.github.io/GlenRead/icon-192.png",
+      "text": "Διάβασε PDF, Word και φωτογραφίες εγγράφων άνετα στο κινητό — με αναγνώριση κειμένου, σημειώσεις και υπογραφή.",
+      "url": "https://aglentzakis-dot.github.io/GlenRead/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "GlenRead",
+        "text": "Read PDFs, Word files and document photos comfortably on your phone — with text recognition, notes and signatures."
       }
     }
   ]
