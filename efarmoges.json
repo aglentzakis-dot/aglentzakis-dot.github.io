@@ -1,10 +1,10 @@
 {
-  "_odigies": "Η λίστα «Οι εφαρμογές μας» για όλες τις εφαρμογές. id: σταθερό όνομα (ίδιο με το app της εφαρμογής). icon: ένα emoji ή σύνδεσμος εικόνας https. text: μία πρόταση. url: Google Play ή σελίδα (μόνο https). showIn: [\"*\"] = σε όλες, ή π.χ. [\"dromologio\",\"fotometra\"]. hideIn: σε ποιες να ΜΗ φαίνεται (η ΦωτοΜέτρα είναι ήδη μέσα στο Δρομολόγιο). active: false = κρυφή παντού. en: αγγλικά (και de, fr, it, es, ro, bg, sq αν θέλεις).",
+  "_odigies": "Η λίστα «Οι εφαρμογές μας» για όλες τις εφαρμογές. id: σταθερό όνομα (ίδιο με το app της εφαρμογής). icon: ένα emoji ή σύνδεσμος εικόνας https. text: μία πρόταση. url: Google Play ή σελίδα (μόνο https). showIn: [\"*\"] = σε όλες, ή π.χ. [\"dromologio\",\"fotometra\"]. hideIn: σε ποιες να ΜΗ φαίνεται (η ΦωτοΜέτρα είναι ήδη μέσα στο Δρομολόγιο). active: false = κρυφή παντού. en: αγγλικά (και de, fr, it, es, ro, bg, sq αν θέλεις). ΣΤΑΘΕΡΗ ΛΙΣΤΑ (14/10/2026): Δρομολόγιο, Κοντά μου, Ταμεία, Ημερολόγιο, GlenRead, Εργαλειοθήκη, GlenScanner, Παραγγελίες, ΦωτοΜέτρα, Fish IQ — με τα αυθεντικά εικονίδια (icon-192.png κάθε εφαρμογής).",
   "apps": [
     {
       "id": "dromologio",
       "name": "Δρομολόγιο",
-      "icon": "https://aglentzakis-dot.github.io/dromologio/icon-192.png",
+      "icon": "https://aglentzakis-dot.github.io/dromologio/eikonidia/icon-192.png",
       "text": "Πελάτες, δουλειές, υπενθυμίσεις και ταμείο για μάστορες, με διαδρομή που πιάνει τις κοντινές δουλειές.",
       "url": "https://aglentzakis-dot.github.io/dromologio/",
       "showIn": [
@@ -19,7 +19,7 @@
     {
       "id": "kontamou",
       "name": "Κοντά μου",
-      "icon": "📍",
+      "icon": "https://aglentzakis-dot.github.io/kontamou/icon-192.png",
       "text": "Μάστορες και συνεργάτες στον χάρτη — σε βρίσκουν οι πελάτες της περιοχής σου.",
       "url": "https://aglentzakis-dot.github.io/kontamou/",
       "showIn": [
@@ -47,28 +47,10 @@
       }
     },
     {
-      "id": "fotometra",
-      "name": "ΦωτοΜέτρα",
-      "icon": "📐",
-      "text": "Σημειώσεις, ίσιες γραμμές και διαστάσεις πάνω στις φωτογραφίες σου.",
-      "url": "https://aglentzakis-dot.github.io/fotometra/",
-      "showIn": [
-        "*"
-      ],
-      "hideIn": [
-        "dromologio"
-      ],
-      "active": true,
-      "en": {
-        "name": "PhotoMeasure",
-        "text": "Notes, straight lines and dimensions on your photos."
-      }
-    },
-    {
       "id": "imerologio",
       "name": "Ημερολόγιο",
       "icon": "https://aglentzakis-dot.github.io/imerologio/icon-192.png",
-      "text": "Ραντεβού για κάθε επάγγελμα: πρώτο ελεύθερο κενό, υπενθυμίσεις με SMS, προσωπικό και χάρτης πελατών.",
+      "text": "Ραντεβού για κάθε επάγγελμα: οι πελάτες κλείνουν μόνοι τους, υπενθυμίσεις με μήνυμα, στατιστικά και χάρτης πελατών.",
       "url": "https://aglentzakis-dot.github.io/imerologio/",
       "showIn": [
         "*"
@@ -76,19 +58,97 @@
       "active": true,
       "en": {
         "name": "Calendar",
-        "text": "Appointments for every profession: first free slot, SMS reminders, staff and a client map."
+        "text": "Appointments for every profession: clients book themselves, message reminders, statistics and a client map."
       }
+    },
+    {
+      "id": "glenread",
+      "name": "GlenRead",
+      "icon": "https://aglentzakis-dot.github.io/GlenRead/icon-192.png",
+      "text": "Διάβασε PDF, Word και φωτογραφίες εγγράφων άνετα στο κινητό — με αναγνώριση κειμένου, σημειώσεις και υπογραφή.",
+      "url": "https://aglentzakis-dot.github.io/GlenRead/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "GlenRead",
+        "text": "Read PDFs, Word files and document photos comfortably on your phone — with text recognition, notes and signatures."
+      }
+    },
+    {
+      "id": "ergaleiothiki",
+      "name": "Εργαλειοθήκη",
+      "icon": "https://aglentzakis-dot.github.io/ergaleiothiki/icon-192.png",
+      "text": "Αλφάδι, μετρήσεις και υπολογισμοί υλικών για κάθε μάστορα.",
+      "url": "https://aglentzakis-dot.github.io/ergaleiothiki/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "Toolbox",
+        "text": "Spirit level, measurements and material calculators for every tradesperson."
+      }
+    },
+    {
+      "id": "glenscanner",
+      "name": "GlenScanner",
+      "icon": "https://aglentzakis-dot.github.io/GlenScanner/icon-192.png",
+      "text": "Σάρωσε έγγραφα με την κάμερα και κάν’ τα καθαρά PDF.",
+      "url": "https://aglentzakis-dot.github.io/GlenScanner/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "GlenScanner",
+        "text": "Scan documents with your camera and turn them into clean PDFs."
+      }
+    },
+    {
+      "id": "paraggelies",
+      "name": "Παραγγελίες",
+      "icon": "https://aglentzakis-dot.github.io/paraggelies/eikonidia/icon-192.png",
+      "text": "Οι πελάτες σου παραγγέλνουν με έναν σύνδεσμο, εσύ τα βλέπεις όλα μαζεμένα.",
+      "url": "https://aglentzakis-dot.github.io/paraggelies/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "Orders",
+        "text": "Your customers order with one link, you see everything in one place."
+      }
+    },
+    {
+      "id": "fotometra",
+      "name": "ΦωτοΜέτρα",
+      "icon": "https://aglentzakis-dot.github.io/fotometra/icon-192.png",
+      "text": "Σημειώσεις, ίσιες γραμμές και διαστάσεις πάνω στις φωτογραφίες σου.",
+      "url": "https://aglentzakis-dot.github.io/fotometra/",
+      "showIn": [
+        "*"
+      ],
+      "active": true,
+      "en": {
+        "name": "PhotoMeasure",
+        "text": "Notes, straight lines and dimensions on your photos."
+      },
+      "hideIn": [
+        "dromologio"
+      ]
     },
     {
       "id": "fishiq",
       "name": "Fish IQ",
-      "icon": "🎣",
+      "icon": "https://aglentzakis-dot.github.io/fishing-log/icon-192.png",
       "text": "Ημερολόγιο ψαρέματος με καιρό, στατιστικά και σκορ ημέρας.",
       "url": "https://aglentzakis-dot.github.io/fishing-log/",
       "showIn": [
         "*"
       ],
-      "active": false,
+      "active": true,
       "en": {
         "name": "Fish IQ",
         "text": "Fishing log with weather, statistics and a daily score."
@@ -107,21 +167,6 @@
       "en": {
         "name": "Identify-AI",
         "text": "Photograph a part and find out what it is and where it goes."
-      }
-    },
-    {
-      "id": "glenread",
-      "name": "GlenRead",
-      "icon": "https://aglentzakis-dot.github.io/GlenRead/icon-192.png",
-      "text": "Διάβασε PDF, Word και φωτογραφίες εγγράφων άνετα στο κινητό — με αναγνώριση κειμένου, σημειώσεις και υπογραφή.",
-      "url": "https://aglentzakis-dot.github.io/GlenRead/",
-      "showIn": [
-        "*"
-      ],
-      "active": true,
-      "en": {
-        "name": "GlenRead",
-        "text": "Read PDFs, Word files and document photos comfortably on your phone — with text recognition, notes and signatures."
       }
     }
   ]
