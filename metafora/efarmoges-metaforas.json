@@ -1,0 +1,26 @@
+{
+  "_odigies": "Μητρώο της σελίδας «Μεταφορά στοιχείων». palia: η παλιά διαδρομή στο aglentzakis-dot.github.io. nea: η νέα διεύθυνση (https, πάντα με / στο τέλος). etoimo: true μόλις η εφαρμογή έχει τον παραλήπτη metafora-lipsi.js· η σελίδα ανοίγει τη «Μεταφορά» μόνη της όταν η νέα διεύθυνση λειτουργεί (φορτώνει το icon-192.png της) — μέχρι τότε δίνει μόνο «Αρχείο μεταφοράς». ls/idb/opfs: ενδεικτικά (για να δείχνει η σελίδα τι υπάρχει και για το αρχείο)· στη μεταφορά στέλνεται ακριβώς ό,τι ζητήσει η ίδια η εφαρμογή. cache: αρχή ονόματος της μνήμης χωρίς σύνδεση (service worker), για το καθάρισμα.",
+  "apps": [
+    {"id":"tameia","onoma":"Ταμεία","icon":"💼","palia":"/tameia/","nea":"https://tameia.glenapps.gr/","etoimo":true,"ls":["tameia-","glen-tameia-","tm_play_pkg"],"idb":[],"opfs":["antigrafa-tameia/","tameia-"],"cache":"tameia-"},
+    {"id":"dromologio","onoma":"Δρομολόγιο","icon":"📍","palia":"/dromologio/","nea":"https://dromologio.glenapps.gr/","etoimo":false,"ls":["stodromo-","dromologio-","dr-play","glenapps-dromologio","glenapps-aitimata-dromologio","kontamou_from_dromologio"],"idb":[],"opfs":[],"cache":"dromologio"},
+    {"id":"kontamou","onoma":"Κοντά μου","icon":"🗺️","palia":"/kontamou/","nea":"https://kontamou.glenapps.gr/","etoimo":false,"ls":["kontamou"],"idb":[],"opfs":[],"cache":"kontamou"},
+    {"id":"imerologio","onoma":"Ημερολόγιο","icon":"📅","palia":"/imerologio/","nea":"https://imerologio.glenapps.gr/","etoimo":false,"ls":["imer-","kr-me","glenapps-imerologio"],"idb":[],"opfs":[],"cache":"imerologio"},
+    {"id":"paraggelies","onoma":"Παραγγελίες","icon":"🧺","palia":"/paraggelies/","nea":"https://paraggelies.glenapps.gr/","etoimo":false,"ls":["paraggelies-"],"idb":["paraggelies"],"opfs":[],"cache":"paraggelies"},
+    {"id":"glenread","onoma":"GlenRead","icon":"📄","palia":"/GlenRead/","nea":"https://glenread.glenapps.gr/","etoimo":false,"ls":["glenread-"],"idb":["glenread","glenread-draft"],"opfs":[],"cache":"glenread"},
+    {"id":"glenscanner","onoma":"GlenScanner","icon":"📷","palia":"/GlenScanner/","nea":"https://glenscanner.glenapps.gr/","etoimo":false,"ls":["glenscanner-"],"idb":["glenscanner"],"opfs":[],"cache":"glenscanner"},
+    {"id":"ergaleiothiki","onoma":"Εργαλειοθήκη","icon":"🧰","palia":"/ergaleiothiki/","nea":"https://ergaleiothiki.glenapps.gr/","etoimo":false,"ls":["ergaleiothiki-"],"idb":[],"opfs":[],"cache":"ergaleiothiki"},
+    {"id":"fotometra","onoma":"ΦωτοΜέτρα","icon":"📐","palia":"/fotometra/","nea":"https://fotometra.glenapps.gr/","etoimo":false,"ls":["fotometra-"],"idb":["fotometra"],"opfs":[],"cache":"fotometra"},
+    {"id":"fishiq","onoma":"Fish IQ","icon":"🎣","palia":"/fishing-log/","nea":"https://fishiq.glenapps.gr/","etoimo":false,"ls":["psarema","fishiq"],"idb":["psaremaDB"],"opfs":[],"cache":"psarema"},
+    {"id":"ygeias","onoma":"Φάκελος Υγείας","icon":"🩺","palia":"/Ygeias/","nea":"https://ygeias.glenapps.gr/","etoimo":false,"ls":["ygeias"],"idb":[],"opfs":[],"cache":"ygeias"},
+    {"id":"brewtopia","onoma":"Brewtopia","icon":"☕","palia":"/Brewtopia/","nea":"https://brewtopia.glenapps.gr/","etoimo":false,"ls":["brewtopia"],"idb":[],"opfs":[],"cache":"brewtopia"},
+    {"id":"identify-ai","onoma":"Identify-AI","icon":"🔍","palia":"/Identify-AI/","nea":"https://identify.glenapps.gr/","etoimo":false,"ls":["exartima_"],"idb":[],"opfs":[],"cache":"exartima"},
+    {"id":"oximata","onoma":"Ιστορικό οχημάτων","icon":"🚗","palia":"/vehicle-history/","nea":"https://oximata.glenapps.gr/","etoimo":false,"ls":["veh."],"idb":[],"opfs":[],"cache":"veh"},
+    {"id":"timologia","onoma":"Τιμολόγια","icon":"🧾","palia":"/Timologia/","nea":"https://timologia.glenapps.gr/","etoimo":false,"ls":["timologia"],"idb":[],"opfs":[],"cache":"timologia"},
+    {"id":"prosklisi","onoma":"Πρόσκληση","icon":"💌","palia":"/prosklisi/","nea":"https://prosklisi.glenapps.gr/","etoimo":false,"ls":["ekdilosi_"],"idb":[],"opfs":[],"cache":"prosklisi"},
+    {"id":"stolos","onoma":"Στόλος","icon":"🚚","palia":"/Stolos/","nea":"https://stolos.glenapps.gr/","etoimo":false,"ls":["stolos_"],"idb":[],"opfs":[],"cache":"stolos"},
+    {"id":"lumio","onoma":"LUMIO","icon":"💡","palia":"/Lumio/","nea":"https://lumio.glenapps.gr/","etoimo":false,"ls":["lumio-","pai-"],"idb":["paidagogos-ai"],"opfs":[],"cache":"lumio"},
+    {"id":"naumachia","onoma":"Ναυμαχία 3Δ","icon":"⚓","palia":"/Battleship/","nea":"https://naumachia.glenapps.gr/","etoimo":false,"ls":["naumachia3d-"],"idb":[],"opfs":[],"cache":"naumachia"},
+    {"id":"glenapps","onoma":"GlenApps (πύλη)","icon":"🅖","palia":"/GlenApps/","nea":"https://glenapps.gr/","etoimo":false,"ls":["glenapps-pyli"],"idb":[],"opfs":[],"cache":"glenapps"}
+  ],
+  "koina": {"_": "Κοινά κλειδιά πολλών εφαρμογών· στέλνονται σε όποια εφαρμογή τα ζητήσει.", "ls":["glenapps-kleidi","glenapps-koina","glen-lang","stodromo-lang"]}
+}

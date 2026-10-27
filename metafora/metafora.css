@@ -1,0 +1,21 @@
+:root{--bg:#F4F6F9;--card:#fff;--ink:#1B2E45;--muted:#5B6770;--line:#D8DEE6;--amber:#F2B632;--red:#C62828;--green:#1E7E4A}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1720;--card:#18222E;--ink:#E8EEF4;--muted:#9AA7B4;--line:#2A3846;--red:#FF6B6B;--green:#5BD08C}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:24px;margin:4px 0 8px}h2{font-size:18px;margin:26px 0 8px}
+.lead{margin:0 0 10px}.steps{margin:0 0 10px;padding-left:22px}.steps li{margin:4px 0}
+.warn{background:color-mix(in srgb,var(--amber) 18%,var(--card));border:1px solid color-mix(in srgb,var(--amber) 55%,var(--card));border-radius:12px;padding:10px 12px;font-size:14px}
+.mn{position:sticky;top:8px;z-index:2;background:var(--card);border:2px solid var(--green);border-radius:12px;padding:10px 12px;margin:12px 0;font-weight:600;white-space:pre-line}
+.mn.bad{border-color:var(--red);color:var(--red)}
+.app{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.app.empty{opacity:.65}
+.hd{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}.hd b{font-size:17px}.hd small{color:var(--muted)}
+.info{color:var(--muted);font-size:14px;margin-top:4px;word-break:break-word}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chips span{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+.chips .ok{border-color:var(--green);color:var(--green);font-weight:700}.chips .wait{color:var(--muted)}
+.bt{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button{flex:1;min-width:150px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+button.main{background:var(--amber);border-color:var(--amber);color:#1B2E45}button.del{color:var(--red)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.foot{color:var(--muted);font-size:12px;text-align:center;margin-top:30px}
