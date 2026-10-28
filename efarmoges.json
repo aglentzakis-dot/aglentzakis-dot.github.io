@@ -124,9 +124,9 @@
     {
       "id": "fotometra",
       "name": "ΦωτοΜέτρα",
-      "icon": "https://aglentzakis-dot.github.io/fotometra/icon-192.png",
+      "icon": "https://fotometra.glenapps.gr/icon-192.png",
       "text": "Σημειώσεις, ίσιες γραμμές και διαστάσεις πάνω στις φωτογραφίες σου.",
-      "url": "https://aglentzakis-dot.github.io/fotometra/",
+      "url": "https://fotometra.glenapps.gr/",
       "showIn": [
         "*"
       ],
