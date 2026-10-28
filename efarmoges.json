@@ -35,7 +35,7 @@
       "id": "tameia",
       "name": "Ταμεία",
       "icon": "https://aglentzakis-dot.github.io/tameia/icon-192.png",
-      "text": "Προσωπικά, εταιρεία και κοινόχρηστα σε ένα μέρος — με πάγια, προϋπολογισμό και αρχείο για τον λογιστή.",
+      "text": "Προσωπικά και εταιρεία σε ένα μέρος — με πάγια, προϋπολογισμό και αρχείο για τον λογιστή. Κοινόχρηστα: υπό κατασκευή, δωρεάν έως 3 διαμερίσματα.",
       "url": "https://aglentzakis-dot.github.io/tameia/",
       "showIn": [
         "*"
@@ -43,7 +43,7 @@
       "active": true,
       "en": {
         "name": "Cash books",
-        "text": "Personal, business and building expenses in one place — with fixed costs, budget and an export for your accountant."
+        "text": "Personal and business money in one place — with fixed costs, budget and an export for your accountant. Shared building expenses: under construction, free for up to 3 apartments."
       }
     },
     {
