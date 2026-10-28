@@ -13,7 +13,6 @@
     {"id":"fishiq","onoma":"Fish IQ","icon":"🎣","palia":"/fishing-log/","nea":"https://fishiq.glenapps.gr/","etoimo":false,"ls":["psarema","fishiq"],"idb":["psaremaDB"],"opfs":[],"cache":"psarema"},
     {"id":"ygeias","onoma":"Φάκελος Υγείας","icon":"🩺","palia":"/Ygeias/","nea":"https://ygeias.glenapps.gr/","etoimo":false,"ls":["ygeias"],"idb":[],"opfs":[],"cache":"ygeias"},
     {"id":"brewtopia","onoma":"Brewtopia","icon":"☕","palia":"/Brewtopia/","nea":"https://brewtopia.glenapps.gr/","etoimo":false,"ls":["brewtopia"],"idb":[],"opfs":[],"cache":"brewtopia"},
-    {"id":"identify-ai","onoma":"Identify-AI","icon":"🔍","palia":"/Identify-AI/","nea":"https://identify.glenapps.gr/","etoimo":false,"ls":["exartima_"],"idb":[],"opfs":[],"cache":"exartima"},
     {"id":"oximata","onoma":"Ιστορικό οχημάτων","icon":"🚗","palia":"/vehicle-history/","nea":"https://oximata.glenapps.gr/","etoimo":false,"ls":["veh."],"idb":[],"opfs":[],"cache":"veh"},
     {"id":"timologia","onoma":"Τιμολόγια","icon":"🧾","palia":"/Timologia/","nea":"https://timologia.glenapps.gr/","etoimo":false,"ls":["timologia"],"idb":[],"opfs":[],"cache":"timologia"},
     {"id":"prosklisi","onoma":"Πρόσκληση","icon":"💌","palia":"/prosklisi/","nea":"https://prosklisi.glenapps.gr/","etoimo":false,"ls":["ekdilosi_"],"idb":[],"opfs":[],"cache":"prosklisi"},

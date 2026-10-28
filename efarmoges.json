@@ -153,21 +153,6 @@
         "name": "Fish IQ",
         "text": "Fishing log with weather, statistics and a daily score."
       }
-    },
-    {
-      "id": "identify-ai",
-      "name": "Identify-AI",
-      "icon": "🔩",
-      "text": "Φωτογράφισε ένα εξάρτημα και μάθε τι είναι και πού μπαίνει.",
-      "url": "https://aglentzakis-dot.github.io/Identify-AI/",
-      "showIn": [
-        "*"
-      ],
-      "active": false,
-      "en": {
-        "name": "Identify-AI",
-        "text": "Photograph a part and find out what it is and where it goes."
-      }
     }
   ]
 }
