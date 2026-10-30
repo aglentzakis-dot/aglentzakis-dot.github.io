@@ -74,7 +74,8 @@ function transfer(a){if(busy)return;var origin=new URL(a.nea).origin;
 
 // ---------- αρχείο μεταφοράς (εναλλακτικά) ----------
 function b64(blob){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1]||"")};r.readAsDataURL(blob)})}
-async function pack(v){if(v instanceof Blob)return{__blob:{type:v.type,b64:await b64(v)}};if(v instanceof Date)return{__date:v.toISOString()};
+async function pack(v){if(typeof CryptoKey!=="undefined"&&v instanceof CryptoKey)return null; /* κλειδί συσκευής: δεν μπαίνει σε αρχείο — στη νέα διεύθυνση ζητείται ξανά ο κωδικός */
+  if(v instanceof Blob)return{__blob:{type:v.type,b64:await b64(v)}};if(v instanceof Date)return{__date:v.toISOString()};
   if(v&&typeof v==="object"){if(Array.isArray(v)){var a=[];for(var i=0;i<v.length;i++)a.push(await pack(v[i]));return a}var o={};for(var k in v)o[k]=await pack(v[k]);return o}return v}
 async function fileOut(a){note("Ετοιμάζω το αρχείο…");var it=itemsOf(a),koina=(REG.koina&&REG.koina.ls)||[],ls={};
   INV.ls.forEach(function(x){if(starts(x.k,a.ls)||starts(x.k,koina))ls[x.k]=localStorage.getItem(x.k)});
@@ -105,7 +106,12 @@ async function wipeApp(a){var s=st()[a.id]||{},it=itemsOf(a),done=!!s.metaferthi
   var p=s.pire||{},koina=(REG.koina||{}).ls||[],items=done?{ls:(p.ls||[]).filter(function(k){return!starts(k,koina)}),idb:p.idb||[],opfs:p.opfs||[]}
     :{ls:it.ls.map(function(x){return x.k}),idb:it.idb,opfs:it.opfs.map(function(f){return f.path})};
   items.ls=items.ls.filter(function(k,i,arr){return arr.indexOf(k)===i&&localStorage.getItem(k)!=null});
-  var n=await wipe(a,items);stSet(a.id,{svistike:Date.now()});await inventory();draw();note("✓ Σβήστηκαν "+pl(n,"στοιχείο","στοιχεία")+" των «"+a.onoma+"» από την παλιά μνήμη, μαζί με τη μνήμη χωρίς σύνδεση της παλιάς διεύθυνσης.")}
+  // κοινά με άλλη εφαρμογή (π.χ. ΦωτοΜέτρα μέσα στο Δρομολόγιο) μένουν μέχρι να μεταφερθεί κι εκείνη
+  var S=st(),alles=(REG.apps||[]).filter(function(o){return o.id!==a.id&&!(S[o.id]||{}).metaferthike&&!(S[o.id]||{}).svistike}),kratithikan=[];
+  items.ls=items.ls.filter(function(k){var x=alles.filter(function(o){return starts(k,o.ls)});x.forEach(function(o){if(kratithikan.indexOf(o.onoma)<0)kratithikan.push(o.onoma)});return!x.length});
+  items.idb=items.idb.filter(function(nm){var x=alles.filter(function(o){return(o.idb||[]).indexOf(nm)>=0});x.forEach(function(o){if(kratithikan.indexOf(o.onoma)<0)kratithikan.push(o.onoma)});return!x.length});
+  items.opfs=items.opfs.filter(function(pt){return!alles.some(function(o){return starts(pt,o.opfs)})});
+  var n=await wipe(a,items);stSet(a.id,{svistike:Date.now()});await inventory();draw();note("✓ Σβήστηκαν "+pl(n,"στοιχείο","στοιχεία")+" των «"+a.onoma+"» από την παλιά μνήμη, μαζί με τη μνήμη χωρίς σύνδεση της παλιάς διεύθυνσης."+(kratithikan.length?" Κρατήθηκαν όσα είναι κοινά με: "+kratithikan.join(", ")+" — σβήνονται όταν μεταφερθεί κι εκείνη.":""))}
 async function wipeAll(){var L=leftovers(),allLs=INV.ls.map(function(x){return x.k});
   if(!confirm("ΟΡΙΣΤΙΚΟ ΣΒΗΣΙΜΟ ΟΛΩΝ όσων έχουν μείνει στην παλιά μνήμη αυτού του κινητού ("+(allLs.length+(INV.idb||[]).length+INV.opfs.length)+" στοιχεία).\n\nΚάν' το ΜΟΝΟ αφού μεταφέρθηκαν όλες οι εφαρμογές που χρησιμοποιείς. Συνέχεια;"))return;
   if(prompt("Γράψε ΣΒΗΣΕ για επιβεβαίωση:")!=="ΣΒΗΣΕ"){note("Δεν σβήστηκε τίποτα.");return}
@@ -136,5 +142,5 @@ document.addEventListener("click",function(e){var b=e.target.closest("button");i
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
   await inventory();draw();
   // η νέα διεύθυνση λειτουργεί; (φορτώνει το εικονίδιό της) — μέχρι τότε η «Μεταφορά» μένει κλειστή
-  REG.apps.forEach(function(a){if(!a.etoimo)return;a.etoimo=false;var im=new Image();im.onload=function(){a.etoimo=true;draw()};im.src=a.nea+"icon-192.png?"+Date.now()})})();
+  REG.apps.forEach(function(a){if(!a.etoimo)return;a.etoimo=false;var im=new Image();im.onload=function(){a.etoimo=true;draw()};im.src=a.nea+(a.elegxos||"icon-192.png")+"?"+Date.now()})})();
 })();
