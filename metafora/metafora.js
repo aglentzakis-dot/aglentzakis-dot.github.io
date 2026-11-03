@@ -37,12 +37,16 @@ function leftovers(){var all=REG.apps,koina=(REG.koina&&REG.koina.ls)||[];
 
 // ---------- ανάγνωση IndexedDB ----------
 function idbOpenExisting(name){return new Promise(function(res,rej){var r=indexedDB.open(name);r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)};r.onupgradeneeded=function(){r.transaction.abort()}})}
+// δείκτες φακέλων/αρχείων (FileSystemHandle) δεν περνούν σε άλλη διεύθυνση — αν μπουν σε μήνυμα, χάνεται σιωπηλά όλη η παρτίδα· ο χρήστης ξαναδιαλέγει φάκελο
+function hasHandle(v,d){d=d||0;if(d>6||!v||typeof v!=="object")return false;if(typeof FileSystemHandle!=="undefined"&&v instanceof FileSystemHandle)return true;
+  if(v instanceof Blob||v instanceof Date||ArrayBuffer.isView(v)||v instanceof ArrayBuffer)return false;
+  if(Array.isArray(v)){for(var i=0;i<v.length;i++)if(hasHandle(v[i],d+1))return true;return false}for(var k in v)if(hasHandle(v[k],d+1))return true;return false}
 async function idbDump(name){var db=await idbOpenExisting(name),stores=[],recs={};
   for(var i=0;i<db.objectStoreNames.length;i++){var sn=db.objectStoreNames[i];
     await new Promise(function(res,rej){var t=db.transaction(sn,"readonly"),o=t.objectStore(sn),idx=[];
       for(var j=0;j<o.indexNames.length;j++){var x=o.index(o.indexNames[j]);idx.push({name:x.name,keyPath:x.keyPath,unique:x.unique,multiEntry:x.multiEntry})}
       stores.push({name:sn,keyPath:o.keyPath,autoIncrement:o.autoIncrement,indexes:idx});var list=recs[sn]=[];
-      var c=o.openCursor();c.onsuccess=function(){var cur=c.result;if(cur){list.push([cur.primaryKey,cur.value]);cur.continue()}};t.oncomplete=res;t.onerror=function(){rej(t.error)}})}
+      var c=o.openCursor();c.onsuccess=function(){var cur=c.result;if(cur){if(!hasHandle(cur.value))list.push([cur.primaryKey,cur.value]);cur.continue()}};t.oncomplete=res;t.onerror=function(){rej(t.error)}})}
   var v=db.version;db.close();return{name:name,version:v,stores:stores,recs:recs}}
 async function opfsBlob(path){var parts=path.split("/"),dir=await navigator.storage.getDirectory();for(var i=0;i<parts.length-1;i++)dir=await dir.getDirectoryHandle(parts[i]);return(await dir.getFileHandle(parts[parts.length-1])).getFile()}
 
@@ -128,7 +132,7 @@ function draw(){var s=st(),h="";
     h+='<div class="app'+(has?"":" empty")+'"><div class="hd"><b>'+esc(a.icon)+" "+esc(a.onoma)+'</b><small>'+esc(a.nea.replace(/^https:\/\//,"").replace(/\/$/,""))+'</small></div>'+
       '<div class="info">'+(has?"Στην παλιά μνήμη: "+[it.ls.length?pl(it.ls.length,"στοιχείο","στοιχεία"):"",it.idb.length?pl(it.idb.length,"βάση","βάσεις"):"",it.opfs.length?pl(it.opfs.length,"αρχείο","αρχεία"):""].filter(Boolean).join(", ")+" · "+kb(it.size):(x.svistike?"Η παλιά μνήμη είναι καθαρή.":"Δεν βρέθηκαν στοιχεία σε αυτό το κινητό."))+'</div>'+
       (chips?'<div class="chips">'+chips+'</div>':"")+
-      (has?'<div class="bt"><button type="button" class="main" data-tr="'+esc(a.id)+'"'+(a.etoimo?"":" disabled")+'>📦 Μεταφορά</button><button type="button" data-fl="'+esc(a.id)+'">📄 Αρχείο μεταφοράς</button><button type="button" class="del" data-wp="'+esc(a.id)+'"'+(x.metaferthike||x.arxeio?"":" disabled")+'>🗑 Σβήσε από την παλιά μνήμη</button></div>':"")+'</div>'});
+      (has?'<div class="bt"><button type="button" class="main" data-tr="'+esc(a.id)+'"'+(a.etoimo?"":" disabled")+'>📦 Μεταφορά</button>'+(a.xoris_arxeio?"":'<button type="button" data-fl="'+esc(a.id)+'">📄 Αρχείο μεταφοράς</button>')+'<button type="button" class="del" data-wp="'+esc(a.id)+'"'+(x.metaferthike||x.arxeio?"":" disabled")+'>🗑 Σβήσε από την παλιά μνήμη</button></div>':"")+'</div>'});
   $("#list").innerHTML=h;
   var L=leftovers(),n=L.ls.length+L.idb.length+L.opfs.length;
   $("#rest").innerHTML='<div class="info">'+(n?"Στοιχεία που δεν ανήκουν σε καμία εφαρμογή της λίστας (π.χ. κοινά κλειδιά, παλιές δοκιμές): "+n+". "+esc(L.ls.slice(0,12).map(function(x){return x.k}).concat(L.idb).join(", "))+(n>12?"…":""):"Δεν έμεινε τίποτα άλλο.")+
