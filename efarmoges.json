@@ -1,5 +1,5 @@
 {
-  "_odigies": "Η λίστα «Οι εφαρμογές μας» για όλες τις εφαρμογές. id: σταθερό όνομα (ίδιο με το app της εφαρμογής). icon: ένα emoji ή σύνδεσμος εικόνας https. text: μία πρόταση. url: Google Play ή σελίδα (μόνο https). showIn: [\"*\"] = σε όλες, ή π.χ. [\"dromologio\",\"fotometra\"]. hideIn: σε ποιες να ΜΗ φαίνεται (η ΦωτοΜέτρα είναι ήδη μέσα στο Δρομολόγιο). active: false = κρυφή παντού. en: αγγλικά (και de, fr, it, es, ro, bg, sq αν θέλεις). ΣΤΑΘΕΡΗ ΛΙΣΤΑ (14/10/2026): Δρομολόγιο, Κοντά μου, Ταμεία, Ημερολόγιο, GlenRead, Εργαλειοθήκη, GlenScanner, Παραγγελίες, ΦωτοΜέτρα, Fish IQ — με τα αυθεντικά εικονίδια (icon-192.png κάθε εφαρμογής).",
+  "_odigies": "Η λίστα «Οι εφαρμογές μας» για ΟΛΕΣ τις εφαρμογές — μία πηγή αλήθειας. Αλλαγή εδώ φαίνεται αμέσως παντού. id: σταθερό όνομα (ίδιο με το app της εφαρμογής). name: όνομα. short: σύντομη περιγραφή για το πλακίδιο. text: μία πρόταση (λωρίδα). icon: σύνδεσμος εικόνας https ΜΟΝΟ από *.glenapps.gr ή aglentzakis-dot.github.io. emoji: εναλλακτικό όσο φορτώνει η εικόνα. bg: χρώμα πλακιδίου (linear-gradient(135deg,#xxxxxx,#xxxxxx) ή #xxxxxx). ink: χρώμα γραμμάτων όταν το φόντο είναι ανοιχτό. url: σελίδα της εφαρμογής, ΜΟΝΟ https από *.glenapps.gr, glenapps.gr, aglentzakis-dot.github.io ή play.google.com — οτιδήποτε άλλο απορρίπτεται. play: (προαιρετικό) σύνδεσμος Google Play https://play.google.com/store/apps/details?id=... — μόνο όταν η εφαρμογή υπάρχει στο κατάστημα· μέσα στις εφαρμογές του καταστήματος φαίνονται μόνο όσες τον έχουν. showIn: [\"*\"] = σε όλες, ή π.χ. [\"dromologio\"]. hideIn: σε ποιες να ΜΗ φαίνεται. active: false = κρυφή παντού. en: αγγλικά (name, short, text· και de, fr, it, es, ro, bg, sq αν θέλεις). Σειρά εμφάνισης = σειρά εδώ. ΣΤΑΘΕΡΗ ΛΙΣΤΑ (14/10/2026): Δρομολόγιο, Κοντά μου, Ταμεία, Ημερολόγιο, GlenRead, Εργαλειοθήκη, GlenScanner, Παραγγελίες, ΦωτοΜέτρα, Fish IQ — με τα αυθεντικά εικονίδια (icon-192.png κάθε εφαρμογής). ΧΩΡΙΣ τιμές ή συνδέσμους αγοράς.",
   "apps": [
     {
       "id": "dromologio",
@@ -13,8 +13,12 @@
       "active": true,
       "en": {
         "name": "Route",
-        "text": "Clients, jobs, reminders and cash book for tradespeople, with a route that picks up nearby jobs."
-      }
+        "text": "Clients, jobs, reminders and cash book for tradespeople, with a route that picks up nearby jobs.",
+        "short": "clients, jobs, routes and cash book"
+      },
+      "emoji": "🗺",
+      "short": "πελάτες, δουλειές, διαδρομές και ταμείο",
+      "bg": "linear-gradient(135deg,#17324D,#2B5C8A)"
     },
     {
       "id": "kontamou",
@@ -28,8 +32,13 @@
       "active": true,
       "en": {
         "name": "Near me",
-        "text": "Tradespeople and partners on the map — customers in your area find you."
-      }
+        "text": "Tradespeople and partners on the map — customers in your area find you.",
+        "short": "tradespeople and partners on the map"
+      },
+      "emoji": "📍",
+      "short": "μάστορες και συνεργάτες στον χάρτη",
+      "bg": "linear-gradient(135deg,#f2b632,#e8a317 60%,#d98a0b)",
+      "ink": "#1b2e45"
     },
     {
       "id": "tameia",
@@ -43,8 +52,12 @@
       "active": true,
       "en": {
         "name": "Cash books",
-        "text": "Personal and business money in one place — with fixed costs, budget and an export for your accountant. Shared building expenses: under construction, free for up to 3 apartments."
-      }
+        "text": "Personal and business money in one place — with fixed costs, budget and an export for your accountant. Shared building expenses: under construction, free for up to 3 apartments.",
+        "short": "personal, business, shared expenses and any cash book you want"
+      },
+      "emoji": "📒",
+      "short": "προσωπικά, εταιρεία, κοινόχρηστα και όσα ταμεία θέλεις",
+      "bg": "linear-gradient(135deg,#1e8449,#27ae60)"
     },
     {
       "id": "imerologio",
@@ -58,8 +71,12 @@
       "active": true,
       "en": {
         "name": "Calendar",
-        "text": "Appointments for every profession: clients book themselves, message reminders, statistics and a client map."
-      }
+        "text": "Appointments for every profession: clients book themselves, message reminders, statistics and a client map.",
+        "short": "your schedule in one place"
+      },
+      "emoji": "📅",
+      "short": "το πρόγραμμά σου σε ένα σημείο",
+      "bg": "linear-gradient(135deg,#1f5fa8,#2f80d1)"
     },
     {
       "id": "glenread",
@@ -73,8 +90,12 @@
       "active": true,
       "en": {
         "name": "GlenRead",
-        "text": "Read PDFs, Word files and document photos comfortably on your phone — with text recognition, notes and signatures."
-      }
+        "text": "Read PDFs, Word files and document photos comfortably on your phone — with text recognition, notes and signatures.",
+        "short": "read and sign PDFs"
+      },
+      "emoji": "📄",
+      "short": "διάβασε και υπόγραψε PDF",
+      "bg": "linear-gradient(135deg,#5b3fa8,#7c5cd6)"
     },
     {
       "id": "ergaleiothiki",
@@ -88,8 +109,12 @@
       "active": true,
       "en": {
         "name": "Toolbox",
-        "text": "Spirit level, measurements and material calculators for every tradesperson."
-      }
+        "text": "Spirit level, measurements and material calculators for every tradesperson.",
+        "short": "spirit level, measurements and material calculators · free"
+      },
+      "emoji": "🧰",
+      "short": "αλφάδι, μετρήσεις και υπολογισμοί υλικών · δωρεάν",
+      "bg": "linear-gradient(135deg,#4a5866,#8e9aa6)"
     },
     {
       "id": "glenscanner",
@@ -103,8 +128,12 @@
       "active": true,
       "en": {
         "name": "GlenScanner",
-        "text": "Scan documents with your camera and turn them into clean PDFs."
-      }
+        "text": "Scan documents with your camera and turn them into clean PDFs.",
+        "short": "scan documents into clean PDFs"
+      },
+      "emoji": "📷",
+      "short": "σάρωσε έγγραφα σε καθαρά PDF",
+      "bg": "linear-gradient(135deg,#0f766e,#14b8a6)"
     },
     {
       "id": "paraggelies",
@@ -118,8 +147,12 @@
       "active": true,
       "en": {
         "name": "Orders",
-        "text": "Your customers order with one link, you see everything in one place."
-      }
+        "text": "Your customers order with one link, you see everything in one place.",
+        "short": "your customers order with one Viber link"
+      },
+      "emoji": "🧺",
+      "short": "οι πελάτες σου παραγγέλνουν με έναν σύνδεσμο στο Viber",
+      "bg": "linear-gradient(135deg,#b4531f,#e07b39)"
     },
     {
       "id": "fotometra",
@@ -133,11 +166,15 @@
       "active": true,
       "en": {
         "name": "PhotoMeasure",
-        "text": "Notes, straight lines and dimensions on your photos."
+        "text": "Notes, straight lines and dimensions on your photos.",
+        "short": "notes and dimensions on photos"
       },
       "hideIn": [
         "dromologio"
-      ]
+      ],
+      "emoji": "📐",
+      "short": "σημειώσεις και διαστάσεις πάνω σε φωτογραφίες",
+      "bg": "linear-gradient(135deg,#7c3aed,#c026d3 55%,#f59e0b)"
     },
     {
       "id": "fishiq",
@@ -151,8 +188,12 @@
       "active": true,
       "en": {
         "name": "Fish IQ",
-        "text": "Fishing log with weather, statistics and a daily score."
-      }
+        "text": "Fishing log with weather, statistics and a daily score.",
+        "short": "fishing log"
+      },
+      "emoji": "🎣",
+      "short": "ημερολόγιο ψαρέματος",
+      "bg": "linear-gradient(135deg,#0e6b8c,#1aa0c8)"
     }
   ]
 }
