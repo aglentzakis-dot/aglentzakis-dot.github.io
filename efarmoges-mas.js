@@ -1,5 +1,5 @@
 /*
-  GlenApps · «Οι εφαρμογές μας» — ΚΟΙΝΟ ΚΟΜΜΑΤΙ, έκδοση 2.1 (8/11/2026) — πρότυπο: η σελίδα των Παραγγελιών
+  GlenApps · «Οι εφαρμογές μας» — ΚΟΙΝΟ ΚΟΜΜΑΤΙ, έκδοση 2.2 (9/11/2026) — πρότυπο: η σελίδα των Παραγγελιών
   © 2026 Ανδρέας Μ. Γλεντζάκης (Andreas M. Glentzakis). Με την επιφύλαξη παντός δικαιώματος. All rights reserved.
   Απαγορεύεται η αντιγραφή, τροποποίηση και διάθεση, εν όλω ή εν μέρει, χωρίς προηγούμενη γραπτή άδεια του κατόχου.
 
@@ -29,7 +29,7 @@
   var W = window;
   if (W.EfarmogesMas) return;
 
-  var VERSION = "2.1";
+  var VERSION = "2.2";
   var SRC = "https://aglentzakis-dot.github.io/efarmoges.json";
   /* Αντίγραφο της λίστας τη στιγμή του συγχρονισμού — για το πρώτο άνοιγμα χωρίς ίντερνετ. */
   var BUILTIN = /*EFM_LIST*/null/*/EFM_LIST*/;
@@ -185,7 +185,17 @@
     return '<span class="efm-ic efm-icw' + (big ? "" : " efm-sm") + '" aria-hidden="true"><span>' + fb + "</span>" +
       (a.icon ? '<img src="' + esc(a.icon) + '" alt="" loading="lazy">' : "") + "</span>";
   }
-  function href(a) { return PLAY ? a.play : a.url; }
+  /* Σημάδι προέλευσης για τα στατιστικά του Google Play (Play Console → προέλευση εγκαταστάσεων).
+     Περιέχει ΜΟΝΟ το όνομα της εφαρμογής από την οποία ήρθε ο χρήστης — κανένα στοιχείο χρήστη ή συσκευής. */
+  function withRef(u) {
+    try {
+      var x = new URL(u); if (x.hostname !== "play.google.com") return u;
+      var src = String(cfg.app || "").replace(/[^a-z0-9_-]/gi, "").slice(0, 40); if (!src) return u;
+      x.searchParams.set("referrer", "utm_source=" + src + "&utm_medium=efarmoges-mas&utm_campaign=glenapps");
+      return x.toString();
+    } catch (e) { return u; }
+  }
+  function href(a) { return withRef(PLAY ? a.play : a.url); }
   function card(a) {
     var off = notWanted(a.id);
     return '<div class="efm-card' + (off ? " efm-off" : "") + '" data-efm-id="' + esc(a.id) + '"><a class="efm-go" href="' + esc(href(a)) +
