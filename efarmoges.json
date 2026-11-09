@@ -52,9 +52,9 @@
     {
       "id": "imerologio",
       "name": "Ημερολόγιο",
-      "icon": "https://aglentzakis-dot.github.io/imerologio/icon-192.png",
+      "icon": "https://imerologio.glenapps.gr/icon-192.png",
       "text": "Ραντεβού για κάθε επάγγελμα: οι πελάτες κλείνουν μόνοι τους, υπενθυμίσεις με μήνυμα, στατιστικά και χάρτης πελατών.",
-      "url": "https://aglentzakis-dot.github.io/imerologio/",
+      "url": "https://imerologio.glenapps.gr/",
       "showIn": [
         "*"
       ],
