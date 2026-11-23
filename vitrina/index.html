@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.2.0">
+<meta name="app-version" content="6.3.0">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -115,7 +115,8 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
     <div class="f"><label>🌗 Φόντο σελίδας <i class="nf" data-new="look"></i></label>
       <div class="seg" id="themeSeg"><button data-theme="dark">🌙 Σκούρο</button><button data-theme="light">☀ Ανοιχτό</button></div></div>
     <div class="f"><label>🌄 Μεγάλη φωτογραφία αρχικής</label>
-      <div class="row"><label class="btn s">Επιλογή<input type="file" accept="image/*" hidden id="s-hero"></label><button class="btn s" id="s-hero-blur">▦ Θόλωμα</button><button class="btn s d" id="s-hero-del">Αφαίρεση</button><span id="s-hero-state" class="hint"></span></div></div>
+      <div class="row"><label class="btn s">Επιλογή<input type="file" accept="image/*" hidden id="s-hero"></label><button class="btn s" id="s-hero-blur">▦ Θόλωμα</button><button class="btn s d" id="s-hero-del">Αφαίρεση</button><span id="s-hero-state" class="hint"></span></div>
+      <div id="s-hero-pos"><div class="row"><label class="hint" for="s-hx">↔ Εστίαση</label><input id="s-hx" type="range" min="0" max="100" style="flex:1"></div><div class="row"><label class="hint" for="s-hy">↕ Εστίαση</label><input id="s-hy" type="range" min="0" max="100" style="flex:1"></div><div class="row"><label class="hint" for="s-hd">🌓 Σκίαση</label><input id="s-hd" type="range" min="0" max="100" style="flex:1"></div><span class="hint">Διάλεξε ποιο σημείο της φωτογραφίας φαίνεται και πόσο σκουραίνει για να διαβάζονται τα γράμματα.</span></div></div>
   </div></details>
 
   <details class="sec" name="sec" data-sec="contact"><summary><span class="ic">📞</span><span class="tt"><b>Επικοινωνία</b><small id="sum-contact"></small></span><span class="nd" hidden></span><span class="st" id="st-contact"></span></summary><div class="body">
@@ -231,7 +232,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <script>
 "use strict";
-const APP_VERSION = "6.2.0";
+const APP_VERSION = "6.3.0";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -429,12 +430,31 @@ body.light .rev,body.light .faq{background:#fff}
 @media(max-width:760px){.revs{grid-template-columns:1fr}}
 .legal{max-width:760px;padding:40px 0}.legal h1{font-size:30px}.legal h2{font-size:19px;margin-top:28px}.legal p,.legal li{color:#d0d4d2}
 @media(max-width:760px){.nav{display:none}.cats{grid-template-columns:1fr 1fr}.grid,.contact{grid-template-columns:1fr}section{padding:54px 0}.hero .in{padding:70px 0 60px}}
-@media(max-width:430px){.cats{grid-template-columns:1fr}.acts .btn{width:100%}}`;
+@media(max-width:430px){.cats{grid-template-columns:1fr}.acts .btn{width:100%}}
+.hero:before{opacity:var(--dim,1)}
+.cat.go{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}.cat.go:hover,.cat.go:focus-visible{border-color:var(--accent)}
+.cat .cn{display:block;margin-top:10px;color:var(--accent);font-size:13px;font-weight:700}
+.md{position:fixed;inset:0;background:#050607e6;z-index:25;display:none;overflow:auto;padding:12px}.md.on{display:block}
+.mdin{position:relative;max-width:900px;margin:32px auto;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:18px}
+.mdx,.mdb{position:absolute;top:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:22px;line-height:1;cursor:pointer;z-index:2}.mdx{right:10px}.mdb{left:10px}
+.mdin h3{margin:4px 50px 16px}.mdg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.mdi{display:flex;flex-direction:column;gap:8px;padding:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;color:var(--text);font:inherit;text-align:left}
+.mdi img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.mdi span{padding:0 10px 10px;font-weight:700}
+.mdin article.proj{margin-top:46px}`;
 
 const SITE_JS = `(function(){var lb=document.getElementById("lb"),li=document.getElementById("lbimg");
 document.addEventListener("click",function(e){var t=e.target.closest("[data-full]");if(t){li.src=t.getAttribute("data-full");lb.classList.add("on");return}if(lb.classList.contains("on")&&(e.target===lb||e.target.closest("#lbx"))){lb.classList.remove("on");li.removeAttribute("src")}});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")lb.classList.remove("on")});
-document.querySelectorAll(".ba input").forEach(function(r){r.addEventListener("input",function(){var b=r.closest(".ba");b.querySelector(".clip").style.clipPath="inset(0 "+(100-r.value)+"% 0 0)";b.querySelector(".line").style.left=r.value+"%"})});
+document.addEventListener("input",function(e){var r=e.target;if(!r.matches||!r.matches(".ba input"))return;var b=r.closest(".ba");b.querySelector(".clip").style.clipPath="inset(0 "+(100-r.value)+"% 0 0)";b.querySelector(".line").style.left=r.value+"%"});
+var md=document.getElementById("md"),mc=document.getElementById("mdc"),lista=null;
+function mdOpen(n,piso){mc.innerHTML="";if(piso){var k=document.createElement("button");k.type="button";k.className="mdb";k.setAttribute("aria-label",document.documentElement.lang==="en"?"Back":"Πίσω");k.textContent="‹";k.addEventListener("click",function(){mdOpen(piso)});mc.appendChild(k)}mc.appendChild(n);md.classList.add("on");md.scrollTop=0}
+function mdClose(){md.classList.remove("on");mc.innerHTML="";lista=null}
+document.addEventListener("click",function(e){var c=e.target.closest(".cat.go");if(c){var cat=c.getAttribute("data-cat"),w=document.createElement("div"),h=document.createElement("h3"),g=document.createElement("div");h.textContent=c.querySelector("h3").textContent;g.className="mdg";
+document.querySelectorAll("main article.proj").forEach(function(a,i){if(a.getAttribute("data-cat")!==cat)return;var b=document.createElement("button");b.type="button";b.className="mdi";b.setAttribute("data-pi",i);var im=a.querySelector(".ba > img, .main img, .thumb img");if(im){var x=document.createElement("img");x.src=im.getAttribute("src");x.alt="";x.loading="lazy";b.appendChild(x)}var t=document.createElement("span");t.textContent=a.getAttribute("data-t")||"";b.appendChild(t);g.appendChild(b)});
+w.appendChild(h);w.appendChild(g);lista=w;mdOpen(w);return}
+var p=e.target.closest("[data-pi]");if(p){var a=document.querySelectorAll("main article.proj")[+p.getAttribute("data-pi")];if(a)mdOpen(a.cloneNode(true),lista);return}
+if(md.classList.contains("on")&&(e.target===md||e.target.closest("#mdx")))mdClose()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("lb").classList.contains("on"))mdClose()});
 var y=document.getElementById("yr");if(y)y.textContent=new Date().getFullYear()})();`;
 
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
@@ -450,12 +470,12 @@ const T = {
     revEy: "Κριτικές", revH: "Τι λένε οι πελάτες", faqEy: "Ερωτήσεις", faqH: "Συχνές ερωτήσεις", conEy: "Επικοινωνία", conH: "Ας μιλήσουμε για το έργο σου.",
     conP: "Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.", area: "Περιοχή εξυπηρέτησης", areaDef: "Κατόπιν συνεννόησης",
     hours: "Ωράριο", privacy: "Πολιτική απορρήτου", afm: "ΑΦΜ", gemi: "ΓΕΜΗ", subject: "Αίτημα προσφοράς", zoom: "Μεγέθυνση", cmp: "Σύγκριση πριν και μετά",
-    before: "ΠΡΙΝ", after: "ΜΕΤΑ", detail: "Λεπτομέρεια", photo: "Φωτογραφία", close: "Κλείσιμο", sw: "EN", swLang: "en" },
+    before: "ΠΡΙΝ", after: "ΜΕΤΑ", projN: "{n} έργα", proj1: "{n} έργο", detail: "Λεπτομέρεια", photo: "Φωτογραφία", close: "Κλείσιμο", sw: "EN", swLang: "en" },
   en: { nav: ["Services", "Projects", "Contact"], cta: "Get a quote", call: "☎ Call me", whatEy: "What we do", whatH: "Services", worksEy: "Our work", worksH: "Our projects",
     revEy: "Reviews", revH: "What our customers say", faqEy: "Questions", faqH: "Frequently asked questions", conEy: "Contact", conH: "Let's talk about your project.",
     conP: "Tell us what you need and we will get back to you. You can also send a photo of the space.", area: "Service area", areaDef: "By arrangement",
     hours: "Opening hours", privacy: "Privacy policy (in Greek)", afm: "VAT No", gemi: "GEMI", subject: "Quote request", zoom: "Enlarge", cmp: "Before and after comparison",
-    before: "BEFORE", after: "AFTER", detail: "Detail", photo: "Photo", close: "Close", sw: "ΕΛ", swLang: "el" } };
+    before: "BEFORE", after: "AFTER", projN: "{n} projects", proj1: "{n} project", detail: "Detail", photo: "Photo", close: "Close", sw: "ΕΛ", swLang: "el" } };
 function siteHTML(url, mode, lang = "el") {
   const st = S.settings, c = st.company || {}, en = lang === "en" && st.features.en, L = T[en ? "en" : "el"];
   const tx = k => (en && (st.en[k] || "").trim()) ? st.en[k] : (st[k] || "");
@@ -472,8 +492,11 @@ function siteHTML(url, mode, lang = "el") {
   const badges = badgeList.length ? `<div class="badges">${badgeList.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
   const fb = cleanSocial(st.fb, "facebook.com"), ig = cleanSocial(st.ig, "instagram.com");
   const social = (fb ? `<a class="btn" href="${esc(fb)}" target="_blank" rel="noopener noreferrer">Facebook</a>` : "") + (ig ? `<a class="btn" href="${esc(ig)}" target="_blank" rel="noopener noreferrer">Instagram</a>` : "");
-  const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}')"` : "";
-  const services = (st.services || []).map((s, i) => `<div class="cat"><span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3></div>`).join("");
+  const pc = (v, d) => { v = Number(v); return isFinite(v) ? Math.max(0, Math.min(100, v)) : d; };
+  const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}');background-position:${pc(st.heroX, 50)}% ${pc(st.heroY, 50)}%;--dim:${(pc(st.heroDim, 100) / 100).toFixed(2)}"` : "";
+  const projOf = cat => S.projects.filter(p => cat && p.cat === cat && (p.title || p.photos.length));
+  const services = (st.services || []).map((s, i) => { const n = projOf(s).length, inner = `<span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3>${n ? `<small class="cn">${(n === 1 ? L.proj1 : L.projN).replace("{n}", n)} ›</small>` : ""}`;
+    return n ? `<button type="button" class="cat go" data-cat="${esc(s)}">${inner}</button>` : `<div class="cat">${inner}</div>`; }).join("");
   const projects = S.projects.filter(p => p.title || p.photos.length).map(p => {
     const title = (en && p.title_en) ? p.title_en : p.title, desc = (en && p.desc_en) ? p.desc_en : p.desc;
     let top = "";
@@ -485,7 +508,7 @@ function siteHTML(url, mode, lang = "el") {
     const rest = (p.before && p.after) ? p.photos : p.photos.slice(1);
     const sz = Math.max(48, Math.min(220, Number(p.thumb) || 90));
     const thumbs = rest.length ? `<div class="thumbs">${rest.filter(id => url(id)).map(id => `<button class="thumb" style="width:${sz}px;height:${sz}px" data-full="${esc(url(id))}" aria-label="${L.zoom}"><img src="${esc(url(id))}" alt="${L.detail}: ${esc(title)}" loading="lazy"></button>`).join("")}</div>` : "";
-    return `<article class="proj">${top}<div class="info">${p.cat ? `<div class="eyebrow">${esc(catTx(p.cat))}</div>` : ""}<h3>${esc(title)}</h3>${desc ? `<p>${esc(desc)}</p>` : ""}</div>${thumbs}</article>`;
+    return `<article class="proj" data-cat="${esc(p.cat || "")}" data-t="${esc(title)}">${top}<div class="info">${p.cat ? `<div class="eyebrow">${esc(catTx(p.cat))}</div>` : ""}<h3>${esc(title)}</h3>${desc ? `<p>${esc(desc)}</p>` : ""}</div>${thumbs}</article>`;
   }).join("");
   const revs = st.features.reviews ? st.reviews.filter(r => r.ok && (r.text || "").trim()).map(r => { const n = Math.max(1, Math.min(5, +r.stars || 5));
     return `<figure class="rev"><div class="stars" aria-label="${n}/5">${"★".repeat(n)}<span>${"★".repeat(5 - n)}</span></div><blockquote>${esc(r.text)}</blockquote>${r.name ? `<figcaption>— ${esc(r.name)}</figcaption>` : ""}</figure>`; }).join("") : "";
@@ -507,6 +530,7 @@ ${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class=
 ${faqs ? `<section id="erotiseis" class="faqs"><div class="wrap"><div class="head"><div class="eyebrow">${L.faqEy}</div><h2>${L.faqH}</h2></div>${faqs}</div></section>` : ""}
 <section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">${L.conEy}</div><h2>${L.conH}</h2></div><div class="contact"><div class="box"><h3>${esc(cta)}</h3><p>${L.conP}</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>${L.area}</h3><p>${esc(tx("area") || L.areaDef)}</p>${tx("hours") ? `<h3>${L.hours}</h3><p>${esc(tx("hours"))}</p>` : ""}</div></div></div></section></main>
 <footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">${L.privacy}</a></div></footer>
+<div class="md" id="md" role="dialog" aria-modal="true"><div class="mdin"><button type="button" class="mdx" id="mdx" aria-label="${L.close}">×</button><div id="mdc"></div></div></div>
 <div class="lb" id="lb" role="dialog" aria-label="${L.photo}"><button id="lbx" aria-label="${L.close}">×</button><img id="lbimg" alt="${L.photo}"></div>${js}</body></html>`;
 }
 
@@ -543,6 +567,8 @@ function fillSettings() {
   for (const [id, k] of Object.entries(CFIELDS)) $(id).value = (S.settings.company || {})[k] || "";
   $("s-services").value = (S.settings.services || []).join("\n");
   $("s-hero-state").textContent = S.settings.hero ? "✓ υπάρχει" : "καμία";
+  $("s-hero-pos").hidden = !S.settings.hero;
+  for (const [id, k, d] of [["s-hx", "heroX", 50], ["s-hy", "heroY", 50], ["s-hd", "heroDim", 100]]) $(id).value = S.settings[k] ?? d;
   $("s-badges").value = (S.settings.badges || []).join("\n");
   const F = S.settings.features; $("f-reviews").checked = F.reviews; $("f-faq").checked = F.faq; $("f-en").checked = F.en;
   for (const k of EN_KEYS) $("en-" + k).value = S.settings.en[k] || "";
@@ -663,6 +689,7 @@ document.querySelectorAll(".sec").forEach(d => d.addEventListener("toggle", () =
 $("s-hero").addEventListener("change", async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return;
   try { S.settings.hero = await addPhotoFile(f); changed(); await sweepPhotos(); fillSettings(); } catch (er) { alert(er.message); } });
 $("s-hero-blur").onclick = async () => { if (!S.settings.hero) return alert("Δεν υπάρχει φωτογραφία αρχικής."); S.settings.hero = await blurPhoto(S.settings.hero); changed(); };
+for (const [id, k] of [["s-hx", "heroX"], ["s-hy", "heroY"], ["s-hd", "heroDim"]]) $(id).addEventListener("input", e => { S.settings[k] = +e.target.value; changed(); });
 $("s-hero-del").onclick = async () => { S.settings.hero = null; changed(); await sweepPhotos(); fillSettings(); };
 
 $("addProject").onclick = () => {
