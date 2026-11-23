@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="app-version" content="6.0.0">
+<meta name="theme-color" content="#111315">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Βιτρίνα — GlenApps</title>
+<style>
+:root{--bg:#101214;--panel:#191d20;--panel2:#202529;--line:#30383d;--text:#f3f3ef;--muted:#aab2b5;--accent:#e5a33b;--danger:#e0533b;--ok:#4caf7a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding-bottom:84px}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}
+.top{position:sticky;top:0;z-index:20;background:#101214f2;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.top .g{width:32px;height:32px;border:2px solid var(--accent);border-radius:7px;transform:rotate(45deg);display:grid;place-items:center}.top .g b{transform:rotate(-45deg);color:var(--accent)}
+.top h1{font-size:16px;margin:0;flex:1}.top small{color:var(--muted);font-size:11px}
+.tabs{position:fixed;bottom:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);background:#15191b;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{background:none;border:0;padding:10px 4px;color:var(--muted);font-size:12px;display:grid;gap:2px;justify-items:center}.tabs button span{font-size:19px}.tabs button.on{color:var(--accent)}
+main{max-width:860px;margin:auto;padding:14px}
+.view{display:none}.view.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 14px}
+.card h2{font-size:17px;margin:0 0 10px}.card h3{font-size:15px;margin:0}
+.f{display:grid;gap:5px;margin:0 0 12px}.f label{font-size:12px;font-weight:700;color:#c5ccce}
+.f input,.f textarea,.f select{width:100%;padding:11px;background:#0f1214;border:1px solid var(--line);border-radius:8px}
+.f textarea{min-height:76px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:#ffffff0a;padding:10px 14px;border-radius:9px;font-weight:700;display:inline-flex;gap:6px;align-items:center;justify-content:center;min-height:42px}
+.btn.p{background:var(--accent);border-color:var(--accent);color:#171717}.btn.d{border-color:#7a3528;color:#ffb4a5}.btn.s{min-height:36px;padding:6px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.hint{font-size:12px;color:var(--muted)}
+.warn{border:2px solid var(--danger);background:#3a1b16;color:#ffd5cc;border-radius:10px;padding:12px 14px;margin:0 0 14px;font-size:13px}
+.warn b{color:#ff8f7a}
+.note{border:1px solid #76592e;background:#332b1d;color:#f1d6a6;border-radius:10px;padding:12px 14px;margin:0 0 14px;font-size:13px}
+.proj{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:#1d2225}
+.proj-head{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.chip{width:110px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#0f1214}
+.chip.main{border:2px solid var(--accent)}
+.chip img{width:100%;height:82px;object-fit:cover;display:block}
+.chip .ops{display:grid;grid-template-columns:repeat(4,1fr)}
+.chip .ops button{background:none;border:0;border-top:1px solid var(--line);padding:7px 0;font-size:14px}
+.chip .ops button+button{border-left:1px solid var(--line)}
+.chip .tag{font-size:10px;padding:2px 6px;color:var(--muted);display:flex;justify-content:space-between}
+.chip.main .tag{color:var(--accent);font-weight:800}
+.ok{color:var(--ok)}
+iframe#preview{width:100%;height:calc(100vh - 170px);border:1px solid var(--line);border-radius:12px;background:#fff}
+.modal{position:fixed;inset:0;z-index:50;background:#050607f5;display:none;flex-direction:column;padding:12px;gap:10px}
+.modal.on{display:flex}
+.modal canvas{flex:1;min-height:0;width:100%;object-fit:contain;touch-action:none;background:#000;border-radius:8px}
+.check{display:flex;gap:10px;align-items:flex-start;margin:8px 0}.check input{width:22px;height:22px;flex:0 0 22px;margin-top:1px}
+ol.steps{padding-left:20px}ol.steps li{margin:0 0 8px}
+a{color:var(--accent)}
+.bk{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
+</style>
+</head>
+<body>
+<div class="top"><div class="g"><b>G</b></div><div style="flex:1"><h1>Βιτρίνα</h1><small id="ver"></small></div><span id="saveState" class="hint"></span></div>
+
+<main>
+<div id="backupWarn" class="warn" style="display:none"></div>
+
+<!-- ΠΡΟΕΠΙΣΚΟΠΗΣΗ -->
+<section class="view" id="v-preview">
+  <div class="row" style="margin-bottom:10px"><span class="hint">Έτσι θα βλέπουν τη σελίδα οι πελάτες σου.</span></div>
+  <iframe id="preview" title="Προεπισκόπηση σελίδας" sandbox="allow-scripts allow-popups"></iframe>
+</section>
+
+<!-- ΕΠΕΞΕΡΓΑΣΙΑ -->
+<section class="view" id="v-edit">
+  <div class="card"><h2>Στοιχεία επιχείρησης</h2>
+    <div class="f"><label for="s-name">Όνομα επιχείρησης</label><input id="s-name" maxlength="60"></div>
+    <div class="f"><label for="s-subtitle">Τι κάνεις (μικρή γραμμή κάτω από το όνομα)</label><input id="s-subtitle" maxlength="60"></div>
+    <div class="f"><label for="s-eyebrow">Μικρή ετικέτα πάνω από τον τίτλο</label><input id="s-eyebrow" maxlength="80"></div>
+    <div class="f"><label for="s-title">Κεντρικός τίτλος</label><input id="s-title" maxlength="90"></div>
+    <div class="f"><label for="s-intro">Περιγραφή αρχικής</label><textarea id="s-intro" maxlength="400"></textarea></div>
+    <div class="f"><label for="s-cta">Κείμενο κουμπιού προσφοράς</label><input id="s-cta" maxlength="30"></div>
+    <div class="f"><label for="s-accent">Χρώμα έμφασης</label><input id="s-accent" type="color"></div>
+    <div class="f"><label>Μεγάλη φωτογραφία αρχικής (προαιρετικά)</label>
+      <div class="row"><label class="btn s">Επιλογή φωτογραφίας<input type="file" accept="image/*" hidden id="s-hero"></label><button class="btn s" id="s-hero-blur">Θόλωμα</button><button class="btn s d" id="s-hero-del">Αφαίρεση</button><span id="s-hero-state" class="hint"></span></div></div>
+  </div>
+  <div class="card"><h2>Επικοινωνία</h2>
+    <div class="f"><label for="s-phone">Τηλέφωνο (π.χ. +30 69…)</label><input id="s-phone" inputmode="tel" maxlength="20"></div>
+    <div class="f"><label for="s-chat">Viber / WhatsApp (ίδιος ή άλλος αριθμός)</label><input id="s-chat" inputmode="tel" maxlength="20"></div>
+    <div class="f"><label for="s-email">Email (προαιρετικά)</label><input id="s-email" inputmode="email" maxlength="80"></div>
+    <div class="f"><label for="s-area">Περιοχή εξυπηρέτησης</label><input id="s-area" maxlength="80"><span class="hint">Γράψε μόνο περιοχή — όχι διεύθυνση συνεργείου ή πελάτη.</span></div>
+  </div>
+  <div class="card"><h2>Κατηγορίες εργασιών</h2>
+    <div class="f"><label for="s-services">Μία ανά γραμμή (έως 12)</label><textarea id="s-services" rows="6"></textarea></div>
+  </div>
+  <div class="card"><h2>Στοιχεία που ορίζει ο νόμος</h2>
+    <p class="hint">Οι επαγγελματικές σελίδες πρέπει να δείχνουν τα στοιχεία της επιχείρησης. Εμφανίζονται στο κάτω μέρος και στην πολιτική απορρήτου.</p>
+    <div class="f"><label for="c-legal">Επωνυμία (όπως στο ΓΕΜΗ)</label><input id="c-legal" maxlength="120"></div>
+    <div class="f"><label for="c-afm">ΑΦΜ</label><input id="c-afm" inputmode="numeric" maxlength="12"></div>
+    <div class="f"><label for="c-gemi">Αριθμός ΓΕΜΗ</label><input id="c-gemi" inputmode="numeric" maxlength="20"></div>
+    <div class="f"><label for="c-addr">Έδρα (όπως δηλώνεται)</label><input id="c-addr" maxlength="160"></div>
+  </div>
+
+  <div class="card"><h2>Έργα</h2>
+    <div class="row"><button class="btn p" id="addProject">+ Νέο έργο</button></div>
+    <div id="projList"></div>
+  </div>
+</section>
+
+<!-- ΔΗΜΟΣΙΕΥΣΗ -->
+<section class="view" id="v-publish">
+  <div class="card"><h2>Πριν δημοσιεύσεις</h2>
+    <label class="check"><input type="checkbox" id="k1"><span>Έλεγξα <b>όλες</b> τις φωτογραφίες: δεν φαίνονται πρόσωπα, πινακίδες αυτοκινήτων, αριθμοί σπιτιών ή άλλα στοιχεία που δείχνουν ποιος είναι ο πελάτης — ή τα θόλωσα.</span></label>
+    <label class="check"><input type="checkbox" id="k2"><span>Έχω τη συγκατάθεση των πελατών για όσες φωτογραφίες είναι από τον χώρο τους.</span></label>
+    <label class="check"><input type="checkbox" id="k3"><span>Ευθύνομαι εγώ για ό,τι δημοσιεύω στη σελίδα μου.</span></label>
+    <div id="pubProblems" class="note" style="display:none"></div>
+    <button class="btn p" id="exportSite" disabled>⬇ Λήψη έτοιμης σελίδας</button>
+    <p class="hint">Κατεβαίνει ένα αρχείο <b>vitrina-selida.zip</b> με τη σελίδα και τις φωτογραφίες. Οι φωτογραφίες έχουν ήδη καθαριστεί από θέση GPS και στοιχεία κάμερας.</p>
+  </div>
+  <div class="card"><h2>Ανέβασμα στον δικό σου δωρεάν λογαριασμό</h2>
+    <p class="hint">Η σελίδα φιλοξενείται <b>στον δικό σου λογαριασμό</b>. Οι GlenApps δεν κρατούν ούτε βλέπουν τίποτα.</p>
+    <ol class="steps">
+      <li>Άνοιξε <a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages" target="_blank" rel="noopener noreferrer">τη σελίδα δημιουργίας στο Cloudflare</a> (αν δεν έχεις λογαριασμό, φτιάξε δωρεάν).</li>
+      <li>Πάτησε <b>«Upload assets»</b> (ανέβασμα αρχείων).</li>
+      <li>Δώσε όνομα, π.χ. το όνομα της επιχείρησής σου με λατινικά — αυτό γίνεται η διεύθυνσή σου (…<b>.pages.dev</b>).</li>
+      <li>Σύρε μέσα το <b>vitrina-selida.zip</b> και πάτησε <b>«Deploy site»</b>.</li>
+      <li>Κάθε φορά που αλλάζεις κάτι: ξανακατέβασε το zip και στο ίδιο έργο πάτησε <b>«Create new deployment»</b>. Η διεύθυνση μένει ίδια.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ΑΝΤΙΓΡΑΦΑ -->
+<section class="view" id="v-backup">
+  <div class="warn"><b>⚠ Κράτα πάντα αντίγραφο ασφαλείας.</b> Η Βιτρίνα φυλάει τα πάντα <b>μόνο σε αυτή τη συσκευή</b>. Αν σβηστούν τα δεδομένα του φυλλομετρητή ή χαθεί το κινητό, χάνονται. Κατέβαζε αντίγραφο μετά από κάθε αλλαγή και φύλαξέ το σε Google Drive, υπολογιστή ή email.</div>
+  <div class="card"><h2>Πού φυλάγονται τα στοιχεία σου</h2>
+    <div id="whereRows"></div>
+  </div>
+  <div class="card"><h2>Αντίγραφα</h2>
+    <div class="row"><button class="btn p" id="dlBackup">⬇ Λήψη αντιγράφου</button><label class="btn">⬆ Επαναφορά από αρχείο<input type="file" accept=".json,application/json" hidden id="ulBackup"></label></div>
+    <p class="hint">Πριν από κάθε επαναφορά κρατιέται αυτόματα αντίγραφο των τωρινών στοιχείων εδώ στη συσκευή (τα 10 πιο πρόσφατα).</p>
+    <h3 style="margin-top:14px">Αυτόματα αντίγραφα στη συσκευή</h3>
+    <div id="prinList" class="hint"></div>
+  </div>
+</section>
+</main>
+
+<nav class="tabs">
+  <button data-v="preview"><span>👁</span>Προβολή</button>
+  <button data-v="edit" class="on"><span>✎</span>Επεξεργασία</button>
+  <button data-v="publish"><span>⇪</span>Δημοσίευση</button>
+  <button data-v="backup"><span>⛁</span>Αντίγραφα</button>
+</nav>
+
+<!-- ΘΟΛΩΜΑ -->
+<div class="modal" id="blurModal" role="dialog" aria-label="Θόλωμα φωτογραφίας">
+  <div class="row"><b style="flex:1">Πέρασε το δάχτυλο πάνω από πρόσωπα, πινακίδες, αριθμούς.</b></div>
+  <canvas id="blurCanvas"></canvas>
+  <div class="row"><label class="hint" for="blurSize">Πινέλο</label><input id="blurSize" type="range" min="20" max="160" value="60" style="flex:1"></div>
+  <div class="row"><button class="btn" id="blurUndo">↶ Αναίρεση</button><button class="btn" id="blurCancel">Άκυρο</button><button class="btn p" id="blurSave" style="flex:1">✓ Αποθήκευση</button></div>
+</div>
+
+<script>
+"use strict";
+const APP_VERSION = "6.0.0";
+const $ = id => document.getElementById(id);
+$("ver").textContent = "έκδοση " + APP_VERSION;
+
+/* ================= Αποθήκευση στη συσκευή (IndexedDB) ================= */
+const DB_NAME = "glenapps-vitrina";
+let dbp = null;
+function db() {
+  if (!dbp) dbp = new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = () => { const d = r.result; d.createObjectStore("kv"); d.createObjectStore("photos"); d.createObjectStore("prin"); };
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+  return dbp;
+}
+async function tx(store, mode, fn) {
+  const d = await db();
+  return new Promise((res, rej) => {
+    const t = d.transaction(store, mode), s = t.objectStore(store);
+    let out; const r = fn(s); if (r) r.onsuccess = () => { out = r.result; };
+    t.oncomplete = () => res(out); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+  });
+}
+const kvGet = k => tx("kv", "readonly", s => s.get(k));
+const kvPut = (k, v) => tx("kv", "readwrite", s => s.put(v, k));
+const phGet = id => tx("photos", "readonly", s => s.get(id));
+const phPut = (id, b) => tx("photos", "readwrite", s => s.put(b, id));
+const phDel = id => tx("photos", "readwrite", s => s.delete(id));
+const phKeys = () => tx("photos", "readonly", s => s.getAllKeys());
+
+/* ================= Κατάσταση ================= */
+const DEFAULT_SERVICES = ["Κάγκελα & κιγκλιδώματα","Πόρτες & πύλες","Μεταλλικές σκάλες","Στέγαστρα & πέργκολες","Μεταλλικοί σκελετοί","Ειδικές κατασκευές"];
+function defaultState() {
+  return { v: 1, settings: {
+    name: "GlenMetal", subtitle: "Μεταλλικές κατασκευές", eyebrow: "Σχεδιασμός · Κατασκευή · Τοποθέτηση",
+    title: "Μεταλλικές κατασκευές με ακρίβεια.", intro: "Σχεδιάζουμε και κατασκευάζουμε μεταλλικές λύσεις για κατοικίες και επαγγελματικούς χώρους.",
+    cta: "Ζήτα προσφορά", accent: "#e5a33b", hero: null, services: DEFAULT_SERVICES.slice(),
+    phone: "", chat: "", email: "", area: "Αθήνα και Αττική",
+    company: { legal: "", afm: "", gemi: "", addr: "" } },
+    projects: [], lastBackup: 0, lastChange: 0 };
+}
+let S = null;
+let saveTimer = null;
+function changed() {
+  S.lastChange = Date.now();
+  $("saveState").textContent = "αποθήκευση…";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 350);
+}
+async function saveNow() {
+  clearTimeout(saveTimer);
+  try { await kvPut("state", S); $("saveState").textContent = "✓ αποθηκεύτηκε"; }
+  catch (e) { $("saveState").textContent = "⚠ δεν αποθηκεύτηκε"; alert("Δεν αποθηκεύτηκε στη συσκευή: " + e.message); }
+  refreshBackupWarn();
+}
+
+/* ================= Φωτογραφίες: σμίκρυνση + καθάρισμα GPS/EXIF ================= */
+function uid() { return (crypto.randomUUID ? crypto.randomUUID() : (Date.now() + "-" + Math.random())).replace(/-/g, "").slice(0, 20); }
+function loadImg(blob) {
+  return new Promise((res, rej) => { const u = URL.createObjectURL(blob), i = new Image();
+    i.onload = () => { URL.revokeObjectURL(u); res(i); }; i.onerror = () => { URL.revokeObjectURL(u); rej(new Error("Το αρχείο δεν είναι εικόνα που μπορώ να διαβάσω.")); }; i.src = u; });
+}
+function canvasToJpeg(c, q = .84) { return new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("Αποτυχία μετατροπής εικόνας")), "image/jpeg", q)); }
+// Ξαναζωγραφίζουμε την εικόνα σε καμβά: το νέο JPEG ΔΕΝ περιέχει EXIF, GPS ή στοιχεία κάμερας.
+async function cleanPhoto(file, maxSide = 1600) {
+  if (!/^image\//.test(file.type || "image/")) throw new Error("Επιτρέπονται μόνο φωτογραφίες.");
+  if (file.size > 40 * 1024 * 1024) throw new Error("Η φωτογραφία είναι πολύ μεγάλη.");
+  const img = await loadImg(file);
+  const k = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+  const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+  const x = c.getContext("2d"); x.fillStyle = "#000"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+  return canvasToJpeg(c);
+}
+async function addPhotoFile(file) { const b = await cleanPhoto(file); const id = uid(); await phPut(id, b); return id; }
+const urlCache = new Map();
+async function photoURL(id) {
+  if (!id) return "";
+  if (urlCache.has(id)) return urlCache.get(id);
+  const b = await phGet(id); if (!b) return "";
+  const u = URL.createObjectURL(b); urlCache.set(id, u); return u;
+}
+function forgetURL(id) { if (urlCache.has(id)) { URL.revokeObjectURL(urlCache.get(id)); urlCache.delete(id); } }
+function usedPhotoIds() {
+  const set = new Set(); if (S.settings.hero) set.add(S.settings.hero);
+  for (const p of S.projects) { p.photos.forEach(x => set.add(x)); if (p.before) set.add(p.before); if (p.after) set.add(p.after); }
+  return set;
+}
+// Οριστική διαγραφή φωτογραφιών που δεν χρησιμοποιούνται πια (μένουν μόνο στα αυτόματα αντίγραφα της συσκευής).
+async function sweepPhotos() {
+  const used = usedPhotoIds();
+  for (const id of await phKeys()) if (!used.has(id)) { forgetURL(id); await phDel(id); }
+}
+
+/* ================= Θόλωμα με ψηφίδωμα (δουλεύει σε όλα τα κινητά, δεν αναιρείται) ================= */
+const bc = $("blurCanvas"), bx = bc.getContext("2d");
+let blurDone = null, blurUndo = [], blurDown = false, blurLast = null;
+async function openBlur(photoId) {
+  const img = await loadImg(await phGet(photoId));
+  bc.width = img.naturalWidth; bc.height = img.naturalHeight; bx.drawImage(img, 0, 0);
+  blurUndo = [];
+  $("blurModal").classList.add("on");
+  return new Promise(res => { blurDone = res; });
+}
+function bpt(e) { const r = bc.getBoundingClientRect(); const s = Math.min(r.width / bc.width, r.height / bc.height);
+  const ox = r.left + (r.width - bc.width * s) / 2, oy = r.top + (r.height - bc.height * s) / 2;
+  return { x: (e.clientX - ox) / s, y: (e.clientY - oy) / s, s }; }
+function pixelDab(x, y, radius) {
+  const R = Math.round(radius), x0 = Math.max(0, Math.round(x - R)), y0 = Math.max(0, Math.round(y - R));
+  const w = Math.min(2 * R, bc.width - x0), h = Math.min(2 * R, bc.height - y0); if (w < 2 || h < 2) return;
+  const block = Math.max(12, Math.round(R / 2.5));
+  const t = document.createElement("canvas"); t.width = Math.max(1, Math.ceil(w / block)); t.height = Math.max(1, Math.ceil(h / block));
+  const tx2 = t.getContext("2d"); tx2.imageSmoothingEnabled = true; tx2.drawImage(bc, x0, y0, w, h, 0, 0, t.width, t.height);
+  bx.save(); bx.beginPath(); bx.arc(x, y, R, 0, Math.PI * 2); bx.clip(); bx.imageSmoothingEnabled = false;
+  bx.drawImage(t, 0, 0, t.width, t.height, x0, y0, t.width * block, t.height * block); bx.restore();
+}
+function brushR(s) { return Number($("blurSize").value) / 2 / (s || 1); }
+bc.addEventListener("pointerdown", e => { e.preventDefault(); if (blurUndo.length > 15) blurUndo.shift(); blurUndo.push(bx.getImageData(0, 0, bc.width, bc.height));
+  blurDown = true; bc.setPointerCapture(e.pointerId); blurLast = bpt(e); pixelDab(blurLast.x, blurLast.y, brushR(blurLast.s)); });
+bc.addEventListener("pointermove", e => { if (!blurDown) return; const p = bpt(e), r = brushR(p.s), dx = p.x - blurLast.x, dy = p.y - blurLast.y;
+  const n = Math.max(1, Math.ceil(Math.hypot(dx, dy) / (r / 2))); for (let i = 1; i <= n; i++) pixelDab(blurLast.x + dx * i / n, blurLast.y + dy * i / n, r); blurLast = p; });
+["pointerup", "pointercancel"].forEach(ev => bc.addEventListener(ev, () => { blurDown = false; }));
+$("blurUndo").onclick = () => { if (blurUndo.length) bx.putImageData(blurUndo.pop(), 0, 0); };
+$("blurCancel").onclick = () => { $("blurModal").classList.remove("on"); blurDone && blurDone(null); };
+$("blurSave").onclick = async () => { const b = await canvasToJpeg(bc, .86); $("blurModal").classList.remove("on"); blurDone && blurDone(b); };
+// Επιστρέφει νέο id (η αθόλωτη εκδοχή σβήνεται οριστικά).
+async function blurPhoto(id) {
+  const b = await openBlur(id); if (!b) return id;
+  const nid = uid(); await phPut(nid, b); forgetURL(id); await phDel(id); return nid;
+}
+
+/* ================= Σελίδα πελατών (ίδια για προβολή και εξαγωγή) ================= */
+const SITE_CSS = `:root{--bg:#101214;--panel:#191d20;--line:#30383d;--text:#f3f3ef;--muted:#aab2b5;--accent:#e5a33b;--max:1180px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}a{color:inherit;text-decoration:none}
+.wrap{width:min(var(--max),calc(100% - 32px));margin:auto}
+.topbar{position:sticky;top:0;z-index:10;background:#101214ee;border-bottom:1px solid #ffffff12;backdrop-filter:blur(10px)}
+.topbar .wrap{height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;gap:12px;align-items:center;font-weight:850;letter-spacing:.06em;min-width:0}.brand b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mark{width:36px;height:36px;flex:0 0 36px;border:2px solid var(--accent);display:grid;place-items:center;transform:rotate(45deg);border-radius:8px}.mark span{transform:rotate(-45deg);color:var(--accent);font-size:16px}
+.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.12em;font-weight:600}
+.nav{display:flex;gap:22px;color:#d3d6d5;font-size:14px}.nav a:hover{color:var(--accent)}
+.btn{border:1px solid var(--line);padding:11px 16px;border-radius:8px;font-weight:700;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#ffffff08;color:var(--text)}
+.btn.p{background:var(--accent);border-color:var(--accent);color:#171717}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 75% 42%,#5d4828 0,#27231c 24%,#171a1b 55%,#101214 78%);background-size:cover;background-position:center}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#101214 0%,#101214dd 40%,#10121444 100%)}
+.hero .in{position:relative;max-width:650px;padding:90px 0 80px}
+.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:800}
+.hero h1{font-size:clamp(36px,7vw,70px);line-height:1.04;letter-spacing:-.04em;margin:18px 0}
+.hero p{color:#c4c9c7;font-size:18px;margin:0}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+section{padding:70px 0}.head h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.03em;margin:6px 0 24px}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cat{padding:22px;background:linear-gradient(145deg,#202529,#171a1c);border:1px solid var(--line);border-radius:10px}
+.cat .n{font-size:12px;color:var(--accent);letter-spacing:.15em}.cat h3{font-size:18px;margin:12px 0 0}
+.projects{background:#15191b;border-block:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.proj{background:#1b2023;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.main{display:block;width:100%;aspect-ratio:4/3;background:#2a3033;border:0;padding:0;cursor:zoom-in}
+.main img{width:100%;height:100%;object-fit:cover;display:block}
+.info{padding:18px 18px 12px}.info h3{margin:4px 0;font-size:20px}.info p{margin:0;color:var(--muted);font-size:15px;white-space:pre-line}
+.thumbs{display:flex;gap:8px;padding:6px 18px 18px;overflow-x:auto}
+.thumb{flex:0 0 auto;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:#343a3d;padding:0;cursor:zoom-in}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ba{position:relative;aspect-ratio:4/3;overflow:hidden;background:#080a0b;touch-action:pan-y}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba .clip{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 50% 0 0)}
+.ba .line{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--accent)}
+.ba input{position:absolute;left:12px;bottom:12px;width:calc(100% - 24px);accent-color:var(--accent)}
+.ba .t{position:absolute;top:10px;padding:4px 8px;background:#111c;color:#fff;border-radius:4px;font-size:11px;font-weight:800}.ba .t.b{left:10px}.ba .t.a{right:10px}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px}.box p{color:var(--muted)}
+footer{padding:26px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}footer a{text-decoration:underline}
+.lb{position:fixed;inset:0;background:#050607f2;z-index:30;display:none;align-items:center;justify-content:center}.lb.on{display:flex}
+.lb img{max-width:96vw;max-height:90vh;object-fit:contain}
+.lb button{position:absolute;top:14px;right:14px;background:#ffffff18;color:#fff;border:1px solid #ffffff44;border-radius:50%;width:44px;height:44px;font-size:22px}
+.legal{max-width:760px;padding:40px 0}.legal h1{font-size:30px}.legal h2{font-size:19px;margin-top:28px}.legal p,.legal li{color:#d0d4d2}
+@media(max-width:760px){.nav{display:none}.cats{grid-template-columns:1fr 1fr}.grid,.contact{grid-template-columns:1fr}section{padding:54px 0}.hero .in{padding:70px 0 60px}}
+@media(max-width:430px){.cats{grid-template-columns:1fr}.acts .btn{width:100%}}`;
+
+const SITE_JS = `(function(){var lb=document.getElementById("lb"),li=document.getElementById("lbimg");
+document.addEventListener("click",function(e){var t=e.target.closest("[data-full]");if(t){li.src=t.getAttribute("data-full");lb.classList.add("on");return}if(lb.classList.contains("on")&&(e.target===lb||e.target.closest("#lbx"))){lb.classList.remove("on");li.removeAttribute("src")}});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")lb.classList.remove("on")});
+document.querySelectorAll(".ba input").forEach(function(r){r.addEventListener("input",function(){var b=r.closest(".ba");b.querySelector(".clip").style.clipPath="inset(0 "+(100-r.value)+"% 0 0)";b.querySelector(".line").style.left=r.value+"%"})});
+var y=document.getElementById("yr");if(y)y.textContent=new Date().getFullYear()})();`;
+
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function cleanPhone(p) { p = String(p || "").replace(/[^\d+]/g, ""); return /^\+?\d{6,15}$/.test(p) ? p : ""; }
+function cleanEmail(e) { e = String(e || "").trim(); return /^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(e) ? e : ""; }
+function cleanColor(c) { return /^#[0-9a-f]{6}$/i.test(c || "") ? c : "#e5a33b"; }
+function intlDigits(p) { p = cleanPhone(p); if (!p) return ""; if (p.startsWith("+")) return p.slice(1); if (p.startsWith("00")) return p.slice(2); return p.length === 10 ? "30" + p : p; }
+
+// url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"
+function siteHTML(url, mode) {
+  const st = S.settings, c = st.company || {};
+  const tel = cleanPhone(st.phone), chat = intlDigits(st.chat || st.phone), mail = cleanEmail(st.email);
+  const callBtn = tel ? `<a class="btn p" href="tel:${esc(tel)}">☎ Κάλεσέ με</a>` : "";
+  const viber = chat ? `<a class="btn" href="viber://chat?number=%2B${esc(chat)}">Viber</a>` : "";
+  const wa = chat ? `<a class="btn" href="https://wa.me/${esc(chat)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : "";
+  const mailBtn = mail ? `<a class="btn" href="mailto:${esc(mail)}?subject=${encodeURIComponent("Αίτημα προσφοράς")}">✉ Email</a>` : "";
+  const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}')"` : "";
+  const services = (st.services || []).map((s, i) => `<div class="cat"><span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(s)}</h3></div>`).join("");
+  const projects = S.projects.filter(p => p.title || p.photos.length).map(p => {
+    let top = "";
+    if (p.before && p.after && url(p.before) && url(p.after)) {
+      top = `<div class="ba"><img src="${esc(url(p.after))}" alt="Μετά"><div class="clip"><img src="${esc(url(p.before))}" alt="Πριν"></div><div class="line"></div><span class="t b">ΠΡΙΝ</span><span class="t a">ΜΕΤΑ</span><input type="range" min="0" max="100" value="50" aria-label="Σύγκριση πριν και μετά"></div>`;
+    } else if (p.photos[0] && url(p.photos[0])) {
+      top = `<button class="main" data-full="${esc(url(p.photos[0]))}" aria-label="Μεγέθυνση"><img src="${esc(url(p.photos[0]))}" alt="${esc(p.title)}" loading="lazy"></button>`;
+    }
+    const rest = (p.before && p.after) ? p.photos : p.photos.slice(1);
+    const sz = Math.max(48, Math.min(220, Number(p.thumb) || 90));
+    const thumbs = rest.length ? `<div class="thumbs">${rest.filter(id => url(id)).map(id => `<button class="thumb" style="width:${sz}px;height:${sz}px" data-full="${esc(url(id))}" aria-label="Μεγέθυνση"><img src="${esc(url(id))}" alt="Λεπτομέρεια: ${esc(p.title)}" loading="lazy"></button>`).join("")}</div>` : "";
+    return `<article class="proj">${top}<div class="info">${p.cat ? `<div class="eyebrow">${esc(p.cat)}</div>` : ""}<h3>${esc(p.title)}</h3>${p.desc ? `<p>${esc(p.desc)}</p>` : ""}</div>${thumbs}</article>`;
+  }).join("");
+  const legalLine = [c.legal, c.afm && "ΑΦΜ " + c.afm, c.gemi && "ΓΕΜΗ " + c.gemi, c.addr].filter(Boolean).map(esc).join(" · ");
+  const privacyHref = mode === "export" ? "politiki-aporritou.html" : "#";
+  const css = mode === "export" ? `<link rel="stylesheet" href="stil.css">` : `<style>${SITE_CSS}</style>`;
+  const js = mode === "export" ? `<script src="skript.js" defer><\/script>` : `<script>${SITE_JS}<\/script>`;
+  const csp = mode === "export" ? `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; form-action 'none'">` : "";
+  return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc((st.intro || "").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}"><title>${esc(st.name)}${st.subtitle ? " | " + esc(st.subtitle) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body>
+<header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark"><span>${esc((st.name || "?").trim().charAt(0).toUpperCase())}</span></div><div><b>${esc(st.name)}</b><small>${esc(st.subtitle)}</small></div></a><nav class="nav"><a href="#ergasies">Εργασίες</a><a href="#erga">Έργα</a><a href="#epikoinonia">Επικοινωνία</a></nav><a class="btn p" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")}</a></div></header>
+<main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(st.eyebrow)}</div><h1>${esc(st.title)}</h1><p>${esc(st.intro)}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")} ↗</a></div></div></div></section>
+${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">Τι κάνουμε</div><h2>Εργασίες</h2></div><div class="cats">${services}</div></div></section>` : ""}
+${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">Δουλειές μας</div><h2>Τα έργα μας</h2></div><div class="grid">${projects}</div></div></section>` : ""}
+<section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">Επικοινωνία</div><h2>Ας μιλήσουμε για το έργο σου.</h2></div><div class="contact"><div class="box"><h3>${esc(st.cta || "Ζήτα προσφορά")}</h3><p>Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div></div><div class="box"><h3>Περιοχή εξυπηρέτησης</h3><p>${esc(st.area || "Κατόπιν συνεννόησης")}</p></div></div></div></section></main>
+<footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">Πολιτική απορρήτου</a></div></footer>
+<div class="lb" id="lb" role="dialog" aria-label="Φωτογραφία"><button id="lbx" aria-label="Κλείσιμο">×</button><img id="lbimg" alt="Φωτογραφία έργου"></div>${js}</body></html>`;
+}
+
+function privacyHTML() {
+  const st = S.settings, c = st.company || {}, mail = cleanEmail(st.email), tel = cleanPhone(st.phone);
+  const who = esc(c.legal || st.name) + (c.afm ? ", ΑΦΜ " + esc(c.afm) : "") + (c.gemi ? ", ΓΕΜΗ " + esc(c.gemi) : "") + (c.addr ? ", " + esc(c.addr) : "");
+  const contact = [mail && "email " + esc(mail), tel && "τηλέφωνο " + esc(tel)].filter(Boolean).join(" ή ") || "τα στοιχεία επικοινωνίας της αρχικής σελίδας";
+  const d = new Date().toLocaleDateString("el-GR");
+  return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; base-uri 'none'; form-action 'none'"><title>Πολιτική απορρήτου — ${esc(st.name)}</title><link rel="stylesheet" href="stil.css"></head><body><main class="wrap legal">
+<p><a href="index.html">← Επιστροφή</a></p><h1>Πολιτική απορρήτου</h1><p>Τελευταία ενημέρωση: ${d}</p>
+<h2>Ποιος είναι υπεύθυνος</h2><p>Υπεύθυνος για τη σελίδα και το περιεχόμενό της είναι: ${who}. Επικοινωνία: ${contact}.</p>
+<h2>Τι συλλέγουμε</h2><p>Η σελίδα αυτή <b>δεν συλλέγει</b> προσωπικά δεδομένα. Δεν χρησιμοποιεί μπισκότα, εργαλεία μέτρησης επισκεψιμότητας, διαφημίσεις ή φόρμες. Όταν μας καλείτε ή μας στέλνετε μήνυμα (τηλέφωνο, Viber, WhatsApp, email), η επικοινωνία γίνεται μέσω της αντίστοιχης υπηρεσίας και χρησιμοποιούμε τα στοιχεία σας μόνο για να σας απαντήσουμε.</p>
+<h2>Φιλοξενία</h2><p>Η σελίδα φιλοξενείται σε πάροχο που επιλέξαμε εμείς. Ο πάροχος μπορεί να καταγράφει τεχνικά στοιχεία σύνδεσης (π.χ. διεύθυνση IP) για λόγους ασφάλειας, σύμφωνα με τη δική του πολιτική απορρήτου.</p>
+<h2>Φωτογραφίες έργων</h2><p>Οι φωτογραφίες δείχνουν δουλειές μας. Δημοσιεύονται με τη συγκατάθεση των πελατών, χωρίς στοιχεία που τους ταυτοποιούν, και χωρίς δεδομένα θέσης (GPS). Αν εμφανίζεται κάτι που σας αφορά και θέλετε να αφαιρεθεί, επικοινωνήστε μαζί μας και θα το αφαιρέσουμε.</p>
+<h2>Τα δικαιώματά σας</h2><p>Έχετε δικαίωμα πρόσβασης, διόρθωσης και διαγραφής, καθώς και δικαίωμα καταγγελίας στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (www.dpa.gr).</p>
+</main></body></html>`;
+}
+
+/* ================= Προβολή ================= */
+async function refreshPreview() {
+  const ids = usedPhotoIds(); const m = new Map();
+  for (const id of ids) { const b = await phGet(id); if (b) m.set(id, "data:image/jpeg;base64," + await blobToB64(b)); }
+  $("preview").srcdoc = siteHTML(id => m.get(id) || "", "preview");
+}
+
+/* ================= Επεξεργασία ================= */
+const FIELDS = { "s-name": "name", "s-subtitle": "subtitle", "s-eyebrow": "eyebrow", "s-title": "title", "s-intro": "intro", "s-cta": "cta", "s-accent": "accent", "s-phone": "phone", "s-chat": "chat", "s-email": "email", "s-area": "area" };
+const CFIELDS = { "c-legal": "legal", "c-afm": "afm", "c-gemi": "gemi", "c-addr": "addr" };
+function fillSettings() {
+  for (const [id, k] of Object.entries(FIELDS)) $(id).value = S.settings[k] || "";
+  for (const [id, k] of Object.entries(CFIELDS)) $(id).value = (S.settings.company || {})[k] || "";
+  $("s-services").value = (S.settings.services || []).join("\n");
+  $("s-hero-state").textContent = S.settings.hero ? "✓ υπάρχει" : "καμία";
+}
+for (const [id, k] of Object.entries(FIELDS)) $(id).addEventListener("input", e => { S.settings[k] = e.target.value; changed(); });
+for (const [id, k] of Object.entries(CFIELDS)) $(id).addEventListener("input", e => { S.settings.company[k] = e.target.value; changed(); });
+$("s-services").addEventListener("input", e => { S.settings.services = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 12); changed(); renderProjects(); });
+$("s-hero").addEventListener("change", async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try { S.settings.hero = await addPhotoFile(f); changed(); await sweepPhotos(); fillSettings(); } catch (er) { alert(er.message); } });
+$("s-hero-blur").onclick = async () => { if (!S.settings.hero) return alert("Δεν υπάρχει φωτογραφία αρχικής."); S.settings.hero = await blurPhoto(S.settings.hero); changed(); };
+$("s-hero-del").onclick = async () => { S.settings.hero = null; changed(); await sweepPhotos(); fillSettings(); };
+
+$("addProject").onclick = () => {
+  S.projects.unshift({ id: uid(), title: "", cat: (S.settings.services || [])[0] || "", desc: "", photos: [], thumb: 90, before: null, after: null });
+  changed(); renderProjects();
+  const t = document.querySelector("#projList .proj input"); if (t) t.focus();
+};
+
+async function renderProjects() {
+  const list = $("projList");
+  if (!S.projects.length) { list.innerHTML = `<p class="hint">Δεν υπάρχουν έργα ακόμα. Πάτησε «+ Νέο έργο».</p>`; return; }
+  const cats = S.settings.services || [];
+  const parts = [];
+  for (let i = 0; i < S.projects.length; i++) {
+    const p = S.projects[i];
+    const opts = [...new Set([...cats, p.cat].filter(Boolean))].map(c => `<option${c === p.cat ? " selected" : ""}>${esc(c)}</option>`).join("");
+    const chips = [];
+    for (let j = 0; j < p.photos.length; j++) {
+      const u = await photoURL(p.photos[j]);
+      chips.push(`<div class="chip${j === 0 ? " main" : ""}"><img src="${esc(u)}" alt=""><div class="tag"><span>${j === 0 ? "★ ΜΕΓΑΛΗ" : "μικρή " + j}</span></div><div class="ops">
+        <button title="Να γίνει η μεγάλη" data-a="main" data-p="${i}" data-j="${j}">★</button><button title="Αριστερά" data-a="left" data-p="${i}" data-j="${j}">◀</button>
+        <button title="Θόλωμα" data-a="blur" data-p="${i}" data-j="${j}">▦</button><button title="Διαγραφή" data-a="delph" data-p="${i}" data-j="${j}">✕</button></div></div>`);
+    }
+    const baState = (p.before ? "✓ πριν" : "— πριν") + " · " + (p.after ? "✓ μετά" : "— μετά");
+    parts.push(`<div class="proj"><div class="proj-head"><b>${i + 1}.</b><div class="row">
+        <button class="btn s" data-a="up" data-p="${i}" ${i === 0 ? "disabled" : ""} aria-label="Πάνω">▲</button>
+        <button class="btn s" data-a="down" data-p="${i}" ${i === S.projects.length - 1 ? "disabled" : ""} aria-label="Κάτω">▼</button>
+        <button class="btn s d" data-a="delp" data-p="${i}">Διαγραφή</button></div></div>
+      <div class="f"><label>Τίτλος έργου</label><input data-k="title" data-p="${i}" value="${esc(p.title)}" maxlength="80" placeholder="π.χ. Κάγκελα μπαλκονιού"></div>
+      <div class="f"><label>Κατηγορία</label><select data-k="cat" data-p="${i}">${opts || "<option></option>"}</select></div>
+      <div class="f"><label>Περιγραφή</label><textarea data-k="desc" data-p="${i}" maxlength="600">${esc(p.desc)}</textarea></div>
+      <div class="row"><label class="btn s p">+ Φωτογραφίες<input type="file" accept="image/*" multiple hidden data-a="addph" data-p="${i}"></label><span class="hint">${p.photos.length} φωτογραφίες · η ★ είναι η μεγάλη</span></div>
+      <div class="chips">${chips.join("")}</div>
+      ${p.photos.length > 1 ? `<div class="f"><label>Μέγεθος μικρών φωτογραφιών: <span id="tv-${i}">${p.thumb || 90}</span> px</label><input type="range" min="48" max="220" value="${p.thumb || 90}" data-k="thumb" data-p="${i}"></div>` : ""}
+      <div class="row"><label class="btn s">Φωτογραφία «Πριν»<input type="file" accept="image/*" hidden data-a="before" data-p="${i}"></label><label class="btn s">Φωτογραφία «Μετά»<input type="file" accept="image/*" hidden data-a="after" data-p="${i}"></label>${p.before || p.after ? `<button class="btn s" data-a="blurba" data-p="${i}">▦ Θόλωμα πριν/μετά</button><button class="btn s d" data-a="delba" data-p="${i}">Αφαίρεση πριν/μετά</button>` : ""}<span class="hint">${baState}</span></div>
+    </div>`);
+  }
+  list.innerHTML = parts.join("");
+}
+$("projList").addEventListener("input", e => {
+  const t = e.target, k = t.dataset.k; if (!k) return; const p = S.projects[+t.dataset.p];
+  if (k === "thumb") { p.thumb = +t.value; const l = $("tv-" + t.dataset.p); if (l) l.textContent = t.value; } else p[k] = t.value;
+  changed();
+});
+$("projList").addEventListener("change", async e => {
+  const t = e.target; if (t.dataset.k === "cat") { S.projects[+t.dataset.p].cat = t.value; changed(); return; }
+  const a = t.dataset.a; if (!a || t.type !== "file") return;
+  const p = S.projects[+t.dataset.p], files = [...t.files]; t.value = "";
+  try {
+    if (a === "addph") { for (const f of files) p.photos.push(await addPhotoFile(f)); }
+    else if (a === "before") p.before = files[0] ? await addPhotoFile(files[0]) : p.before;
+    else if (a === "after") p.after = files[0] ? await addPhotoFile(files[0]) : p.after;
+  } catch (er) { alert(er.message); }
+  changed(); await sweepPhotos(); renderProjects();
+});
+$("projList").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-a]"); if (!b) return;
+  const a = b.dataset.a, i = +b.dataset.p, j = +b.dataset.j, P = S.projects, p = P[i];
+  if (a === "up" && i > 0) [P[i - 1], P[i]] = [P[i], P[i - 1]];
+  else if (a === "down" && i < P.length - 1) [P[i + 1], P[i]] = [P[i], P[i + 1]];
+  else if (a === "delp") { if (!confirm(`Να διαγραφεί το έργο «${p.title || "χωρίς τίτλο"}» και οι φωτογραφίες του;`)) return; P.splice(i, 1); }
+  else if (a === "main") { const [x] = p.photos.splice(j, 1); p.photos.unshift(x); }
+  else if (a === "left" && j > 0) [p.photos[j - 1], p.photos[j]] = [p.photos[j], p.photos[j - 1]];
+  else if (a === "blur") p.photos[j] = await blurPhoto(p.photos[j]);
+  else if (a === "delph") { if (!confirm("Να διαγραφεί οριστικά αυτή η φωτογραφία;")) return; p.photos.splice(j, 1); }
+  else if (a === "blurba") { if (p.before) p.before = await blurPhoto(p.before); if (p.after) p.after = await blurPhoto(p.after); }
+  else if (a === "delba") { p.before = null; p.after = null; }
+  else return;
+  changed(); await sweepPhotos(); renderProjects();
+});
+
+/* ================= ZIP (χωρίς εξωτερικές βιβλιοθήκες) ================= */
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_T[(c ^ u8[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function makeZip(files) { // files: [{name, data:Uint8Array}]
+  const enc = new TextEncoder(), chunks = [], central = []; let off = 0;
+  const d = new Date(), dt = ((d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1)) & 0xFFFF, dd = (((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate()) & 0xFFFF;
+  for (const f of files) {
+    const nm = enc.encode(f.name), crc = crc32(f.data), sz = f.data.length;
+    const h = new DataView(new ArrayBuffer(30)); h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true); h.setUint16(10, dt, true); h.setUint16(12, dd, true); h.setUint32(14, crc, true); h.setUint32(18, sz, true); h.setUint32(22, sz, true); h.setUint16(26, nm.length, true); h.setUint16(28, 0, true);
+    chunks.push(new Uint8Array(h.buffer), nm, f.data);
+    const c = new DataView(new ArrayBuffer(46)); c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true); c.setUint16(12, dt, true); c.setUint16(14, dd, true); c.setUint32(16, crc, true); c.setUint32(20, sz, true); c.setUint32(24, sz, true); c.setUint16(28, nm.length, true); c.setUint32(42, off, true);
+    central.push(new Uint8Array(c.buffer), nm);
+    off += 30 + nm.length + sz;
+  }
+  const cdSize = central.reduce((a, b) => a + b.length, 0);
+  const e = new DataView(new ArrayBuffer(22)); e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, cdSize, true); e.setUint32(16, off, true);
+  return new Blob([...chunks, ...central, new Uint8Array(e.buffer)], { type: "application/zip" });
+}
+function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+
+const HEADERS_FILE = `/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+`;
+async function buildSiteZip() {
+  const enc = new TextEncoder(), files = [], names = new Map();
+  for (const id of usedPhotoIds()) {
+    const b = await phGet(id); if (!b) continue;
+    const n = "fotografies/" + id + ".jpg"; names.set(id, n);
+    files.push({ name: n, data: new Uint8Array(await b.arrayBuffer()) });
+  }
+  files.unshift(
+    { name: "index.html", data: enc.encode(siteHTML(id => names.get(id) || "", "export")) },
+    { name: "stil.css", data: enc.encode(SITE_CSS) },
+    { name: "skript.js", data: enc.encode(SITE_JS) },
+    { name: "politiki-aporritou.html", data: enc.encode(privacyHTML()) },
+    { name: "_headers", data: enc.encode(HEADERS_FILE) });
+  return makeZip(files);
+}
+function publishProblems() {
+  const st = S.settings, out = [];
+  if (!st.name.trim()) out.push("Λείπει το όνομα της επιχείρησης.");
+  if (!cleanPhone(st.phone) && !cleanPhone(st.chat) && !cleanEmail(st.email)) out.push("Βάλε τουλάχιστον ένα σωστό τηλέφωνο ή email, για να σε βρίσκουν.");
+  if (!(st.company.legal && st.company.afm)) out.push("Συμπλήρωσε επωνυμία και ΑΦΜ στα «Στοιχεία που ορίζει ο νόμος».");
+  if (!S.projects.some(p => p.photos.length)) out.push("Πρόσθεσε τουλάχιστον ένα έργο με φωτογραφία.");
+  return out;
+}
+function refreshPublish() {
+  const pr = publishProblems(), box = $("pubProblems");
+  box.style.display = pr.length ? "block" : "none"; box.innerHTML = pr.map(x => "• " + esc(x)).join("<br>");
+  $("exportSite").disabled = !($("k1").checked && $("k2").checked && $("k3").checked) || pr.length > 0;
+}
+["k1", "k2", "k3"].forEach(id => $(id).addEventListener("change", refreshPublish));
+$("exportSite").onclick = async () => {
+  $("exportSite").disabled = true;
+  try { await saveNow(); download(await buildSiteZip(), "vitrina-selida.zip"); }
+  catch (e) { alert("Δεν φτιάχτηκε η σελίδα: " + e.message); }
+  finally { refreshPublish(); }
+};
+
+/* ================= Αντίγραφα ασφαλείας (κανόνες GlenApps) ================= */
+function countEntries(st) { return (st.projects || []).length; }
+function blobToB64(b) { return new Promise(r => { const f = new FileReader(); f.onload = () => r(String(f.result).split(",")[1]); f.readAsDataURL(b); }); }
+function b64ToBlob(s) { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type: "image/jpeg" }); }
+async function snapshot() {
+  const photos = {}; for (const id of usedPhotoIds()) { const b = await phGet(id); if (b) photos[id] = await blobToB64(b); }
+  return { tipos: "glenapps-vitrina", ekdosi: APP_VERSION, imerominia: new Date().toISOString(), state: { ...S, lastBackup: 0 }, photos };
+}
+async function keepPrin(reason) { // κρατά τα 10 πιο πρόσφατα
+  if (!countEntries(S) && !S.settings.hero) return;
+  const snap = await snapshot(); snap.logos = reason;
+  await tx("prin", "readwrite", s => s.put(snap, Date.now()));
+  const keys = (await tx("prin", "readonly", s => s.getAllKeys())).sort((a, b) => b - a);
+  for (const k of keys.slice(10)) await tx("prin", "readwrite", s => s.delete(k));
+}
+$("dlBackup").onclick = async () => {
+  if (!countEntries(S)) return alert("Δεν υπάρχουν έργα — δεν φτιάχνεται άδειο αντίγραφο.");
+  const snap = await snapshot();
+  download(new Blob([JSON.stringify(snap)], { type: "application/json" }), "vitrina-antigrafo-" + new Date().toISOString().slice(0, 10) + ".json");
+  S.lastBackup = Date.now(); await saveNow(); renderBackup();
+};
+function validSnap(d) { return d && d.tipos === "glenapps-vitrina" && d.state && d.state.settings && Array.isArray(d.state.projects) && d.photos && typeof d.photos === "object"; }
+async function restoreSnap(d) {
+  if (!validSnap(d)) throw new Error("Το αρχείο δεν είναι αντίγραφο Βιτρίνας.");
+  const nNew = countEntries(d.state), nNow = countEntries(S);
+  let msg = `Το αντίγραφο έχει ${nNew} έργα. Τώρα υπάρχουν ${nNow}.`;
+  if (!nNew) msg = "⚠ ΠΡΟΣΟΧΗ: το αντίγραφο είναι ΑΔΕΙΟ (0 έργα). " + msg;
+  if (!confirm(msg + "\n\nΤα τωρινά θα φυλαχτούν πρώτα σε αυτόματο αντίγραφο. Συνέχεια;")) return false;
+  await keepPrin("πριν από επαναφορά");
+  for (const [id, b64] of Object.entries(d.photos)) { if (!/^[A-Za-z0-9]{1,40}$/.test(id)) continue; await phPut(id, b64ToBlob(b64)); }
+  const def = defaultState();
+  S = { ...def, ...d.state, settings: { ...def.settings, ...d.state.settings, company: { ...def.settings.company, ...(d.state.settings.company || {}) } }, lastBackup: S.lastBackup };
+  S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
+  if (S.settings.hero && !d.photos[S.settings.hero]) S.settings.hero = null;
+  await saveNow(); await sweepPhotos(); fillSettings(); renderProjects(); renderBackup();
+  return true;
+}
+$("ulBackup").addEventListener("change", async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try { if (await restoreSnap(JSON.parse(await f.text()))) alert("Η επαναφορά ολοκληρώθηκε."); } catch (er) { alert("Αδυναμία επαναφοράς: " + er.message); }
+});
+async function renderBackup() {
+  const d = S.lastBackup ? new Date(S.lastBackup).toLocaleString("el-GR") : null;
+  let persisted = false; try { persisted = navigator.storage && await navigator.storage.persisted(); } catch {}
+  $("whereRows").innerHTML = `<div class="bk"><span>Σε αυτή τη συσκευή</span><b class="ok">✓</b></div>
+    <div class="bk"><span>Προστασία από αυτόματο σβήσιμο του φυλλομετρητή</span><b>${persisted ? '<span class="ok">✓</span>' : "✗"}</b></div>
+    <div class="bk"><span>Αρχείο αντιγράφου που κατέβασες${d ? " (" + d + ")" : ""}</span><b>${d ? '<span class="ok">✓</span>' : "✗"}</b></div>
+    <div class="bk"><span>Google Drive</span><b class="hint">θα συνδεθεί μέσα στο Δρομολόγιο</b></div>`;
+  const keys = (await tx("prin", "readonly", s => s.getAllKeys())).sort((a, b) => b - a);
+  $("prinList").innerHTML = keys.length ? keys.map(k => `<div class="bk"><span>${new Date(k).toLocaleString("el-GR")}</span><button class="btn s" data-prin="${k}">Επαναφορά</button></div>`).join("") : "Κανένα ακόμα.";
+}
+$("prinList").addEventListener("click", async e => { const b = e.target.closest("[data-prin]"); if (!b) return;
+  const d = await tx("prin", "readonly", s => s.get(Number(b.dataset.prin))); try { if (await restoreSnap(d)) alert("Η επαναφορά ολοκληρώθηκε."); } catch (er) { alert(er.message); } });
+function refreshBackupWarn() {
+  const w = $("backupWarn"), n = countEntries(S);
+  const need = n > 0 && (!S.lastBackup || S.lastChange > S.lastBackup);
+  w.style.display = need ? "block" : "none";
+  w.innerHTML = `<b>⚠ Δεν έχεις αντίγραφο των τελευταίων αλλαγών.</b> Τα στοιχεία είναι μόνο σε αυτή τη συσκευή. <a href="#" id="goBk">Κατέβασε αντίγραφο τώρα</a>.`;
+  const g = $("goBk"); if (g) g.onclick = ev => { ev.preventDefault(); show("backup"); };
+}
+
+/* ================= Καρτέλες ================= */
+function show(v) {
+  document.querySelectorAll(".view").forEach(x => x.classList.toggle("on", x.id === "v-" + v));
+  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  if (v === "preview") refreshPreview(); if (v === "publish") refreshPublish(); if (v === "backup") renderBackup();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => show(b.dataset.v));
+
+/* ================= Εκκίνηση ================= */
+(async function start() {
+  try {
+    const saved = await kvGet("state"), def = defaultState();
+    S = saved ? { ...def, ...saved, settings: { ...def.settings, ...saved.settings, company: { ...def.settings.company, ...(saved.settings.company || {}) } } } : def;
+    if (navigator.storage && navigator.storage.persist) { try { await navigator.storage.persist(); } catch {} }
+  } catch (e) { S = defaultState(); alert("Η αποθήκευση της συσκευής δεν είναι διαθέσιμη (π.χ. ιδιωτική περιήγηση). Οι αλλαγές δεν θα κρατηθούν."); }
+  fillSettings(); await renderProjects(); refreshBackupWarn(); show("edit");
+  window.vitrinaReady = true;
+  if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+})();
+</script>
+</body>
+</html>
