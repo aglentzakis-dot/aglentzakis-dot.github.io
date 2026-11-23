@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.0.0">
+<meta name="app-version" content="6.1.0">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -53,6 +53,23 @@ iframe#preview{width:100%;height:calc(100vh - 170px);border:1px solid var(--line
 .check{display:flex;gap:10px;align-items:flex-start;margin:8px 0}.check input{width:22px;height:22px;flex:0 0 22px;margin-top:1px}
 ol.steps{padding-left:20px}ol.steps li{margin:0 0 8px}
 a{color:var(--accent)}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:0 0 10px;overflow:hidden}
+.sec summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;min-height:62px}
+.sec summary::-webkit-details-marker{display:none}
+.sec summary .ic{width:40px;height:40px;flex:0 0 40px;border-radius:10px;background:#ffffff0d;display:grid;place-items:center;font-size:21px}
+.sec summary .tt{flex:1;min-width:0}.sec summary .tt b{display:block;font-size:15px}.sec summary .tt small{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sec summary .st{font-size:15px;font-weight:800}.sec summary .st.ok{color:var(--ok)}.sec summary .st.no{color:var(--accent)}
+.sec summary:after{content:"›";font-size:24px;color:var(--muted);transition:.2s}.sec[open] summary:after{transform:rotate(90deg)}
+.sec[open] summary{border-bottom:1px solid var(--line)}
+.sec .body{padding:14px}
+.nd{width:10px;height:10px;border-radius:50%;background:#ffd400;box-shadow:0 0 0 3px #ffd40033}
+i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vertical-align:middle;margin-left:4px}i.nf.on{display:inline-block}
+.swatches{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.swatches button{width:40px;height:40px;border-radius:50%;border:3px solid transparent;outline:1px solid var(--line)}
+.swatches button.on{border-color:#fff}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{background:none;border:0;padding:11px;font-weight:700}.seg button.on{background:var(--accent);color:#171717}
+.logo-prev{width:52px;height:52px;border-radius:10px;border:1px solid var(--line);background:#0f1214 center/contain no-repeat;display:grid;place-items:center;color:var(--muted);font-size:20px}
 .bk{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
 </style>
 </head>
@@ -70,38 +87,57 @@ a{color:var(--accent)}
 
 <!-- ΕΠΕΞΕΡΓΑΣΙΑ -->
 <section class="view" id="v-edit">
-  <div class="card"><h2>Στοιχεία επιχείρησης</h2>
-    <div class="f"><label for="s-name">Όνομα επιχείρησης</label><input id="s-name" maxlength="60"></div>
-    <div class="f"><label for="s-subtitle">Τι κάνεις (μικρή γραμμή κάτω από το όνομα)</label><input id="s-subtitle" maxlength="60"></div>
-    <div class="f"><label for="s-eyebrow">Μικρή ετικέτα πάνω από τον τίτλο</label><input id="s-eyebrow" maxlength="80"></div>
-    <div class="f"><label for="s-title">Κεντρικός τίτλος</label><input id="s-title" maxlength="90"></div>
-    <div class="f"><label for="s-intro">Περιγραφή αρχικής</label><textarea id="s-intro" maxlength="400"></textarea></div>
-    <div class="f"><label for="s-cta">Κείμενο κουμπιού προσφοράς</label><input id="s-cta" maxlength="30"></div>
-    <div class="f"><label for="s-accent">Χρώμα έμφασης</label><input id="s-accent" type="color"></div>
-    <div class="f"><label>Μεγάλη φωτογραφία αρχικής (προαιρετικά)</label>
-      <div class="row"><label class="btn s">Επιλογή φωτογραφίας<input type="file" accept="image/*" hidden id="s-hero"></label><button class="btn s" id="s-hero-blur">Θόλωμα</button><button class="btn s d" id="s-hero-del">Αφαίρεση</button><span id="s-hero-state" class="hint"></span></div></div>
-  </div>
-  <div class="card"><h2>Επικοινωνία</h2>
-    <div class="f"><label for="s-phone">Τηλέφωνο (π.χ. +30 69…)</label><input id="s-phone" inputmode="tel" maxlength="20"></div>
-    <div class="f"><label for="s-chat">Viber / WhatsApp (ίδιος ή άλλος αριθμός)</label><input id="s-chat" inputmode="tel" maxlength="20"></div>
-    <div class="f"><label for="s-email">Email (προαιρετικά)</label><input id="s-email" inputmode="email" maxlength="80"></div>
-    <div class="f"><label for="s-area">Περιοχή εξυπηρέτησης</label><input id="s-area" maxlength="80"><span class="hint">Γράψε μόνο περιοχή — όχι διεύθυνση συνεργείου ή πελάτη.</span></div>
-  </div>
-  <div class="card"><h2>Κατηγορίες εργασιών</h2>
-    <div class="f"><label for="s-services">Μία ανά γραμμή (έως 12)</label><textarea id="s-services" rows="6"></textarea></div>
-  </div>
-  <div class="card"><h2>Στοιχεία που ορίζει ο νόμος</h2>
-    <p class="hint">Οι επαγγελματικές σελίδες πρέπει να δείχνουν τα στοιχεία της επιχείρησης. Εμφανίζονται στο κάτω μέρος και στην πολιτική απορρήτου.</p>
-    <div class="f"><label for="c-legal">Επωνυμία (όπως στο ΓΕΜΗ)</label><input id="c-legal" maxlength="120"></div>
-    <div class="f"><label for="c-afm">ΑΦΜ</label><input id="c-afm" inputmode="numeric" maxlength="12"></div>
-    <div class="f"><label for="c-gemi">Αριθμός ΓΕΜΗ</label><input id="c-gemi" inputmode="numeric" maxlength="20"></div>
-    <div class="f"><label for="c-addr">Έδρα (όπως δηλώνεται)</label><input id="c-addr" maxlength="160"></div>
-  </div>
+  <details class="sec" name="sec" data-sec="ident"><summary><span class="ic">🏷</span><span class="tt"><b>Ταυτότητα</b><small id="sum-ident"></small></span><span class="nd" hidden></span><span class="st" id="st-ident"></span></summary><div class="body">
+    <div class="f"><label for="s-name">🏢 Όνομα επιχείρησης</label><input id="s-name" maxlength="60"></div>
+    <div class="f"><label for="s-subtitle">🔧 Τι κάνεις</label><input id="s-subtitle" maxlength="60" placeholder="π.χ. Μεταλλικές κατασκευές"></div>
+    <div class="f"><label>🖼 Λογότυπο <i class="nf" data-new="ident"></i></label>
+      <div class="row"><span class="logo-prev" id="logoPrev"></span><label class="btn s">Επιλογή<input type="file" accept="image/*" hidden id="s-logo"></label><button class="btn s d" id="s-logo-del">Αφαίρεση</button></div>
+      <span class="hint">Αν δεν βάλεις, δείχνει το πρώτο γράμμα του ονόματος.</span></div>
+  </div></details>
 
-  <div class="card"><h2>Έργα</h2>
+  <details class="sec" name="sec" data-sec="texts"><summary><span class="ic">✍</span><span class="tt"><b>Κείμενα αρχικής</b><small id="sum-texts"></small></span><span class="nd" hidden></span><span class="st" id="st-texts"></span></summary><div class="body">
+    <div class="f"><label for="s-eyebrow">🏷 Μικρή ετικέτα</label><input id="s-eyebrow" maxlength="80"></div>
+    <div class="f"><label for="s-title">📣 Κεντρικός τίτλος</label><input id="s-title" maxlength="90"></div>
+    <div class="f"><label for="s-intro">📝 Περιγραφή</label><textarea id="s-intro" maxlength="400"></textarea></div>
+    <div class="f"><label for="s-cta">👆 Κουμπί προσφοράς</label><input id="s-cta" maxlength="30"></div>
+    <div class="f"><label for="s-badges">✅ Σήματα εμπιστοσύνης (ένα ανά γραμμή, έως 4) <i class="nf" data-new="texts"></i></label><textarea id="s-badges" rows="3" placeholder="Δωρεάν αυτοψία&#10;Εγγύηση εργασιών&#10;20 χρόνια εμπειρία"></textarea></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="look"><summary><span class="ic">🎨</span><span class="tt"><b>Εμφάνιση</b><small id="sum-look"></small></span><span class="nd" hidden></span><span class="st" id="st-look"></span></summary><div class="body">
+    <div class="f"><label>🎨 Χρώμα</label><div class="swatches" id="swatches"></div>
+      <div class="row"><span class="hint">ή δικό σου:</span><input id="s-accent" type="color" aria-label="Δικό σου χρώμα"></div></div>
+    <div class="f"><label>🌗 Φόντο σελίδας <i class="nf" data-new="look"></i></label>
+      <div class="seg" id="themeSeg"><button data-theme="dark">🌙 Σκούρο</button><button data-theme="light">☀ Ανοιχτό</button></div></div>
+    <div class="f"><label>🌄 Μεγάλη φωτογραφία αρχικής</label>
+      <div class="row"><label class="btn s">Επιλογή<input type="file" accept="image/*" hidden id="s-hero"></label><button class="btn s" id="s-hero-blur">▦ Θόλωμα</button><button class="btn s d" id="s-hero-del">Αφαίρεση</button><span id="s-hero-state" class="hint"></span></div></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="contact"><summary><span class="ic">📞</span><span class="tt"><b>Επικοινωνία</b><small id="sum-contact"></small></span><span class="nd" hidden></span><span class="st" id="st-contact"></span></summary><div class="body">
+    <div class="f"><label for="s-phone">☎ Τηλέφωνο</label><input id="s-phone" inputmode="tel" maxlength="20" placeholder="+30 69…"></div>
+    <div class="f"><label for="s-chat">💬 Viber / WhatsApp</label><input id="s-chat" inputmode="tel" maxlength="20" placeholder="αν είναι άλλος αριθμός"></div>
+    <div class="f"><label for="s-email">✉ Email</label><input id="s-email" inputmode="email" maxlength="80"></div>
+    <div class="f"><label for="s-area">📍 Περιοχή εξυπηρέτησης</label><input id="s-area" maxlength="80"><span class="hint">Μόνο περιοχή — όχι διεύθυνση.</span></div>
+    <div class="f"><label for="s-hours">🕐 Ωράριο <i class="nf" data-new="contact"></i></label><input id="s-hours" maxlength="80" placeholder="π.χ. Δευ–Παρ 8:00–17:00, Σάβ 8:00–13:00"></div>
+    <div class="f"><label for="s-fb">📘 Facebook <i class="nf" data-new="contact"></i></label><input id="s-fb" inputmode="url" maxlength="200" placeholder="https://www.facebook.com/…"></div>
+    <div class="f"><label for="s-ig">📸 Instagram <i class="nf" data-new="contact"></i></label><input id="s-ig" inputmode="url" maxlength="200" placeholder="https://www.instagram.com/…"></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="services"><summary><span class="ic">🛠</span><span class="tt"><b>Εργασίες</b><small id="sum-services"></small></span><span class="nd" hidden></span><span class="st" id="st-services"></span></summary><div class="body">
+    <div class="f"><label for="s-services">📋 Μία ανά γραμμή (έως 12)</label><textarea id="s-services" rows="6"></textarea></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="legal"><summary><span class="ic">⚖</span><span class="tt"><b>Νομικά στοιχεία</b><small id="sum-legal"></small></span><span class="nd" hidden></span><span class="st" id="st-legal"></span></summary><div class="body">
+    <p class="hint">Τα ζητά ο νόμος. Φαίνονται στο κάτω μέρος της σελίδας.</p>
+    <div class="f"><label for="c-legal">🏛 Επωνυμία</label><input id="c-legal" maxlength="120"></div>
+    <div class="f"><label for="c-afm">🔢 ΑΦΜ</label><input id="c-afm" inputmode="numeric" maxlength="12"></div>
+    <div class="f"><label for="c-gemi">📄 Αριθμός ΓΕΜΗ</label><input id="c-gemi" inputmode="numeric" maxlength="20"></div>
+    <div class="f"><label for="c-addr">📍 Έδρα</label><input id="c-addr" maxlength="160"></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="projects" open><summary><span class="ic">🖼</span><span class="tt"><b>Έργα</b><small id="sum-projects"></small></span><span class="nd" hidden></span><span class="st" id="st-projects"></span></summary><div class="body">
     <div class="row"><button class="btn p" id="addProject">+ Νέο έργο</button></div>
     <div id="projList"></div>
-  </div>
+  </div></details>
 </section>
 
 <!-- ΔΗΜΟΣΙΕΥΣΗ -->
@@ -158,7 +194,7 @@ a{color:var(--accent)}
 
 <script>
 "use strict";
-const APP_VERSION = "6.0.0";
+const APP_VERSION = "6.1.0";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -195,14 +231,15 @@ function defaultState() {
     name: "GlenMetal", subtitle: "Μεταλλικές κατασκευές", eyebrow: "Σχεδιασμός · Κατασκευή · Τοποθέτηση",
     title: "Μεταλλικές κατασκευές με ακρίβεια.", intro: "Σχεδιάζουμε και κατασκευάζουμε μεταλλικές λύσεις για κατοικίες και επαγγελματικούς χώρους.",
     cta: "Ζήτα προσφορά", accent: "#e5a33b", hero: null, services: DEFAULT_SERVICES.slice(),
-    phone: "", chat: "", email: "", area: "Αθήνα και Αττική",
+    phone: "", chat: "", email: "", area: "Αθήνα και Αττική", hours: "", fb: "", ig: "",
+    logo: null, theme: "dark", badges: ["Κατασκευές κατά παραγγελία", "Προσεγμένη τοποθέτηση"],
     company: { legal: "", afm: "", gemi: "", addr: "" } },
-    projects: [], lastBackup: 0, lastChange: 0 };
+    projects: [], lastBackup: 0, lastChange: 0, seen: {} };
 }
 let S = null;
 let saveTimer = null;
 function changed() {
-  S.lastChange = Date.now();
+  S.lastChange = Date.now(); updateSummaries();
   $("saveState").textContent = "αποθήκευση…";
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveNow, 350);
@@ -241,7 +278,7 @@ async function photoURL(id) {
 }
 function forgetURL(id) { if (urlCache.has(id)) { URL.revokeObjectURL(urlCache.get(id)); urlCache.delete(id); } }
 function usedPhotoIds() {
-  const set = new Set(); if (S.settings.hero) set.add(S.settings.hero);
+  const set = new Set(); if (S.settings.hero) set.add(S.settings.hero); if (S.settings.logo) set.add(S.settings.logo);
   for (const p of S.projects) { p.photos.forEach(x => set.add(x)); if (p.before) set.add(p.before); if (p.after) set.add(p.after); }
   return set;
 }
@@ -332,6 +369,14 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 .lb{position:fixed;inset:0;background:#050607f2;z-index:30;display:none;align-items:center;justify-content:center}.lb.on{display:flex}
 .lb img{max-width:96vw;max-height:90vh;object-fit:contain}
 .lb button{position:absolute;top:14px;right:14px;background:#ffffff18;color:#fff;border:1px solid #ffffff44;border-radius:50%;width:44px;height:44px;font-size:22px}
+.mark.img{transform:none;border:0;border-radius:8px;overflow:hidden;width:42px;height:42px;flex-basis:42px}.mark.img img{width:100%;height:100%;object-fit:contain}
+.badges{display:flex;gap:10px 22px;flex-wrap:wrap;margin-top:30px;color:var(--muted);font-size:13px}.badges span:before{content:"✓";color:var(--accent);margin-right:7px;font-weight:900}
+body.light{--bg:#f6f5f1;--panel:#ffffff;--line:#dedbd3;--text:#17191a;--muted:#5b6366}
+body.light .topbar{background:#f6f5f1ee;border-color:#00000014}body.light .nav{color:#3a3f42}
+body.light .hero{background:radial-gradient(ellipse at 75% 42%,#f3dfb8 0,#f6f5f1 60%);background-size:cover;background-position:center}
+body.light .hero:before{background:linear-gradient(90deg,#f6f5f1 0%,#f6f5f1dd 40%,#f6f5f144 100%)}body.light .hero p{color:#3a3f42}
+body.light .cat{background:#fff}body.light .projects{background:#efede7}body.light .proj{background:#fff}body.light .main,body.light .thumb{background:#e4e1da}
+body.light .btn{background:#00000006}body.light .btn.p{background:var(--accent)}
 .legal{max-width:760px;padding:40px 0}.legal h1{font-size:30px}.legal h2{font-size:19px;margin-top:28px}.legal p,.legal li{color:#d0d4d2}
 @media(max-width:760px){.nav{display:none}.cats{grid-template-columns:1fr 1fr}.grid,.contact{grid-template-columns:1fr}section{padding:54px 0}.hero .in{padding:70px 0 60px}}
 @media(max-width:430px){.cats{grid-template-columns:1fr}.acts .btn{width:100%}}`;
@@ -346,6 +391,7 @@ function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;
 function cleanPhone(p) { p = String(p || "").replace(/[^\d+]/g, ""); return /^\+?\d{6,15}$/.test(p) ? p : ""; }
 function cleanEmail(e) { e = String(e || "").trim(); return /^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i.test(e) ? e : ""; }
 function cleanColor(c) { return /^#[0-9a-f]{6}$/i.test(c || "") ? c : "#e5a33b"; }
+function cleanSocial(u, host) { try { const x = new URL(String(u || "").trim()); return x.protocol === "https:" && (x.hostname === host || x.hostname.endsWith("." + host)) ? x.href : ""; } catch { return ""; } }
 function intlDigits(p) { p = cleanPhone(p); if (!p) return ""; if (p.startsWith("+")) return p.slice(1); if (p.startsWith("00")) return p.slice(2); return p.length === 10 ? "30" + p : p; }
 
 // url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"
@@ -356,6 +402,10 @@ function siteHTML(url, mode) {
   const viber = chat ? `<a class="btn" href="viber://chat?number=%2B${esc(chat)}">Viber</a>` : "";
   const wa = chat ? `<a class="btn" href="https://wa.me/${esc(chat)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : "";
   const mailBtn = mail ? `<a class="btn" href="mailto:${esc(mail)}?subject=${encodeURIComponent("Αίτημα προσφοράς")}">✉ Email</a>` : "";
+  const logo = st.logo && url(st.logo) ? `<img src="${esc(url(st.logo))}" alt="">` : `<span>${esc((st.name || "?").trim().charAt(0).toUpperCase())}</span>`;
+  const badges = (st.badges || []).length ? `<div class="badges">${st.badges.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
+  const fb = cleanSocial(st.fb, "facebook.com"), ig = cleanSocial(st.ig, "instagram.com");
+  const social = (fb ? `<a class="btn" href="${esc(fb)}" target="_blank" rel="noopener noreferrer">Facebook</a>` : "") + (ig ? `<a class="btn" href="${esc(ig)}" target="_blank" rel="noopener noreferrer">Instagram</a>` : "");
   const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}')"` : "";
   const services = (st.services || []).map((s, i) => `<div class="cat"><span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(s)}</h3></div>`).join("");
   const projects = S.projects.filter(p => p.title || p.photos.length).map(p => {
@@ -375,12 +425,12 @@ function siteHTML(url, mode) {
   const css = mode === "export" ? `<link rel="stylesheet" href="stil.css">` : `<style>${SITE_CSS}</style>`;
   const js = mode === "export" ? `<script src="skript.js" defer><\/script>` : `<script>${SITE_JS}<\/script>`;
   const csp = mode === "export" ? `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; form-action 'none'">` : "";
-  return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc((st.intro || "").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}"><title>${esc(st.name)}${st.subtitle ? " | " + esc(st.subtitle) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body>
-<header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark"><span>${esc((st.name || "?").trim().charAt(0).toUpperCase())}</span></div><div><b>${esc(st.name)}</b><small>${esc(st.subtitle)}</small></div></a><nav class="nav"><a href="#ergasies">Εργασίες</a><a href="#erga">Έργα</a><a href="#epikoinonia">Επικοινωνία</a></nav><a class="btn p" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")}</a></div></header>
-<main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(st.eyebrow)}</div><h1>${esc(st.title)}</h1><p>${esc(st.intro)}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")} ↗</a></div></div></div></section>
+  return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc((st.intro || "").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}"><title>${esc(st.name)}${st.subtitle ? " | " + esc(st.subtitle) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body class="${st.theme === "light" ? "light" : ""}">
+<header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark${st.logo && url(st.logo) ? " img" : ""}">${logo}</div><div><b>${esc(st.name)}</b><small>${esc(st.subtitle)}</small></div></a><nav class="nav"><a href="#ergasies">Εργασίες</a><a href="#erga">Έργα</a><a href="#epikoinonia">Επικοινωνία</a></nav><a class="btn p" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")}</a></div></header>
+<main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(st.eyebrow)}</div><h1>${esc(st.title)}</h1><p>${esc(st.intro)}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")} ↗</a></div>${badges}</div></div></section>
 ${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">Τι κάνουμε</div><h2>Εργασίες</h2></div><div class="cats">${services}</div></div></section>` : ""}
 ${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">Δουλειές μας</div><h2>Τα έργα μας</h2></div><div class="grid">${projects}</div></div></section>` : ""}
-<section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">Επικοινωνία</div><h2>Ας μιλήσουμε για το έργο σου.</h2></div><div class="contact"><div class="box"><h3>${esc(st.cta || "Ζήτα προσφορά")}</h3><p>Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div></div><div class="box"><h3>Περιοχή εξυπηρέτησης</h3><p>${esc(st.area || "Κατόπιν συνεννόησης")}</p></div></div></div></section></main>
+<section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">Επικοινωνία</div><h2>Ας μιλήσουμε για το έργο σου.</h2></div><div class="contact"><div class="box"><h3>${esc(st.cta || "Ζήτα προσφορά")}</h3><p>Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>Περιοχή εξυπηρέτησης</h3><p>${esc(st.area || "Κατόπιν συνεννόησης")}</p>${st.hours ? `<h3>Ωράριο</h3><p>${esc(st.hours)}</p>` : ""}</div></div></div></section></main>
 <footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">Πολιτική απορρήτου</a></div></footer>
 <div class="lb" id="lb" role="dialog" aria-label="Φωτογραφία"><button id="lbx" aria-label="Κλείσιμο">×</button><img id="lbimg" alt="Φωτογραφία έργου"></div>${js}</body></html>`;
 }
@@ -403,22 +453,80 @@ function privacyHTML() {
 /* ================= Προβολή ================= */
 async function refreshPreview() {
   const ids = usedPhotoIds(); const m = new Map();
-  for (const id of ids) { const b = await phGet(id); if (b) m.set(id, "data:image/jpeg;base64," + await blobToB64(b)); }
+  for (const id of ids) { const b = await phGet(id); if (b) m.set(id, "data:" + (b.type || "image/jpeg") + ";base64," + await blobToB64(b)); }
   $("preview").srcdoc = siteHTML(id => m.get(id) || "", "preview");
 }
 
 /* ================= Επεξεργασία ================= */
-const FIELDS = { "s-name": "name", "s-subtitle": "subtitle", "s-eyebrow": "eyebrow", "s-title": "title", "s-intro": "intro", "s-cta": "cta", "s-accent": "accent", "s-phone": "phone", "s-chat": "chat", "s-email": "email", "s-area": "area" };
+const FIELDS = { "s-name": "name", "s-subtitle": "subtitle", "s-eyebrow": "eyebrow", "s-title": "title", "s-intro": "intro", "s-cta": "cta", "s-accent": "accent", "s-phone": "phone", "s-chat": "chat", "s-email": "email", "s-area": "area", "s-hours": "hours", "s-fb": "fb", "s-ig": "ig" };
 const CFIELDS = { "c-legal": "legal", "c-afm": "afm", "c-gemi": "gemi", "c-addr": "addr" };
 function fillSettings() {
   for (const [id, k] of Object.entries(FIELDS)) $(id).value = S.settings[k] || "";
   for (const [id, k] of Object.entries(CFIELDS)) $(id).value = (S.settings.company || {})[k] || "";
   $("s-services").value = (S.settings.services || []).join("\n");
   $("s-hero-state").textContent = S.settings.hero ? "✓ υπάρχει" : "καμία";
+  $("s-badges").value = (S.settings.badges || []).join("\n");
+  renderLook(); renderLogo(); updateSummaries(); renderNewDots();
 }
 for (const [id, k] of Object.entries(FIELDS)) $(id).addEventListener("input", e => { S.settings[k] = e.target.value; changed(); });
 for (const [id, k] of Object.entries(CFIELDS)) $(id).addEventListener("input", e => { S.settings.company[k] = e.target.value; changed(); });
 $("s-services").addEventListener("input", e => { S.settings.services = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 12); changed(); renderProjects(); });
+$("s-badges").addEventListener("input", e => { S.settings.badges = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 4); changed(); });
+const PALETTE = ["#e5a33b", "#f2c200", "#e0533b", "#c0392b", "#2e86de", "#16a085", "#27ae60", "#8e44ad", "#7f8c8d", "#ffffff"];
+function renderLook() {
+  const cur = cleanColor(S.settings.accent).toLowerCase();
+  $("swatches").innerHTML = PALETTE.map(c => `<button style="background:${c}" data-c="${c}" class="${c === cur ? "on" : ""}" aria-label="Χρώμα ${c}"></button>`).join("");
+  $("s-accent").value = cur;
+  document.querySelectorAll("#themeSeg button").forEach(b => b.classList.toggle("on", b.dataset.theme === (S.settings.theme || "dark")));
+}
+$("swatches").addEventListener("click", e => { const b = e.target.closest("[data-c]"); if (!b) return; S.settings.accent = b.dataset.c; changed(); renderLook(); });
+$("s-accent").addEventListener("change", renderLook);
+$("themeSeg").addEventListener("click", e => { const b = e.target.closest("[data-theme]"); if (!b) return; S.settings.theme = b.dataset.theme; changed(); renderLook(); });
+async function renderLogo() {
+  const el = $("logoPrev"), u = S.settings.logo ? await photoURL(S.settings.logo) : "";
+  el.style.backgroundImage = u ? `url("${u}")` : ""; el.textContent = u ? "" : (S.settings.name || "?").trim().charAt(0).toUpperCase();
+}
+// Λογότυπο: κρατά τη διαφάνεια (PNG), χωρίς στοιχεία κάμερας
+async function cleanLogo(file) {
+  if (!/^image\//.test(file.type || "image/")) throw new Error("Επιτρέπονται μόνο εικόνες.");
+  const img = await loadImg(file), k = Math.min(1, 400 / Math.max(img.naturalWidth, img.naturalHeight));
+  const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  return new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("Αποτυχία")), "image/png"));
+}
+$("s-logo").addEventListener("change", async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try { const id = uid(); await phPut(id, await cleanLogo(f)); S.settings.logo = id; changed(); await sweepPhotos(); renderLogo(); } catch (er) { alert(er.message); } });
+$("s-logo-del").onclick = async () => { S.settings.logo = null; changed(); await sweepPhotos(); renderLogo(); };
+$("s-name").addEventListener("input", renderLogo);
+
+/* Σύνοψη και κατάσταση ανά ενότητα */
+function setSt(sec, ok, sum) { const st = $("st-" + sec); st.textContent = ok ? "✓" : "!"; st.className = "st " + (ok ? "ok" : "no"); st.title = ok ? "Συμπληρωμένο" : "Θέλει συμπλήρωση"; $("sum-" + sec).textContent = sum; }
+function updateSummaries() {
+  const st = S.settings, c = st.company || {};
+  setSt("ident", !!st.name.trim(), [st.name, st.subtitle].filter(Boolean).join(" · ") || "Όνομα, λογότυπο");
+  setSt("texts", !!st.title.trim(), st.title || "Τίτλος, περιγραφή");
+  setSt("look", true, (st.theme === "light" ? "Ανοιχτό φόντο" : "Σκούρο φόντο") + (st.hero ? " · με φωτογραφία" : ""));
+  const okC = !!(cleanPhone(st.phone) || cleanPhone(st.chat) || cleanEmail(st.email));
+  setSt("contact", okC, [st.phone, st.area].filter(Boolean).join(" · ") || "Τηλέφωνο, περιοχή");
+  setSt("services", (st.services || []).length > 0, (st.services || []).length + " εργασίες");
+  setSt("legal", !!(c.legal && c.afm), c.legal ? c.legal : "Επωνυμία, ΑΦΜ");
+  const n = S.projects.length, ph = S.projects.reduce((a, p) => a + p.photos.length, 0);
+  setSt("projects", S.projects.some(p => p.photos.length), n + " έργα · " + ph + " φωτογραφίες");
+}
+/* Κίτρινη τελεία για νέες ρυθμίσεις: σβήνει μόλις ανοίξει η ενότητα */
+const NEW_SECS = ["ident", "texts", "look", "contact"];
+function renderNewDots() {
+  S.seen = S.seen || {};
+  document.querySelectorAll(".sec").forEach(d => { const k = d.dataset.sec, isNew = NEW_SECS.includes(k) && !S.seen[k]; d.querySelector(".nd").hidden = !isNew; });
+}
+document.querySelectorAll(".sec").forEach(d => d.addEventListener("toggle", () => {
+  const k = d.dataset.sec;
+  if (d.open && NEW_SECS.includes(k) && !S.seen[k]) {
+    d.querySelectorAll("i.nf").forEach(i => i.classList.add("on"));
+    S.seen[k] = true; d.querySelector(".nd").hidden = true; saveNow();
+  } else if (!d.open) d.querySelectorAll("i.nf").forEach(i => i.classList.remove("on"));
+}));
+
 $("s-hero").addEventListener("change", async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return;
   try { S.settings.hero = await addPhotoFile(f); changed(); await sweepPhotos(); fillSettings(); } catch (er) { alert(er.message); } });
 $("s-hero-blur").onclick = async () => { if (!S.settings.hero) return alert("Δεν υπάρχει φωτογραφία αρχικής."); S.settings.hero = await blurPhoto(S.settings.hero); changed(); };
@@ -432,7 +540,7 @@ $("addProject").onclick = () => {
 
 async function renderProjects() {
   const list = $("projList");
-  if (!S.projects.length) { list.innerHTML = `<p class="hint">Δεν υπάρχουν έργα ακόμα. Πάτησε «+ Νέο έργο».</p>`; return; }
+  if (!S.projects.length) { list.innerHTML = `<p class="hint">Δεν υπάρχουν έργα ακόμα. Πάτησε «+ Νέο έργο».</p>`; updateSummaries(); return; }
   const cats = S.settings.services || [];
   const parts = [];
   for (let i = 0; i < S.projects.length; i++) {
@@ -460,6 +568,7 @@ async function renderProjects() {
     </div>`);
   }
   list.innerHTML = parts.join("");
+  updateSummaries();
 }
 $("projList").addEventListener("input", e => {
   const t = e.target, k = t.dataset.k; if (!k) return; const p = S.projects[+t.dataset.p];
@@ -525,7 +634,7 @@ async function buildSiteZip() {
   const enc = new TextEncoder(), files = [], names = new Map();
   for (const id of usedPhotoIds()) {
     const b = await phGet(id); if (!b) continue;
-    const n = "fotografies/" + id + ".jpg"; names.set(id, n);
+    const n = "fotografies/" + id + (b.type === "image/png" ? ".png" : ".jpg"); names.set(id, n);
     files.push({ name: n, data: new Uint8Array(await b.arrayBuffer()) });
   }
   files.unshift(
@@ -560,9 +669,9 @@ $("exportSite").onclick = async () => {
 /* ================= Αντίγραφα ασφαλείας (κανόνες GlenApps) ================= */
 function countEntries(st) { return (st.projects || []).length; }
 function blobToB64(b) { return new Promise(r => { const f = new FileReader(); f.onload = () => r(String(f.result).split(",")[1]); f.readAsDataURL(b); }); }
-function b64ToBlob(s) { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type: "image/jpeg" }); }
+function b64ToBlob(s) { let type = "image/jpeg"; const m = /^data:(image\/(?:jpeg|png));base64,/.exec(s); if (m) { type = m[1]; s = s.slice(m[0].length); } const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type }); }
 async function snapshot() {
-  const photos = {}; for (const id of usedPhotoIds()) { const b = await phGet(id); if (b) photos[id] = await blobToB64(b); }
+  const photos = {}; for (const id of usedPhotoIds()) { const b = await phGet(id); if (b) photos[id] = "data:" + (b.type || "image/jpeg") + ";base64," + await blobToB64(b); }
   return { tipos: "glenapps-vitrina", ekdosi: APP_VERSION, imerominia: new Date().toISOString(), state: { ...S, lastBackup: 0 }, photos };
 }
 async function keepPrin(reason) { // κρατά τα 10 πιο πρόσφατα
@@ -591,6 +700,7 @@ async function restoreSnap(d) {
   S = { ...def, ...d.state, settings: { ...def.settings, ...d.state.settings, company: { ...def.settings.company, ...(d.state.settings.company || {}) } }, lastBackup: S.lastBackup };
   S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
   if (S.settings.hero && !d.photos[S.settings.hero]) S.settings.hero = null;
+  if (S.settings.logo && !d.photos[S.settings.logo]) S.settings.logo = null;
   await saveNow(); await sweepPhotos(); fillSettings(); renderProjects(); renderBackup();
   return true;
 }
@@ -631,7 +741,7 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => show(b.
 (async function start() {
   try {
     const saved = await kvGet("state"), def = defaultState();
-    S = saved ? { ...def, ...saved, settings: { ...def.settings, ...saved.settings, company: { ...def.settings.company, ...(saved.settings.company || {}) } } } : def;
+    S = saved ? { ...def, seen: {}, ...saved, settings: { ...def.settings, ...saved.settings, company: { ...def.settings.company, ...(saved.settings.company || {}) } } } : def;
     if (navigator.storage && navigator.storage.persist) { try { await navigator.storage.persist(); } catch {} }
   } catch (e) { S = defaultState(); alert("Η αποθήκευση της συσκευής δεν είναι διαθέσιμη (π.χ. ιδιωτική περιήγηση). Οι αλλαγές δεν θα κρατηθούν."); }
   fillSettings(); await renderProjects(); refreshBackupWarn(); show("edit");

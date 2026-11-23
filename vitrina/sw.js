@@ -1,7 +1,7 @@
 // Βιτρίνα GlenApps — sw.js
 // ΜΗΝ αφαιρεθεί — κανόνας GlenApps: η εφαρμογή ανοίγει ΑΜΕΣΩΣ από το αποθηκευμένο αντίγραφο
 // της συσκευής και ελέγχει για νέα έκδοση στο παρασκήνιο· το δίκτυο περιμένει το πολύ 3 δευτερόλεπτα.
-const CACHE = "vitrina-6.0.0";
+const CACHE = "vitrina-6.1.0";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n)))).then(() => self.clients.claim())); });
