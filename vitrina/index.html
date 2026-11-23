@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.1.0">
+<meta name="app-version" content="6.2.0">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -70,6 +70,12 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 .seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .seg button{background:none;border:0;padding:11px;font-weight:700}.seg button.on{background:var(--accent);color:#171717}
 .logo-prev{width:52px;height:52px;border-radius:10px;border:1px solid var(--line);background:#0f1214 center/contain no-repeat;display:grid;place-items:center;color:var(--muted);font-size:20px}
+.tog{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}.tog:first-of-type{border-top:0}
+.tog input{position:absolute;opacity:0;pointer-events:none}.tog .sw{width:48px;height:28px;flex:0 0 48px;border-radius:14px;background:#3a4246;position:relative;transition:.2s}
+.tog .sw:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.tog input:checked+.sw{background:var(--accent)}.tog input:checked+.sw:after{left:23px}.tog input:focus-visible+.sw{outline:2px solid #fff}
+.tog b{display:block}.tog small{display:block;color:var(--muted);font-size:12px}
+.item{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:#1d2225}
 .bk{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
 </style>
 </head>
@@ -81,7 +87,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <!-- ΠΡΟΕΠΙΣΚΟΠΗΣΗ -->
 <section class="view" id="v-preview">
-  <div class="row" style="margin-bottom:10px"><span class="hint">Έτσι θα βλέπουν τη σελίδα οι πελάτες σου.</span></div>
+  <div class="row" style="margin-bottom:10px"><span class="hint" style="flex:1">Έτσι θα βλέπουν τη σελίδα οι πελάτες σου.</span><div class="seg" id="langSeg" hidden style="width:120px"><button data-lang="el" class="on">ΕΛ</button><button data-lang="en">EN</button></div></div>
   <iframe id="preview" title="Προεπισκόπηση σελίδας" sandbox="allow-scripts allow-popups"></iframe>
 </section>
 
@@ -132,6 +138,37 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
     <div class="f"><label for="c-afm">🔢 ΑΦΜ</label><input id="c-afm" inputmode="numeric" maxlength="12"></div>
     <div class="f"><label for="c-gemi">📄 Αριθμός ΓΕΜΗ</label><input id="c-gemi" inputmode="numeric" maxlength="20"></div>
     <div class="f"><label for="c-addr">📍 Έδρα</label><input id="c-addr" maxlength="160"></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="extra"><summary><span class="ic">⚙</span><span class="tt"><b>Επιπλέον λειτουργίες</b><small id="sum-extra"></small></span><span class="nd" hidden></span><span class="st" id="st-extra"></span></summary><div class="body">
+    <p class="hint">Άνοιξε μόνο όσα θέλεις να φαίνονται στη σελίδα σου.</p>
+    <label class="tog"><input type="checkbox" id="f-reviews"><span class="sw"></span><span><b>⭐ Κριτικές πελατών</b><small>Σχόλια πελατών με αστέρια</small></span></label>
+    <label class="tog"><input type="checkbox" id="f-faq"><span class="sw"></span><span><b>❓ Συχνές ερωτήσεις</b><small>Απαντήσεις σε ό,τι ρωτούν συνήθως οι πελάτες</small></span></label>
+    <label class="tog"><input type="checkbox" id="f-en"><span class="sw"></span><span><b>🌐 Σελίδα και στα αγγλικά</b><small>Κουμπί EN για πελάτες από το εξωτερικό</small></span></label>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="reviews" hidden><summary><span class="ic">⭐</span><span class="tt"><b>Κριτικές πελατών</b><small id="sum-reviews"></small></span><span class="nd" hidden></span><span class="st" id="st-reviews"></span></summary><div class="body">
+    <div class="warn"><b>⚠ Μόνο αληθινές κριτικές.</b> Ο νόμος απαγορεύει τις ψεύτικες ή «φτιαγμένες» κριτικές (πρόστιμα από την Αρχή Προστασίας Καταναλωτή). Γράψε μόνο ό,τι σου είπε ή σου έγραψε πραγματικά ο πελάτης, με τη συγκατάθεσή του, και μόνο μικρό όνομα με αρχικό επωνύμου (π.χ. «Νίκος Π.»).</div>
+    <button class="btn p" id="addReview">+ Νέα κριτική</button>
+    <div id="revList"></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="faq" hidden><summary><span class="ic">❓</span><span class="tt"><b>Συχνές ερωτήσεις</b><small id="sum-faq"></small></span><span class="nd" hidden></span><span class="st" id="st-faq"></span></summary><div class="body">
+    <button class="btn p" id="addFaq">+ Νέα ερώτηση</button>
+    <div id="faqList"></div>
+  </div></details>
+
+  <details class="sec" name="sec" data-sec="en" hidden><summary><span class="ic">🌐</span><span class="tt"><b>Αγγλικά κείμενα</b><small id="sum-en"></small></span><span class="nd" hidden></span><span class="st" id="st-en"></span></summary><div class="body">
+    <p class="hint">Ό,τι αφήσεις κενό, εμφανίζεται στα ελληνικά. Τα αγγλικά των έργων γράφονται μέσα σε κάθε έργο.</p>
+    <div class="f"><label for="en-subtitle">🔧 Τι κάνεις (EN)</label><input id="en-subtitle" maxlength="60" placeholder="e.g. Metal constructions"></div>
+    <div class="f"><label for="en-eyebrow">🏷 Μικρή ετικέτα (EN)</label><input id="en-eyebrow" maxlength="80"></div>
+    <div class="f"><label for="en-title">📣 Κεντρικός τίτλος (EN)</label><input id="en-title" maxlength="90"></div>
+    <div class="f"><label for="en-intro">📝 Περιγραφή (EN)</label><textarea id="en-intro" maxlength="400"></textarea></div>
+    <div class="f"><label for="en-cta">👆 Κουμπί προσφοράς (EN)</label><input id="en-cta" maxlength="30" placeholder="Get a quote"></div>
+    <div class="f"><label for="en-area">📍 Περιοχή (EN)</label><input id="en-area" maxlength="80"></div>
+    <div class="f"><label for="en-hours">🕐 Ωράριο (EN)</label><input id="en-hours" maxlength="80"></div>
+    <div class="f"><label for="en-services">🛠 Εργασίες (EN) — με την ίδια σειρά, μία ανά γραμμή</label><textarea id="en-services" rows="6"></textarea></div>
+    <div class="f"><label for="en-badges">✅ Σήματα εμπιστοσύνης (EN)</label><textarea id="en-badges" rows="3"></textarea></div>
   </div></details>
 
   <details class="sec" name="sec" data-sec="projects" open><summary><span class="ic">🖼</span><span class="tt"><b>Έργα</b><small id="sum-projects"></small></span><span class="nd" hidden></span><span class="st" id="st-projects"></span></summary><div class="body">
@@ -194,7 +231,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <script>
 "use strict";
-const APP_VERSION = "6.1.0";
+const APP_VERSION = "6.2.0";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -232,11 +269,18 @@ function defaultState() {
     title: "Μεταλλικές κατασκευές με ακρίβεια.", intro: "Σχεδιάζουμε και κατασκευάζουμε μεταλλικές λύσεις για κατοικίες και επαγγελματικούς χώρους.",
     cta: "Ζήτα προσφορά", accent: "#e5a33b", hero: null, services: DEFAULT_SERVICES.slice(),
     phone: "", chat: "", email: "", area: "Αθήνα και Αττική", hours: "", fb: "", ig: "",
+    features: { reviews: false, faq: false, en: false }, reviews: [], faq: [],
+    en: { subtitle: "", eyebrow: "", title: "", intro: "", cta: "", area: "", hours: "", services: [], badges: [] },
     logo: null, theme: "dark", badges: ["Κατασκευές κατά παραγγελία", "Προσεγμένη τοποθέτηση"],
     company: { legal: "", afm: "", gemi: "", addr: "" } },
     projects: [], lastBackup: 0, lastChange: 0, seen: {} };
 }
 let S = null;
+function mergeSettings(d, x) {
+  x = x || {};
+  return { ...d, ...x, company: { ...d.company, ...(x.company || {}) }, features: { ...d.features, ...(x.features || {}) }, en: { ...d.en, ...(x.en || {}) },
+    reviews: Array.isArray(x.reviews) ? x.reviews : [], faq: Array.isArray(x.faq) ? x.faq : [] };
+}
 let saveTimer = null;
 function changed() {
   S.lastChange = Date.now(); updateSummaries();
@@ -377,6 +421,12 @@ body.light .hero{background:radial-gradient(ellipse at 75% 42%,#f3dfb8 0,#f6f5f1
 body.light .hero:before{background:linear-gradient(90deg,#f6f5f1 0%,#f6f5f1dd 40%,#f6f5f144 100%)}body.light .hero p{color:#3a3f42}
 body.light .cat{background:#fff}body.light .projects{background:#efede7}body.light .proj{background:#fff}body.light .main,body.light .thumb{background:#e4e1da}
 body.light .btn{background:#00000006}body.light .btn.p{background:var(--accent)}
+.tr{display:flex;gap:8px;align-items:center}.lang{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-weight:800;font-size:13px}
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.rev{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}
+.stars{color:var(--accent);letter-spacing:2px}.stars span{opacity:.25}.rev blockquote{margin:10px 0;font-size:16px;white-space:pre-line}.rev figcaption{color:var(--muted);font-size:14px}
+.faq{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin:0 0 10px}.faq summary{padding:16px 18px;cursor:pointer;font-weight:700}.faq p{margin:0;padding:0 18px 16px;color:var(--muted);white-space:pre-line}
+body.light .rev,body.light .faq{background:#fff}
+@media(max-width:760px){.revs{grid-template-columns:1fr}}
 .legal{max-width:760px;padding:40px 0}.legal h1{font-size:30px}.legal h2{font-size:19px;margin-top:28px}.legal p,.legal li{color:#d0d4d2}
 @media(max-width:760px){.nav{display:none}.cats{grid-template-columns:1fr 1fr}.grid,.contact{grid-template-columns:1fr}section{padding:54px 0}.hero .in{padding:70px 0 60px}}
 @media(max-width:430px){.cats{grid-template-columns:1fr}.acts .btn{width:100%}}`;
@@ -394,45 +444,70 @@ function cleanColor(c) { return /^#[0-9a-f]{6}$/i.test(c || "") ? c : "#e5a33b";
 function cleanSocial(u, host) { try { const x = new URL(String(u || "").trim()); return x.protocol === "https:" && (x.hostname === host || x.hostname.endsWith("." + host)) ? x.href : ""; } catch { return ""; } }
 function intlDigits(p) { p = cleanPhone(p); if (!p) return ""; if (p.startsWith("+")) return p.slice(1); if (p.startsWith("00")) return p.slice(2); return p.length === 10 ? "30" + p : p; }
 
-// url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"
-function siteHTML(url, mode) {
-  const st = S.settings, c = st.company || {};
+// url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"· lang: "el" ή "en"
+const T = {
+  el: { nav: ["Εργασίες", "Έργα", "Επικοινωνία"], cta: "Ζήτα προσφορά", call: "☎ Κάλεσέ με", whatEy: "Τι κάνουμε", whatH: "Εργασίες", worksEy: "Δουλειές μας", worksH: "Τα έργα μας",
+    revEy: "Κριτικές", revH: "Τι λένε οι πελάτες", faqEy: "Ερωτήσεις", faqH: "Συχνές ερωτήσεις", conEy: "Επικοινωνία", conH: "Ας μιλήσουμε για το έργο σου.",
+    conP: "Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.", area: "Περιοχή εξυπηρέτησης", areaDef: "Κατόπιν συνεννόησης",
+    hours: "Ωράριο", privacy: "Πολιτική απορρήτου", afm: "ΑΦΜ", gemi: "ΓΕΜΗ", subject: "Αίτημα προσφοράς", zoom: "Μεγέθυνση", cmp: "Σύγκριση πριν και μετά",
+    before: "ΠΡΙΝ", after: "ΜΕΤΑ", detail: "Λεπτομέρεια", photo: "Φωτογραφία", close: "Κλείσιμο", sw: "EN", swLang: "en" },
+  en: { nav: ["Services", "Projects", "Contact"], cta: "Get a quote", call: "☎ Call me", whatEy: "What we do", whatH: "Services", worksEy: "Our work", worksH: "Our projects",
+    revEy: "Reviews", revH: "What our customers say", faqEy: "Questions", faqH: "Frequently asked questions", conEy: "Contact", conH: "Let's talk about your project.",
+    conP: "Tell us what you need and we will get back to you. You can also send a photo of the space.", area: "Service area", areaDef: "By arrangement",
+    hours: "Opening hours", privacy: "Privacy policy (in Greek)", afm: "VAT No", gemi: "GEMI", subject: "Quote request", zoom: "Enlarge", cmp: "Before and after comparison",
+    before: "BEFORE", after: "AFTER", detail: "Detail", photo: "Photo", close: "Close", sw: "ΕΛ", swLang: "el" } };
+function siteHTML(url, mode, lang = "el") {
+  const st = S.settings, c = st.company || {}, en = lang === "en" && st.features.en, L = T[en ? "en" : "el"];
+  const tx = k => (en && (st.en[k] || "").trim()) ? st.en[k] : (st[k] || "");
+  const svcEn = (s, i) => (en && (st.en.services || [])[i]) ? st.en.services[i] : s;
+  const catTx = cat => { const i = (st.services || []).indexOf(cat); return i >= 0 ? svcEn(cat, i) : cat; };
+  const cta = tx("cta") || L.cta;
   const tel = cleanPhone(st.phone), chat = intlDigits(st.chat || st.phone), mail = cleanEmail(st.email);
-  const callBtn = tel ? `<a class="btn p" href="tel:${esc(tel)}">☎ Κάλεσέ με</a>` : "";
+  const callBtn = tel ? `<a class="btn p" href="tel:${esc(tel)}">${L.call}</a>` : "";
   const viber = chat ? `<a class="btn" href="viber://chat?number=%2B${esc(chat)}">Viber</a>` : "";
   const wa = chat ? `<a class="btn" href="https://wa.me/${esc(chat)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>` : "";
-  const mailBtn = mail ? `<a class="btn" href="mailto:${esc(mail)}?subject=${encodeURIComponent("Αίτημα προσφοράς")}">✉ Email</a>` : "";
+  const mailBtn = mail ? `<a class="btn" href="mailto:${esc(mail)}?subject=${encodeURIComponent(L.subject)}">✉ Email</a>` : "";
   const logo = st.logo && url(st.logo) ? `<img src="${esc(url(st.logo))}" alt="">` : `<span>${esc((st.name || "?").trim().charAt(0).toUpperCase())}</span>`;
-  const badges = (st.badges || []).length ? `<div class="badges">${st.badges.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
+  const badgeList = (en && (st.en.badges || []).length) ? st.en.badges : (st.badges || []);
+  const badges = badgeList.length ? `<div class="badges">${badgeList.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
   const fb = cleanSocial(st.fb, "facebook.com"), ig = cleanSocial(st.ig, "instagram.com");
   const social = (fb ? `<a class="btn" href="${esc(fb)}" target="_blank" rel="noopener noreferrer">Facebook</a>` : "") + (ig ? `<a class="btn" href="${esc(ig)}" target="_blank" rel="noopener noreferrer">Instagram</a>` : "");
   const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}')"` : "";
-  const services = (st.services || []).map((s, i) => `<div class="cat"><span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(s)}</h3></div>`).join("");
+  const services = (st.services || []).map((s, i) => `<div class="cat"><span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3></div>`).join("");
   const projects = S.projects.filter(p => p.title || p.photos.length).map(p => {
+    const title = (en && p.title_en) ? p.title_en : p.title, desc = (en && p.desc_en) ? p.desc_en : p.desc;
     let top = "";
     if (p.before && p.after && url(p.before) && url(p.after)) {
-      top = `<div class="ba"><img src="${esc(url(p.after))}" alt="Μετά"><div class="clip"><img src="${esc(url(p.before))}" alt="Πριν"></div><div class="line"></div><span class="t b">ΠΡΙΝ</span><span class="t a">ΜΕΤΑ</span><input type="range" min="0" max="100" value="50" aria-label="Σύγκριση πριν και μετά"></div>`;
+      top = `<div class="ba"><img src="${esc(url(p.after))}" alt="${L.after}"><div class="clip"><img src="${esc(url(p.before))}" alt="${L.before}"></div><div class="line"></div><span class="t b">${L.before}</span><span class="t a">${L.after}</span><input type="range" min="0" max="100" value="50" aria-label="${L.cmp}"></div>`;
     } else if (p.photos[0] && url(p.photos[0])) {
-      top = `<button class="main" data-full="${esc(url(p.photos[0]))}" aria-label="Μεγέθυνση"><img src="${esc(url(p.photos[0]))}" alt="${esc(p.title)}" loading="lazy"></button>`;
+      top = `<button class="main" data-full="${esc(url(p.photos[0]))}" aria-label="${L.zoom}"><img src="${esc(url(p.photos[0]))}" alt="${esc(title)}" loading="lazy"></button>`;
     }
     const rest = (p.before && p.after) ? p.photos : p.photos.slice(1);
     const sz = Math.max(48, Math.min(220, Number(p.thumb) || 90));
-    const thumbs = rest.length ? `<div class="thumbs">${rest.filter(id => url(id)).map(id => `<button class="thumb" style="width:${sz}px;height:${sz}px" data-full="${esc(url(id))}" aria-label="Μεγέθυνση"><img src="${esc(url(id))}" alt="Λεπτομέρεια: ${esc(p.title)}" loading="lazy"></button>`).join("")}</div>` : "";
-    return `<article class="proj">${top}<div class="info">${p.cat ? `<div class="eyebrow">${esc(p.cat)}</div>` : ""}<h3>${esc(p.title)}</h3>${p.desc ? `<p>${esc(p.desc)}</p>` : ""}</div>${thumbs}</article>`;
+    const thumbs = rest.length ? `<div class="thumbs">${rest.filter(id => url(id)).map(id => `<button class="thumb" style="width:${sz}px;height:${sz}px" data-full="${esc(url(id))}" aria-label="${L.zoom}"><img src="${esc(url(id))}" alt="${L.detail}: ${esc(title)}" loading="lazy"></button>`).join("")}</div>` : "";
+    return `<article class="proj">${top}<div class="info">${p.cat ? `<div class="eyebrow">${esc(catTx(p.cat))}</div>` : ""}<h3>${esc(title)}</h3>${desc ? `<p>${esc(desc)}</p>` : ""}</div>${thumbs}</article>`;
   }).join("");
-  const legalLine = [c.legal, c.afm && "ΑΦΜ " + c.afm, c.gemi && "ΓΕΜΗ " + c.gemi, c.addr].filter(Boolean).map(esc).join(" · ");
+  const revs = st.features.reviews ? st.reviews.filter(r => r.ok && (r.text || "").trim()).map(r => { const n = Math.max(1, Math.min(5, +r.stars || 5));
+    return `<figure class="rev"><div class="stars" aria-label="${n}/5">${"★".repeat(n)}<span>${"★".repeat(5 - n)}</span></div><blockquote>${esc(r.text)}</blockquote>${r.name ? `<figcaption>— ${esc(r.name)}</figcaption>` : ""}</figure>`; }).join("") : "";
+  const faqs = st.features.faq ? st.faq.filter(f => (f.q || "").trim() && (f.a || "").trim()).map(f => {
+    const q = (en && f.q_en) ? f.q_en : f.q, a = (en && f.a_en) ? f.a_en : f.a; return `<details class="faq"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`; }).join("") : "";
+  const legalLine = [c.legal, c.afm && L.afm + " " + c.afm, c.gemi && L.gemi + " " + c.gemi, c.addr].filter(Boolean).map(esc).join(" · ");
   const privacyHref = mode === "export" ? "politiki-aporritou.html" : "#";
+  const langSw = st.features.en ? `<a class="lang" href="${mode === "export" ? (en ? "index.html" : "en.html") : "#"}" hreflang="${L.swLang}" lang="${L.swLang}">${L.sw}</a>` : "";
   const css = mode === "export" ? `<link rel="stylesheet" href="stil.css">` : `<style>${SITE_CSS}</style>`;
   const js = mode === "export" ? `<script src="skript.js" defer><\/script>` : `<script>${SITE_JS}<\/script>`;
   const csp = mode === "export" ? `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; form-action 'none'">` : "";
-  return `<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc((st.intro || "").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}"><title>${esc(st.name)}${st.subtitle ? " | " + esc(st.subtitle) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body class="${st.theme === "light" ? "light" : ""}">
-<header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark${st.logo && url(st.logo) ? " img" : ""}">${logo}</div><div><b>${esc(st.name)}</b><small>${esc(st.subtitle)}</small></div></a><nav class="nav"><a href="#ergasies">Εργασίες</a><a href="#erga">Έργα</a><a href="#epikoinonia">Επικοινωνία</a></nav><a class="btn p" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")}</a></div></header>
-<main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(st.eyebrow)}</div><h1>${esc(st.title)}</h1><p>${esc(st.intro)}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(st.cta || "Ζήτα προσφορά")} ↗</a></div>${badges}</div></div></section>
-${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">Τι κάνουμε</div><h2>Εργασίες</h2></div><div class="cats">${services}</div></div></section>` : ""}
-${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">Δουλειές μας</div><h2>Τα έργα μας</h2></div><div class="grid">${projects}</div></div></section>` : ""}
-<section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">Επικοινωνία</div><h2>Ας μιλήσουμε για το έργο σου.</h2></div><div class="contact"><div class="box"><h3>${esc(st.cta || "Ζήτα προσφορά")}</h3><p>Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>Περιοχή εξυπηρέτησης</h3><p>${esc(st.area || "Κατόπιν συνεννόησης")}</p>${st.hours ? `<h3>Ωράριο</h3><p>${esc(st.hours)}</p>` : ""}</div></div></div></section></main>
-<footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">Πολιτική απορρήτου</a></div></footer>
-<div class="lb" id="lb" role="dialog" aria-label="Φωτογραφία"><button id="lbx" aria-label="Κλείσιμο">×</button><img id="lbimg" alt="Φωτογραφία έργου"></div>${js}</body></html>`;
+  const alt = (mode === "export" && st.features.en) ? `<link rel="alternate" hreflang="el" href="index.html"><link rel="alternate" hreflang="en" href="en.html">` : "";
+  return `<!doctype html><html lang="${en ? "en" : "el"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc(tx("intro").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}">${alt}<title>${esc(st.name)}${tx("subtitle") ? " | " + esc(tx("subtitle")) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body class="${st.theme === "light" ? "light" : ""}">
+<header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark${st.logo && url(st.logo) ? " img" : ""}">${logo}</div><div><b>${esc(st.name)}</b><small>${esc(tx("subtitle"))}</small></div></a><nav class="nav"><a href="#ergasies">${L.nav[0]}</a><a href="#erga">${L.nav[1]}</a><a href="#epikoinonia">${L.nav[2]}</a></nav><div class="tr">${langSw}<a class="btn p" href="#epikoinonia">${esc(cta)}</a></div></div></header>
+<main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(tx("eyebrow"))}</div><h1>${esc(tx("title"))}</h1><p>${esc(tx("intro"))}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(cta)} ↗</a></div>${badges}</div></div></section>
+${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">${L.whatEy}</div><h2>${L.whatH}</h2></div><div class="cats">${services}</div></div></section>` : ""}
+${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="grid">${projects}</div></div></section>` : ""}
+${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class="eyebrow">${L.revEy}</div><h2>${L.revH}</h2></div><div class="revs">${revs}</div></div></section>` : ""}
+${faqs ? `<section id="erotiseis" class="faqs"><div class="wrap"><div class="head"><div class="eyebrow">${L.faqEy}</div><h2>${L.faqH}</h2></div>${faqs}</div></section>` : ""}
+<section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">${L.conEy}</div><h2>${L.conH}</h2></div><div class="contact"><div class="box"><h3>${esc(cta)}</h3><p>${L.conP}</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>${L.area}</h3><p>${esc(tx("area") || L.areaDef)}</p>${tx("hours") ? `<h3>${L.hours}</h3><p>${esc(tx("hours"))}</p>` : ""}</div></div></div></section></main>
+<footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">${L.privacy}</a></div></footer>
+<div class="lb" id="lb" role="dialog" aria-label="${L.photo}"><button id="lbx" aria-label="${L.close}">×</button><img id="lbimg" alt="${L.photo}"></div>${js}</body></html>`;
 }
 
 function privacyHTML() {
@@ -451,10 +526,13 @@ function privacyHTML() {
 }
 
 /* ================= Προβολή ================= */
+let previewLang = "el";
+$("langSeg").addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (!b) return; previewLang = b.dataset.lang;
+  document.querySelectorAll("#langSeg button").forEach(x => x.classList.toggle("on", x === b)); refreshPreview(); });
 async function refreshPreview() {
   const ids = usedPhotoIds(); const m = new Map();
   for (const id of ids) { const b = await phGet(id); if (b) m.set(id, "data:" + (b.type || "image/jpeg") + ";base64," + await blobToB64(b)); }
-  $("preview").srcdoc = siteHTML(id => m.get(id) || "", "preview");
+  $("preview").srcdoc = siteHTML(id => m.get(id) || "", "preview", S.settings.features.en ? previewLang : "el");
 }
 
 /* ================= Επεξεργασία ================= */
@@ -466,6 +544,10 @@ function fillSettings() {
   $("s-services").value = (S.settings.services || []).join("\n");
   $("s-hero-state").textContent = S.settings.hero ? "✓ υπάρχει" : "καμία";
   $("s-badges").value = (S.settings.badges || []).join("\n");
+  const F = S.settings.features; $("f-reviews").checked = F.reviews; $("f-faq").checked = F.faq; $("f-en").checked = F.en;
+  for (const k of EN_KEYS) $("en-" + k).value = S.settings.en[k] || "";
+  $("en-services").value = (S.settings.en.services || []).join("\n"); $("en-badges").value = (S.settings.en.badges || []).join("\n");
+  applyFeatures(); renderReviews(); renderFaq();
   renderLook(); renderLogo(); updateSummaries(); renderNewDots();
 }
 for (const [id, k] of Object.entries(FIELDS)) $(id).addEventListener("input", e => { S.settings[k] = e.target.value; changed(); });
@@ -499,6 +581,51 @@ $("s-logo").addEventListener("change", async e => { const f = e.target.files[0];
 $("s-logo-del").onclick = async () => { S.settings.logo = null; changed(); await sweepPhotos(); renderLogo(); };
 $("s-name").addEventListener("input", renderLogo);
 
+/* Επιπλέον λειτουργίες */
+const EN_KEYS = ["subtitle", "eyebrow", "title", "intro", "cta", "area", "hours"];
+function applyFeatures() {
+  const F = S.settings.features;
+  document.querySelector('.sec[data-sec="reviews"]').hidden = !F.reviews;
+  document.querySelector('.sec[data-sec="faq"]').hidden = !F.faq;
+  document.querySelector('.sec[data-sec="en"]').hidden = !F.en;
+  $("langSeg").hidden = !F.en; if (!F.en) previewLang = "el";
+}
+for (const k of ["reviews", "faq", "en"]) $("f-" + k).addEventListener("change", e => {
+  S.settings.features[k] = e.target.checked; changed(); applyFeatures(); renderProjects(); renderFaq();
+  if (e.target.checked) { const d = document.querySelector('.sec[data-sec="' + k + '"]'); setTimeout(() => d.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50); }
+});
+for (const k of EN_KEYS) $("en-" + k).addEventListener("input", e => { S.settings.en[k] = e.target.value; changed(); });
+$("en-services").addEventListener("input", e => { S.settings.en.services = e.target.value.split("\n").map(x => x.trim()).slice(0, 12); changed(); });
+$("en-badges").addEventListener("input", e => { S.settings.en.badges = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 4); changed(); });
+
+function renderReviews() {
+  const L = S.settings.reviews;
+  $("revList").innerHTML = L.length ? L.map((r, i) => `<div class="item"><div class="proj-head"><b>⭐ ${i + 1}</b><div class="row"><button class="btn s" data-r="up" data-i="${i}" ${i ? "" : "disabled"}>▲</button><button class="btn s d" data-r="del" data-i="${i}">Διαγραφή</button></div></div>
+    <div class="f"><label>👤 Όνομα (μικρό + αρχικό επωνύμου)</label><input data-rk="name" data-i="${i}" value="${esc(r.name)}" maxlength="30" placeholder="π.χ. Νίκος Π."></div>
+    <div class="f"><label>⭐ Αστέρια</label><select data-rk="stars" data-i="${i}">${[5, 4, 3, 2, 1].map(n => `<option value="${n}"${(r.stars || 5) == n ? " selected" : ""}>${"★".repeat(n)}${"☆".repeat(5 - n)}</option>`).join("")}</select></div>
+    <div class="f"><label>💬 Τι είπε ο πελάτης</label><textarea data-rk="text" data-i="${i}" maxlength="400">${esc(r.text)}</textarea></div>
+    <label class="check"><input type="checkbox" data-rk="ok" data-i="${i}" ${r.ok ? "checked" : ""}><span>Ο πελάτης <b>συμφώνησε</b> να δημοσιευτεί. ${r.ok ? "" : '<span class="hint">(Χωρίς αυτό δεν εμφανίζεται.)</span>'}</span></label></div>`).join("")
+    : `<p class="hint">Καμία κριτική ακόμα.</p>`;
+}
+$("addReview").onclick = () => { S.settings.reviews.unshift({ name: "", stars: 5, text: "", ok: false }); changed(); renderReviews(); };
+$("revList").addEventListener("input", e => { const t = e.target, k = t.dataset.rk; if (!k || k === "ok") return; S.settings.reviews[+t.dataset.i][k] = k === "stars" ? +t.value : t.value; changed(); });
+$("revList").addEventListener("change", e => { const t = e.target; if (t.dataset.rk === "ok") { S.settings.reviews[+t.dataset.i].ok = t.checked; changed(); renderReviews(); } else if (t.dataset.rk === "stars") { S.settings.reviews[+t.dataset.i].stars = +t.value; changed(); } });
+$("revList").addEventListener("click", e => { const b = e.target.closest("[data-r]"); if (!b) return; const i = +b.dataset.i, L = S.settings.reviews;
+  if (b.dataset.r === "del") { if (!confirm("Να διαγραφεί η κριτική;")) return; L.splice(i, 1); } else if (i > 0) [L[i - 1], L[i]] = [L[i], L[i - 1]]; changed(); renderReviews(); });
+
+function renderFaq() {
+  const L = S.settings.faq, en = S.settings.features.en;
+  $("faqList").innerHTML = L.length ? L.map((f, i) => `<div class="item"><div class="proj-head"><b>❓ ${i + 1}</b><div class="row"><button class="btn s" data-q="up" data-i="${i}" ${i ? "" : "disabled"}>▲</button><button class="btn s d" data-q="del" data-i="${i}">Διαγραφή</button></div></div>
+    <div class="f"><label>❓ Ερώτηση</label><input data-qk="q" data-i="${i}" value="${esc(f.q)}" maxlength="140" placeholder="π.χ. Βγάζετε τιμολόγιο;"></div>
+    <div class="f"><label>💡 Απάντηση</label><textarea data-qk="a" data-i="${i}" maxlength="600">${esc(f.a)}</textarea></div>
+    ${en ? `<div class="f"><label>❓ Ερώτηση (EN)</label><input data-qk="q_en" data-i="${i}" value="${esc(f.q_en)}" maxlength="140"></div><div class="f"><label>💡 Απάντηση (EN)</label><textarea data-qk="a_en" data-i="${i}" maxlength="600">${esc(f.a_en)}</textarea></div>` : ""}</div>`).join("")
+    : `<p class="hint">Καμία ερώτηση ακόμα.</p>`;
+}
+$("addFaq").onclick = () => { S.settings.faq.push({ q: "", a: "", q_en: "", a_en: "" }); changed(); renderFaq(); };
+$("faqList").addEventListener("input", e => { const t = e.target, k = t.dataset.qk; if (!k) return; S.settings.faq[+t.dataset.i][k] = t.value; changed(); });
+$("faqList").addEventListener("click", e => { const b = e.target.closest("[data-q]"); if (!b) return; const i = +b.dataset.i, L = S.settings.faq;
+  if (b.dataset.q === "del") { if (!confirm("Να διαγραφεί η ερώτηση;")) return; L.splice(i, 1); } else if (i > 0) [L[i - 1], L[i]] = [L[i], L[i - 1]]; changed(); renderFaq(); });
+
 /* Σύνοψη και κατάσταση ανά ενότητα */
 function setSt(sec, ok, sum) { const st = $("st-" + sec); st.textContent = ok ? "✓" : "!"; st.className = "st " + (ok ? "ok" : "no"); st.title = ok ? "Συμπληρωμένο" : "Θέλει συμπλήρωση"; $("sum-" + sec).textContent = sum; }
 function updateSummaries() {
@@ -511,10 +638,16 @@ function updateSummaries() {
   setSt("services", (st.services || []).length > 0, (st.services || []).length + " εργασίες");
   setSt("legal", !!(c.legal && c.afm), c.legal ? c.legal : "Επωνυμία, ΑΦΜ");
   const n = S.projects.length, ph = S.projects.reduce((a, p) => a + p.photos.length, 0);
+  const F = st.features, on = ["reviews", "faq", "en"].filter(k => F[k]);
+  setSt("extra", true, on.length ? on.map(k => ({ reviews: "Κριτικές", faq: "Ερωτήσεις", en: "Αγγλικά" })[k]).join(" · ") : "Όλα κλειστά");
+  const okRev = st.reviews.filter(r => r.ok && r.text.trim()).length;
+  setSt("reviews", okRev > 0, okRev + " με συγκατάθεση από " + st.reviews.length);
+  setSt("faq", st.faq.some(f => f.q.trim() && f.a.trim()), st.faq.length + " ερωτήσεις");
+  setSt("en", !!(st.en.title || "").trim(), st.en.title || "Αγγλικός τίτλος, περιγραφή");
   setSt("projects", S.projects.some(p => p.photos.length), n + " έργα · " + ph + " φωτογραφίες");
 }
 /* Κίτρινη τελεία για νέες ρυθμίσεις: σβήνει μόλις ανοίξει η ενότητα */
-const NEW_SECS = ["ident", "texts", "look", "contact"];
+const NEW_SECS = ["ident", "texts", "look", "contact", "extra"];
 function renderNewDots() {
   S.seen = S.seen || {};
   document.querySelectorAll(".sec").forEach(d => { const k = d.dataset.sec, isNew = NEW_SECS.includes(k) && !S.seen[k]; d.querySelector(".nd").hidden = !isNew; });
@@ -533,7 +666,7 @@ $("s-hero-blur").onclick = async () => { if (!S.settings.hero) return alert("Δ�
 $("s-hero-del").onclick = async () => { S.settings.hero = null; changed(); await sweepPhotos(); fillSettings(); };
 
 $("addProject").onclick = () => {
-  S.projects.unshift({ id: uid(), title: "", cat: (S.settings.services || [])[0] || "", desc: "", photos: [], thumb: 90, before: null, after: null });
+  S.projects.unshift({ id: uid(), title: "", title_en: "", desc_en: "", cat: (S.settings.services || [])[0] || "", desc: "", photos: [], thumb: 90, before: null, after: null });
   changed(); renderProjects();
   const t = document.querySelector("#projList .proj input"); if (t) t.focus();
 };
@@ -561,6 +694,7 @@ async function renderProjects() {
       <div class="f"><label>Τίτλος έργου</label><input data-k="title" data-p="${i}" value="${esc(p.title)}" maxlength="80" placeholder="π.χ. Κάγκελα μπαλκονιού"></div>
       <div class="f"><label>Κατηγορία</label><select data-k="cat" data-p="${i}">${opts || "<option></option>"}</select></div>
       <div class="f"><label>Περιγραφή</label><textarea data-k="desc" data-p="${i}" maxlength="600">${esc(p.desc)}</textarea></div>
+      ${S.settings.features.en ? `<div class="f"><label>🌐 Τίτλος (EN)</label><input data-k="title_en" data-p="${i}" value="${esc(p.title_en)}" maxlength="80"></div><div class="f"><label>🌐 Περιγραφή (EN)</label><textarea data-k="desc_en" data-p="${i}" maxlength="600">${esc(p.desc_en)}</textarea></div>` : ""}
       <div class="row"><label class="btn s p">+ Φωτογραφίες<input type="file" accept="image/*" multiple hidden data-a="addph" data-p="${i}"></label><span class="hint">${p.photos.length} φωτογραφίες · η ★ είναι η μεγάλη</span></div>
       <div class="chips">${chips.join("")}</div>
       ${p.photos.length > 1 ? `<div class="f"><label>Μέγεθος μικρών φωτογραφιών: <span id="tv-${i}">${p.thumb || 90}</span> px</label><input type="range" min="48" max="220" value="${p.thumb || 90}" data-k="thumb" data-p="${i}"></div>` : ""}
@@ -639,6 +773,7 @@ async function buildSiteZip() {
   }
   files.unshift(
     { name: "index.html", data: enc.encode(siteHTML(id => names.get(id) || "", "export")) },
+    ...(S.settings.features.en ? [{ name: "en.html", data: enc.encode(siteHTML(id => names.get(id) || "", "export", "en")) }] : []),
     { name: "stil.css", data: enc.encode(SITE_CSS) },
     { name: "skript.js", data: enc.encode(SITE_JS) },
     { name: "politiki-aporritou.html", data: enc.encode(privacyHTML()) },
@@ -697,8 +832,8 @@ async function restoreSnap(d) {
   await keepPrin("πριν από επαναφορά");
   for (const [id, b64] of Object.entries(d.photos)) { if (!/^[A-Za-z0-9]{1,40}$/.test(id)) continue; await phPut(id, b64ToBlob(b64)); }
   const def = defaultState();
-  S = { ...def, ...d.state, settings: { ...def.settings, ...d.state.settings, company: { ...def.settings.company, ...(d.state.settings.company || {}) } }, lastBackup: S.lastBackup };
-  S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
+  S = { ...def, ...d.state, settings: mergeSettings(def.settings, d.state.settings), lastBackup: S.lastBackup, seen: S.seen || {} };
+  S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), title_en: String(p.title_en || ""), desc_en: String(p.desc_en || ""), photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
   if (S.settings.hero && !d.photos[S.settings.hero]) S.settings.hero = null;
   if (S.settings.logo && !d.photos[S.settings.logo]) S.settings.logo = null;
   await saveNow(); await sweepPhotos(); fillSettings(); renderProjects(); renderBackup();
@@ -741,7 +876,7 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => show(b.
 (async function start() {
   try {
     const saved = await kvGet("state"), def = defaultState();
-    S = saved ? { ...def, seen: {}, ...saved, settings: { ...def.settings, ...saved.settings, company: { ...def.settings.company, ...(saved.settings.company || {}) } } } : def;
+    S = saved ? { ...def, seen: {}, ...saved, settings: mergeSettings(def.settings, saved.settings) } : def;
     if (navigator.storage && navigator.storage.persist) { try { await navigator.storage.persist(); } catch {} }
   } catch (e) { S = defaultState(); alert("Η αποθήκευση της συσκευής δεν είναι διαθέσιμη (π.χ. ιδιωτική περιήγηση). Οι αλλαγές δεν θα κρατηθούν."); }
   fillSettings(); await renderProjects(); refreshBackupWarn(); show("edit");
