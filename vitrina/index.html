@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.4.1">
+<meta name="app-version" content="6.5.0">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -234,7 +234,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <script>
 "use strict";
-const APP_VERSION = "6.4.1";
+const APP_VERSION = "6.5.0";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -446,6 +446,8 @@ body.light .rev,body.light .faq{background:#fff}
 .mdi img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.mdi span{padding:0 10px 10px;font-weight:700}
 .mdin article.proj{margin-top:46px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.tiles.one{grid-template-columns:1fr;max-width:760px}.tiles.one .tile{aspect-ratio:16/9}
+.allp{margin-top:16px;cursor:pointer;font:inherit}
 .tile{position:relative;display:block;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);color:var(--text);font:inherit;text-align:left;cursor:pointer;aspect-ratio:4/3}
 .tile img,.tile .noimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--panel)}
 .tile .tt{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;background:linear-gradient(transparent,#000000cc);color:#fff}
@@ -473,8 +475,8 @@ document.addEventListener("input",function(e){var r=e.target;if(!r.matches||!r.m
 var md=document.getElementById("md"),mc=document.getElementById("mdc"),lista=null;
 function mdOpen(n,piso){mc.innerHTML="";if(piso){var k=document.createElement("button");k.type="button";k.className="mdb";k.setAttribute("aria-label",document.documentElement.lang==="en"?"Back":"Πίσω");k.textContent="‹";k.addEventListener("click",function(){mdOpen(piso)});mc.appendChild(k)}mc.appendChild(n);md.classList.add("on");md.scrollTop=0}
 function mdClose(){md.classList.remove("on");mc.innerHTML="";lista=null}
-document.addEventListener("click",function(e){var c=e.target.closest(".cat.go");if(c){var cat=c.getAttribute("data-cat"),w=document.createElement("div"),h=document.createElement("h3"),g=document.createElement("div");h.textContent=c.querySelector("h3").textContent;g.className="mdg";
-document.querySelectorAll("main article.proj").forEach(function(a,i){if(a.getAttribute("data-cat")!==cat)return;var b=document.createElement("button");b.type="button";b.className="mdi";b.setAttribute("data-pi",i);var im=a.querySelector(".ba > img, .main img, .thumb img");if(im){var x=document.createElement("img");x.src=im.getAttribute("src");x.alt="";x.loading="lazy";b.appendChild(x)}var t=document.createElement("span");t.textContent=a.getAttribute("data-t")||"";b.appendChild(t);g.appendChild(b)});
+document.addEventListener("click",function(e){var c=e.target.closest(".cat.go,.allp");if(c){var cat=c.getAttribute("data-cat"),w=document.createElement("div"),h=document.createElement("h3"),g=document.createElement("div");h.textContent=c.getAttribute("data-h")||c.querySelector("h3").textContent;g.className="mdg";
+document.querySelectorAll("main article.proj").forEach(function(a,i){if(cat!=="*"&&a.getAttribute("data-cat")!==cat)return;var b=document.createElement("button");b.type="button";b.className="mdi";b.setAttribute("data-pi",i);var im=a.querySelector(".ba > img, .main img, .thumb img");if(im){var x=document.createElement("img");x.src=im.getAttribute("src");x.alt="";x.loading="lazy";b.appendChild(x)}var t=document.createElement("span");t.textContent=a.getAttribute("data-t")||"";b.appendChild(t);g.appendChild(b)});
 w.appendChild(h);w.appendChild(g);lista=w;mdOpen(w);return}
 var p=e.target.closest("[data-pi]");if(p){var a=document.querySelectorAll("main article.proj")[+p.getAttribute("data-pi")];if(a)mdOpen(a.cloneNode(true),p.closest(".mdg")?lista:null);return}
 if(md.classList.contains("on")&&(e.target===md||e.target.closest("#mdx")))mdClose()});
@@ -490,12 +492,12 @@ function intlDigits(p) { p = cleanPhone(p); if (!p) return ""; if (p.startsWith(
 
 // url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"· lang: "el" ή "en"
 const T = {
-  el: { nav: ["Εργασίες", "Έργα", "Επικοινωνία"], cta: "Ζήτα προσφορά", call: "☎ Κάλεσέ με", whatEy: "Τι κάνουμε", whatH: "Εργασίες", worksEy: "Δουλειές μας", worksH: "Τα έργα μας",
+  el: { nav: ["Εργασίες", "Έργα", "Επικοινωνία"], cta: "Ζήτα προσφορά", call: "☎ Κάλεσέ με", whatEy: "Τι κάνουμε", whatH: "Εργασίες", worksEy: "Δουλειές μας", worksH: "Τα έργα μας", worksAll: "Όλα τα έργα μας ({n})",
     revEy: "Κριτικές", revH: "Τι λένε οι πελάτες", revNote: "Οι κριτικές δημοσιεύονται από την επιχείρηση, από μηνύματα πελατών για εργασίες που έγιναν πραγματικά, με τη συγκατάθεσή τους. Δεν πληρώθηκε καμία κριτική.", faqEy: "Ερωτήσεις", faqH: "Συχνές ερωτήσεις", conEy: "Επικοινωνία", conH: "Ας μιλήσουμε για το έργο σου.",
     conP: "Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.", area: "Περιοχή εξυπηρέτησης", areaDef: "Κατόπιν συνεννόησης",
     hours: "Ωράριο", privacy: "Πολιτική απορρήτου", afm: "ΑΦΜ", gemi: "ΓΕΜΗ", subject: "Αίτημα προσφοράς", zoom: "Μεγέθυνση", cmp: "Σύγκριση πριν και μετά",
     before: "ΠΡΙΝ", after: "ΜΕΤΑ", projN: "{n} έργα", proj1: "{n} έργο", detail: "Λεπτομέρεια", photo: "Φωτογραφία", close: "Κλείσιμο", sw: "EN", swLang: "en" },
-  en: { nav: ["Services", "Projects", "Contact"], cta: "Get a quote", call: "☎ Call me", whatEy: "What we do", whatH: "Services", worksEy: "Our work", worksH: "Our projects",
+  en: { nav: ["Services", "Projects", "Contact"], cta: "Get a quote", call: "☎ Call me", whatEy: "What we do", whatH: "Services", worksEy: "Our work", worksH: "Our projects", worksAll: "All our projects ({n})",
     revEy: "Reviews", revH: "What our customers say", revNote: "Reviews are published by the business, from messages of customers for work actually carried out, with their consent. No review was paid for.", faqEy: "Questions", faqH: "Frequently asked questions", conEy: "Contact", conH: "Let's talk about your project.",
     conP: "Tell us what you need and we will get back to you. You can also send a photo of the space.", area: "Service area", areaDef: "By arrangement",
     hours: "Opening hours", privacy: "Privacy policy (in Greek)", afm: "VAT No", gemi: "GEMI", subject: "Quote request", zoom: "Enlarge", cmp: "Before and after comparison",
@@ -525,7 +527,9 @@ function siteHTML(url, mode, lang = "el") {
   const services = (st.services || []).map((s, i) => { const n = projOf(s).length, sty = svcSty(s), ph = sty ? " ph" : "", inner = `<span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3>${n ? `<small class="cn">${(n === 1 ? L.proj1 : L.projN).replace("{n}", n)} ›</small>` : ""}`;
     return n ? `<button type="button" class="cat go${ph}" data-cat="${esc(s)}"${sty}>${inner}</button>` : `<div class="cat${ph}"${sty}>${inner}</div>`; }).join("");
   const shown = S.projects.filter(p => p.title || p.photos.length);
-  const tiles = shown.map((p, i) => { const title = (en && p.title_en) ? p.title_en : p.title, c = cover(p);
+  // Στην αρχική φαίνεται μόνο ένα έργο (το «προβεβλημένο» ή το πρώτο)· τα υπόλοιπα με το «Όλα τα έργα μας».
+  const fi = Math.max(0, shown.findIndex(p => p.feat));
+  const tiles = shown.map((p, i) => { if (i !== fi) return ""; const title = (en && p.title_en) ? p.title_en : p.title, c = cover(p);
     return `<button type="button" class="tile" data-pi="${i}">${c ? `<img src="${esc(url(c))}" alt="" loading="lazy">` : `<span class="noimg"></span>`}<span class="tt">${p.cat ? `<small>${esc(catTx(p.cat))}</small>` : ""}<b>${esc(title)}</b></span></button>`; }).join("");
   const projects = shown.map(p => {
     const title = (en && p.title_en) ? p.title_en : p.title, desc = (en && p.desc_en) ? p.desc_en : p.desc;
@@ -556,7 +560,7 @@ function siteHTML(url, mode, lang = "el") {
 <header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark${st.logo && url(st.logo) ? " img" : ""}">${logo}</div><div><b>${esc(st.name)}</b><small>${esc(tx("subtitle"))}</small></div></a><nav class="nav"><a href="#ergasies">${L.nav[0]}</a><a href="#erga">${L.nav[1]}</a><a href="#epikoinonia">${L.nav[2]}</a></nav><div class="tr">${langSw}<a class="btn p" href="#epikoinonia">${esc(cta)}</a></div></div></header>
 <main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(tx("eyebrow"))}</div><h1>${esc(tx("title"))}</h1><p>${esc(tx("intro"))}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(cta)} ↗</a></div>${badges}</div></div></section>
 ${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">${L.whatEy}</div><h2>${L.whatH}</h2></div><div class="cats">${services}</div></div></section>` : ""}
-${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="tiles">${tiles}</div><div class="arx" hidden>${projects}</div></div></section>` : ""}
+${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="tiles one">${tiles}</div>${shown.length > 1 ? `<button type="button" class="btn allp" data-cat="*" data-h="${esc(L.worksH)}">${L.worksAll.replace("{n}", shown.length)} ›</button>` : ""}<div class="arx" hidden>${projects}</div></div></section>` : ""}
 ${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class="eyebrow">${L.revEy}</div><h2>${L.revH}</h2></div><div class="revs">${revs}</div><p class="revnote">${L.revNote}</p></div></section>` : ""}
 ${faqs ? `<section id="erotiseis" class="faqs"><div class="wrap"><div class="head"><div class="eyebrow">${L.faqEy}</div><h2>${L.faqH}</h2></div>${faqs}</div></section>` : ""}
 <section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">${L.conEy}</div><h2>${L.conH}</h2></div><div class="contact"><div class="box"><h3>${esc(cta)}</h3><p>${L.conP}</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>${L.area}</h3><p>${esc(tx("area") || L.areaDef)}</p>${tx("hours") ? `<h3>${L.hours}</h3><p>${esc(tx("hours"))}</p>` : ""}</div></div></div></section></main>
@@ -763,6 +767,7 @@ async function renderProjects() {
     }
     const baState = (p.before ? "✓ πριν" : "— πριν") + " · " + (p.after ? "✓ μετά" : "— μετά");
     parts.push(`<div class="proj"><div class="proj-head"><b>${i + 1}.</b><div class="row">
+        <button class="btn s${p.feat ? " p" : ""}" data-a="feat" data-p="${i}" title="Αυτό φαίνεται στην αρχική">${p.feat ? "★ Στην αρχική" : "☆ Στην αρχική"}</button>
         <button class="btn s" data-a="up" data-p="${i}" ${i === 0 ? "disabled" : ""} aria-label="Πάνω">▲</button>
         <button class="btn s" data-a="down" data-p="${i}" ${i === S.projects.length - 1 ? "disabled" : ""} aria-label="Κάτω">▼</button>
         <button class="btn s d" data-a="delp" data-p="${i}">Διαγραφή</button></div></div>
@@ -798,7 +803,8 @@ $("projList").addEventListener("change", async e => {
 $("projList").addEventListener("click", async e => {
   const b = e.target.closest("button[data-a]"); if (!b) return;
   const a = b.dataset.a, i = +b.dataset.p, j = +b.dataset.j, P = S.projects, p = P[i];
-  if (a === "up" && i > 0) [P[i - 1], P[i]] = [P[i], P[i - 1]];
+  if (a === "feat") { const nai = !p.feat; P.forEach(x => { x.feat = false; }); p.feat = nai; }
+  else if (a === "up" && i > 0) [P[i - 1], P[i]] = [P[i], P[i - 1]];
   else if (a === "down" && i < P.length - 1) [P[i + 1], P[i]] = [P[i], P[i + 1]];
   else if (a === "delp") { if (!confirm(`Να διαγραφεί το έργο «${p.title || "χωρίς τίτλο"}» και οι φωτογραφίες του;`)) return; P.splice(i, 1); }
   else if (a === "main") { const [x] = p.photos.splice(j, 1); p.photos.unshift(x); }
@@ -908,7 +914,7 @@ async function restoreSnap(d) {
   for (const [id, b64] of Object.entries(d.photos)) { if (!/^[A-Za-z0-9]{1,40}$/.test(id)) continue; await phPut(id, b64ToBlob(b64)); }
   const def = defaultState();
   S = { ...def, ...d.state, settings: mergeSettings(def.settings, d.state.settings), lastBackup: S.lastBackup, seen: S.seen || {} };
-  S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), title_en: String(p.title_en || ""), desc_en: String(p.desc_en || ""), photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
+  S.projects = S.projects.map(p => ({ id: p.id || uid(), title: String(p.title || ""), cat: String(p.cat || ""), desc: String(p.desc || ""), title_en: String(p.title_en || ""), desc_en: String(p.desc_en || ""), feat: !!p.feat, photos: Array.isArray(p.photos) ? p.photos.filter(x => d.photos[x]) : [], thumb: +p.thumb || 90, before: d.photos[p.before] ? p.before : null, after: d.photos[p.after] ? p.after : null }));
   if (S.settings.hero && !d.photos[S.settings.hero]) S.settings.hero = null;
   if (S.settings.logo && !d.photos[S.settings.logo]) S.settings.logo = null;
   await saveNow(); await sweepPhotos(); fillSettings(); renderProjects(); renderBackup();
