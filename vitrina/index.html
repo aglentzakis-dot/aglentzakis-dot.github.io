@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.4.0">
+<meta name="app-version" content="6.4.1">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -234,7 +234,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <script>
 "use strict";
-const APP_VERSION = "6.4.0";
+const APP_VERSION = "6.4.1";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -430,6 +430,7 @@ body.light .btn{background:#00000006}body.light .btn.p{background:var(--accent)}
 .stars{color:var(--accent);letter-spacing:2px}.stars span{opacity:.25}.rev blockquote{margin:10px 0;font-size:16px;white-space:pre-line}.rev figcaption{color:var(--muted);font-size:14px}
 .faq{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin:0 0 10px}.faq summary{padding:16px 18px;cursor:pointer;font-weight:700}.faq p{margin:0;padding:0 18px 16px;color:var(--muted);white-space:pre-line}
 body.light .rev,body.light .faq{background:#fff}
+.revnote{margin:14px 0 0;font-size:.82rem;color:var(--muted)}
 @media(max-width:760px){.revs{grid-template-columns:1fr}}
 .legal{max-width:760px;padding:40px 0}.legal h1{font-size:30px}.legal h2{font-size:19px;margin-top:28px}.legal p,.legal li{color:#d0d4d2}
 @media(max-width:760px){.nav{display:none}.cats{grid-template-columns:1fr 1fr}.grid,.contact{grid-template-columns:1fr}section{padding:54px 0}.hero .in{padding:70px 0 60px}}
@@ -490,12 +491,12 @@ function intlDigits(p) { p = cleanPhone(p); if (!p) return ""; if (p.startsWith(
 // url(id) -> διεύθυνση φωτογραφίας· mode: "preview" ή "export"· lang: "el" ή "en"
 const T = {
   el: { nav: ["Εργασίες", "Έργα", "Επικοινωνία"], cta: "Ζήτα προσφορά", call: "☎ Κάλεσέ με", whatEy: "Τι κάνουμε", whatH: "Εργασίες", worksEy: "Δουλειές μας", worksH: "Τα έργα μας",
-    revEy: "Κριτικές", revH: "Τι λένε οι πελάτες", faqEy: "Ερωτήσεις", faqH: "Συχνές ερωτήσεις", conEy: "Επικοινωνία", conH: "Ας μιλήσουμε για το έργο σου.",
+    revEy: "Κριτικές", revH: "Τι λένε οι πελάτες", revNote: "Οι κριτικές δημοσιεύονται από την επιχείρηση, από μηνύματα πελατών για εργασίες που έγιναν πραγματικά, με τη συγκατάθεσή τους. Δεν πληρώθηκε καμία κριτική.", faqEy: "Ερωτήσεις", faqH: "Συχνές ερωτήσεις", conEy: "Επικοινωνία", conH: "Ας μιλήσουμε για το έργο σου.",
     conP: "Πες μας τι χρειάζεσαι και θα σου απαντήσουμε. Μπορείς να στείλεις και φωτογραφία του χώρου.", area: "Περιοχή εξυπηρέτησης", areaDef: "Κατόπιν συνεννόησης",
     hours: "Ωράριο", privacy: "Πολιτική απορρήτου", afm: "ΑΦΜ", gemi: "ΓΕΜΗ", subject: "Αίτημα προσφοράς", zoom: "Μεγέθυνση", cmp: "Σύγκριση πριν και μετά",
     before: "ΠΡΙΝ", after: "ΜΕΤΑ", projN: "{n} έργα", proj1: "{n} έργο", detail: "Λεπτομέρεια", photo: "Φωτογραφία", close: "Κλείσιμο", sw: "EN", swLang: "en" },
   en: { nav: ["Services", "Projects", "Contact"], cta: "Get a quote", call: "☎ Call me", whatEy: "What we do", whatH: "Services", worksEy: "Our work", worksH: "Our projects",
-    revEy: "Reviews", revH: "What our customers say", faqEy: "Questions", faqH: "Frequently asked questions", conEy: "Contact", conH: "Let's talk about your project.",
+    revEy: "Reviews", revH: "What our customers say", revNote: "Reviews are published by the business, from messages of customers for work actually carried out, with their consent. No review was paid for.", faqEy: "Questions", faqH: "Frequently asked questions", conEy: "Contact", conH: "Let's talk about your project.",
     conP: "Tell us what you need and we will get back to you. You can also send a photo of the space.", area: "Service area", areaDef: "By arrangement",
     hours: "Opening hours", privacy: "Privacy policy (in Greek)", afm: "VAT No", gemi: "GEMI", subject: "Quote request", zoom: "Enlarge", cmp: "Before and after comparison",
     before: "BEFORE", after: "AFTER", projN: "{n} projects", proj1: "{n} project", detail: "Detail", photo: "Photo", close: "Close", sw: "ΕΛ", swLang: "el" } };
@@ -556,7 +557,7 @@ function siteHTML(url, mode, lang = "el") {
 <main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(tx("eyebrow"))}</div><h1>${esc(tx("title"))}</h1><p>${esc(tx("intro"))}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(cta)} ↗</a></div>${badges}</div></div></section>
 ${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">${L.whatEy}</div><h2>${L.whatH}</h2></div><div class="cats">${services}</div></div></section>` : ""}
 ${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="tiles">${tiles}</div><div class="arx" hidden>${projects}</div></div></section>` : ""}
-${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class="eyebrow">${L.revEy}</div><h2>${L.revH}</h2></div><div class="revs">${revs}</div></div></section>` : ""}
+${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class="eyebrow">${L.revEy}</div><h2>${L.revH}</h2></div><div class="revs">${revs}</div><p class="revnote">${L.revNote}</p></div></section>` : ""}
 ${faqs ? `<section id="erotiseis" class="faqs"><div class="wrap"><div class="head"><div class="eyebrow">${L.faqEy}</div><h2>${L.faqH}</h2></div>${faqs}</div></section>` : ""}
 <section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">${L.conEy}</div><h2>${L.conH}</h2></div><div class="contact"><div class="box"><h3>${esc(cta)}</h3><p>${L.conP}</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>${L.area}</h3><p>${esc(tx("area") || L.areaDef)}</p>${tx("hours") ? `<h3>${L.hours}</h3><p>${esc(tx("hours"))}</p>` : ""}</div></div></div></section></main>
 <footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">${L.privacy}</a></div></footer>
