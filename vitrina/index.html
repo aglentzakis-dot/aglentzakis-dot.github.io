@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="app-version" content="6.3.0">
+<meta name="app-version" content="6.4.0">
 <meta name="theme-color" content="#111315">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-src 'self' blob: about:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
@@ -131,6 +131,8 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
   <details class="sec" name="sec" data-sec="services"><summary><span class="ic">🛠</span><span class="tt"><b>Εργασίες</b><small id="sum-services"></small></span><span class="nd" hidden></span><span class="st" id="st-services"></span></summary><div class="body">
     <div class="f"><label for="s-services">📋 Μία ανά γραμμή (έως 12)</label><textarea id="s-services" rows="6"></textarea></div>
+    <div class="f"><label>🖼 Φωτογραφία σε κάθε κατηγορία</label><div id="svc-pics"></div><span class="hint">Χωρίς δική της, παίρνει τη φωτογραφία του πρώτου έργου της κατηγορίας.</span>
+      <div class="row"><label class="hint" for="s-sd">🌓 Σκίαση</label><input id="s-sd" type="range" min="0" max="100" style="flex:1"></div></div>
   </div></details>
 
   <details class="sec" name="sec" data-sec="legal"><summary><span class="ic">⚖</span><span class="tt"><b>Νομικά στοιχεία</b><small id="sum-legal"></small></span><span class="nd" hidden></span><span class="st" id="st-legal"></span></summary><div class="body">
@@ -232,7 +234,7 @@ i.nf{display:none;width:8px;height:8px;border-radius:50%;background:#ffd400;vert
 
 <script>
 "use strict";
-const APP_VERSION = "6.3.0";
+const APP_VERSION = "6.4.0";
 const $ = id => document.getElementById(id);
 $("ver").textContent = "έκδοση " + APP_VERSION;
 
@@ -324,6 +326,7 @@ async function photoURL(id) {
 function forgetURL(id) { if (urlCache.has(id)) { URL.revokeObjectURL(urlCache.get(id)); urlCache.delete(id); } }
 function usedPhotoIds() {
   const set = new Set(); if (S.settings.hero) set.add(S.settings.hero); if (S.settings.logo) set.add(S.settings.logo);
+  for (const v of Object.values(S.settings.svcImg || {})) if (v) set.add(v);
   for (const p of S.projects) { p.photos.forEach(x => set.add(x)); if (p.before) set.add(p.before); if (p.after) set.add(p.after); }
   return set;
 }
@@ -440,11 +443,31 @@ body.light .rev,body.light .faq{background:#fff}
 .mdin h3{margin:4px 50px 16px}.mdg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .mdi{display:flex;flex-direction:column;gap:8px;padding:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;color:var(--text);font:inherit;text-align:left}
 .mdi img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.mdi span{padding:0 10px 10px;font-weight:700}
-.mdin article.proj{margin-top:46px}`;
+.mdin article.proj{margin-top:46px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.tile{position:relative;display:block;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);color:var(--text);font:inherit;text-align:left;cursor:pointer;aspect-ratio:4/3}
+.tile img,.tile .noimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--panel)}
+.tile .tt{position:absolute;left:0;right:0;bottom:0;padding:28px 12px 10px;background:linear-gradient(transparent,#000000cc);color:#fff}
+.tile .tt small{display:block;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.06em}.tile .tt b{display:block;font-size:16px}
+.tile:hover,.tile:focus-visible{border-color:var(--accent)}
+.cat{position:relative;overflow:hidden}.cat>*{position:relative}
+.cat.ph{background-size:cover;background-position:center;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
+.cat.ph:before{content:"";position:absolute;inset:0;background:var(--bg);opacity:var(--cdim,.55)}
+.cat.ph h3{text-shadow:0 1px 8px var(--bg)}
+.lb .lbn{display:none;top:50%;transform:translateY(-50%);font-size:30px}.lb.many .lbn{display:block}#lbp{left:12px;right:auto}#lbn{right:12px}
+@media(max-width:430px){.tiles{grid-template-columns:1fr 1fr;gap:10px}.tile .tt b{font-size:14px}}`;
 
-const SITE_JS = `(function(){var lb=document.getElementById("lb"),li=document.getElementById("lbimg");
-document.addEventListener("click",function(e){var t=e.target.closest("[data-full]");if(t){li.src=t.getAttribute("data-full");lb.classList.add("on");return}if(lb.classList.contains("on")&&(e.target===lb||e.target.closest("#lbx"))){lb.classList.remove("on");li.removeAttribute("src")}});
-document.addEventListener("keydown",function(e){if(e.key==="Escape")lb.classList.remove("on")});
+const SITE_JS = `(function(){var H=document.documentElement;try{var E=H.getAttribute("data-en");if(E&&!localStorage.getItem("glang")){var ls=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];if(!ls.some(function(l){return /^el/i.test(l)})){location.replace(E);return}}}catch(x){}
+document.addEventListener("click",function(e){if(e.target.closest("a.lang"))try{localStorage.setItem("glang","1")}catch(x){}});
+var lb=document.getElementById("lb"),li=document.getElementById("lbimg"),gal=[],gi=0,tx=null;
+function lbShow(){li.src=gal[gi];lb.classList.toggle("many",gal.length>1)}
+function lbGo(d){if(gal.length<2)return;gi=(gi+d+gal.length)%gal.length;lbShow()}
+function lbClose(){lb.classList.remove("on");li.removeAttribute("src");gal=[]}
+document.addEventListener("click",function(e){var t=e.target.closest("[data-full]");if(t){var box=t.closest("article")||document;gal=[].map.call(box.querySelectorAll("[data-full]"),function(b){return b.getAttribute("data-full")});gi=Math.max(0,gal.indexOf(t.getAttribute("data-full")));lbShow();lb.classList.add("on");return}
+if(lb.classList.contains("on")){if(e.target.closest("#lbp")){lbGo(-1);return}if(e.target.closest("#lbn")){lbGo(1);return}if(e.target===lb||e.target.closest("#lbx"))lbClose()}});
+lb.addEventListener("touchstart",function(e){tx=e.touches[0].clientX},{passive:true});
+lb.addEventListener("touchend",function(e){if(tx===null)return;var d=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(d)>40)lbGo(d<0?1:-1)});
+document.addEventListener("keydown",function(e){if(!lb.classList.contains("on"))return;if(e.key==="Escape")lbClose();else if(e.key==="ArrowRight")lbGo(1);else if(e.key==="ArrowLeft")lbGo(-1)});
 document.addEventListener("input",function(e){var r=e.target;if(!r.matches||!r.matches(".ba input"))return;var b=r.closest(".ba");b.querySelector(".clip").style.clipPath="inset(0 "+(100-r.value)+"% 0 0)";b.querySelector(".line").style.left=r.value+"%"});
 var md=document.getElementById("md"),mc=document.getElementById("mdc"),lista=null;
 function mdOpen(n,piso){mc.innerHTML="";if(piso){var k=document.createElement("button");k.type="button";k.className="mdb";k.setAttribute("aria-label",document.documentElement.lang==="en"?"Back":"Πίσω");k.textContent="‹";k.addEventListener("click",function(){mdOpen(piso)});mc.appendChild(k)}mc.appendChild(n);md.classList.add("on");md.scrollTop=0}
@@ -452,7 +475,7 @@ function mdClose(){md.classList.remove("on");mc.innerHTML="";lista=null}
 document.addEventListener("click",function(e){var c=e.target.closest(".cat.go");if(c){var cat=c.getAttribute("data-cat"),w=document.createElement("div"),h=document.createElement("h3"),g=document.createElement("div");h.textContent=c.querySelector("h3").textContent;g.className="mdg";
 document.querySelectorAll("main article.proj").forEach(function(a,i){if(a.getAttribute("data-cat")!==cat)return;var b=document.createElement("button");b.type="button";b.className="mdi";b.setAttribute("data-pi",i);var im=a.querySelector(".ba > img, .main img, .thumb img");if(im){var x=document.createElement("img");x.src=im.getAttribute("src");x.alt="";x.loading="lazy";b.appendChild(x)}var t=document.createElement("span");t.textContent=a.getAttribute("data-t")||"";b.appendChild(t);g.appendChild(b)});
 w.appendChild(h);w.appendChild(g);lista=w;mdOpen(w);return}
-var p=e.target.closest("[data-pi]");if(p){var a=document.querySelectorAll("main article.proj")[+p.getAttribute("data-pi")];if(a)mdOpen(a.cloneNode(true),lista);return}
+var p=e.target.closest("[data-pi]");if(p){var a=document.querySelectorAll("main article.proj")[+p.getAttribute("data-pi")];if(a)mdOpen(a.cloneNode(true),p.closest(".mdg")?lista:null);return}
 if(md.classList.contains("on")&&(e.target===md||e.target.closest("#mdx")))mdClose()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!document.getElementById("lb").classList.contains("on"))mdClose()});
 var y=document.getElementById("yr");if(y)y.textContent=new Date().getFullYear()})();`;
@@ -495,9 +518,15 @@ function siteHTML(url, mode, lang = "el") {
   const pc = (v, d) => { v = Number(v); return isFinite(v) ? Math.max(0, Math.min(100, v)) : d; };
   const heroBg = st.hero && url(st.hero) ? ` style="background-image:url('${esc(url(st.hero))}');background-position:${pc(st.heroX, 50)}% ${pc(st.heroY, 50)}%;--dim:${(pc(st.heroDim, 100) / 100).toFixed(2)}"` : "";
   const projOf = cat => S.projects.filter(p => cat && p.cat === cat && (p.title || p.photos.length));
-  const services = (st.services || []).map((s, i) => { const n = projOf(s).length, inner = `<span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3>${n ? `<small class="cn">${(n === 1 ? L.proj1 : L.projN).replace("{n}", n)} ›</small>` : ""}`;
-    return n ? `<button type="button" class="cat go" data-cat="${esc(s)}">${inner}</button>` : `<div class="cat">${inner}</div>`; }).join("");
-  const projects = S.projects.filter(p => p.title || p.photos.length).map(p => {
+  const cover = p => p.after && url(p.after) ? p.after : (p.photos[0] && url(p.photos[0]) ? p.photos[0] : (p.before && url(p.before) ? p.before : ""));
+  const svcPic = s => { const id = (st.svcImg || {})[s]; if (id && url(id)) return url(id); const p = projOf(s).find(cover); return p ? url(cover(p)) : ""; };
+  const svcSty = s => { const u = svcPic(s); return u ? ` style="background-image:url('${esc(u)}');--cdim:${(pc(st.svcDim, 55) / 100).toFixed(2)}"` : ""; };
+  const services = (st.services || []).map((s, i) => { const n = projOf(s).length, sty = svcSty(s), ph = sty ? " ph" : "", inner = `<span class="n">${String(i + 1).padStart(2, "0")}</span><h3>${esc(svcEn(s, i))}</h3>${n ? `<small class="cn">${(n === 1 ? L.proj1 : L.projN).replace("{n}", n)} ›</small>` : ""}`;
+    return n ? `<button type="button" class="cat go${ph}" data-cat="${esc(s)}"${sty}>${inner}</button>` : `<div class="cat${ph}"${sty}>${inner}</div>`; }).join("");
+  const shown = S.projects.filter(p => p.title || p.photos.length);
+  const tiles = shown.map((p, i) => { const title = (en && p.title_en) ? p.title_en : p.title, c = cover(p);
+    return `<button type="button" class="tile" data-pi="${i}">${c ? `<img src="${esc(url(c))}" alt="" loading="lazy">` : `<span class="noimg"></span>`}<span class="tt">${p.cat ? `<small>${esc(catTx(p.cat))}</small>` : ""}<b>${esc(title)}</b></span></button>`; }).join("");
+  const projects = shown.map(p => {
     const title = (en && p.title_en) ? p.title_en : p.title, desc = (en && p.desc_en) ? p.desc_en : p.desc;
     let top = "";
     if (p.before && p.after && url(p.before) && url(p.after)) {
@@ -521,17 +550,18 @@ function siteHTML(url, mode, lang = "el") {
   const js = mode === "export" ? `<script src="skript.js" defer><\/script>` : `<script>${SITE_JS}<\/script>`;
   const csp = mode === "export" ? `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; base-uri 'none'; form-action 'none'">` : "";
   const alt = (mode === "export" && st.features.en) ? `<link rel="alternate" hreflang="el" href="index.html"><link rel="alternate" hreflang="en" href="en.html">` : "";
-  return `<!doctype html><html lang="${en ? "en" : "el"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc(tx("intro").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}">${alt}<title>${esc(st.name)}${tx("subtitle") ? " | " + esc(tx("subtitle")) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body class="${st.theme === "light" ? "light" : ""}">
+  const autoEn = mode === "export" && st.features.en && !en ? ` data-en="en.html"` : "";
+  return `<!doctype html><html lang="${en ? "en" : "el"}"${autoEn}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${csp}<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="description" content="${esc(tx("intro").slice(0, 160))}"><meta name="generator" content="Βιτρίνα GlenApps ${APP_VERSION}">${alt}<title>${esc(st.name)}${tx("subtitle") ? " | " + esc(tx("subtitle")) : ""}</title>${css}<style>:root{--accent:${cleanColor(st.accent)}}</style></head><body class="${st.theme === "light" ? "light" : ""}">
 <header class="topbar"><div class="wrap"><a class="brand" href="#"><div class="mark${st.logo && url(st.logo) ? " img" : ""}">${logo}</div><div><b>${esc(st.name)}</b><small>${esc(tx("subtitle"))}</small></div></a><nav class="nav"><a href="#ergasies">${L.nav[0]}</a><a href="#erga">${L.nav[1]}</a><a href="#epikoinonia">${L.nav[2]}</a></nav><div class="tr">${langSw}<a class="btn p" href="#epikoinonia">${esc(cta)}</a></div></div></header>
 <main><section class="hero"${heroBg}><div class="wrap"><div class="in"><div class="eyebrow">${esc(tx("eyebrow"))}</div><h1>${esc(tx("title"))}</h1><p>${esc(tx("intro"))}</p><div class="acts">${callBtn}${viber}<a class="btn" href="#epikoinonia">${esc(cta)} ↗</a></div>${badges}</div></div></section>
 ${services ? `<section id="ergasies"><div class="wrap"><div class="head"><div class="eyebrow">${L.whatEy}</div><h2>${L.whatH}</h2></div><div class="cats">${services}</div></div></section>` : ""}
-${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="grid">${projects}</div></div></section>` : ""}
+${projects ? `<section class="projects" id="erga"><div class="wrap"><div class="head"><div class="eyebrow">${L.worksEy}</div><h2>${L.worksH}</h2></div><div class="tiles">${tiles}</div><div class="arx" hidden>${projects}</div></div></section>` : ""}
 ${revs ? `<section id="kritikes"><div class="wrap"><div class="head"><div class="eyebrow">${L.revEy}</div><h2>${L.revH}</h2></div><div class="revs">${revs}</div></div></section>` : ""}
 ${faqs ? `<section id="erotiseis" class="faqs"><div class="wrap"><div class="head"><div class="eyebrow">${L.faqEy}</div><h2>${L.faqH}</h2></div>${faqs}</div></section>` : ""}
 <section id="epikoinonia"><div class="wrap"><div class="head"><div class="eyebrow">${L.conEy}</div><h2>${L.conH}</h2></div><div class="contact"><div class="box"><h3>${esc(cta)}</h3><p>${L.conP}</p><div class="acts">${callBtn}${viber}${wa}${mailBtn}</div>${social ? `<div class="acts">${social}</div>` : ""}</div><div class="box"><h3>${L.area}</h3><p>${esc(tx("area") || L.areaDef)}</p>${tx("hours") ? `<h3>${L.hours}</h3><p>${esc(tx("hours"))}</p>` : ""}</div></div></div></section></main>
 <footer><div class="wrap">© <span id="yr"></span> ${esc(st.name)}${legalLine ? "<br>" + legalLine : ""}<br><a href="${privacyHref}">${L.privacy}</a></div></footer>
 <div class="md" id="md" role="dialog" aria-modal="true"><div class="mdin"><button type="button" class="mdx" id="mdx" aria-label="${L.close}">×</button><div id="mdc"></div></div></div>
-<div class="lb" id="lb" role="dialog" aria-label="${L.photo}"><button id="lbx" aria-label="${L.close}">×</button><img id="lbimg" alt="${L.photo}"></div>${js}</body></html>`;
+<div class="lb" id="lb" role="dialog" aria-label="${L.photo}"><button id="lbx" aria-label="${L.close}">×</button><button id="lbp" class="lbn" aria-label="‹">‹</button><button id="lbn" class="lbn" aria-label="›">›</button><img id="lbimg" alt="${L.photo}"></div>${js}</body></html>`;
 }
 
 function privacyHTML() {
@@ -566,6 +596,7 @@ function fillSettings() {
   for (const [id, k] of Object.entries(FIELDS)) $(id).value = S.settings[k] || "";
   for (const [id, k] of Object.entries(CFIELDS)) $(id).value = (S.settings.company || {})[k] || "";
   $("s-services").value = (S.settings.services || []).join("\n");
+  $("s-sd").value = S.settings.svcDim ?? 55; renderSvcPics();
   $("s-hero-state").textContent = S.settings.hero ? "✓ υπάρχει" : "καμία";
   $("s-hero-pos").hidden = !S.settings.hero;
   for (const [id, k, d] of [["s-hx", "heroX", 50], ["s-hy", "heroY", 50], ["s-hd", "heroDim", 100]]) $(id).value = S.settings[k] ?? d;
@@ -578,7 +609,23 @@ function fillSettings() {
 }
 for (const [id, k] of Object.entries(FIELDS)) $(id).addEventListener("input", e => { S.settings[k] = e.target.value; changed(); });
 for (const [id, k] of Object.entries(CFIELDS)) $(id).addEventListener("input", e => { S.settings.company[k] = e.target.value; changed(); });
-$("s-services").addEventListener("input", e => { S.settings.services = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 12); changed(); renderProjects(); });
+function renderSvcPics() {
+  const box = $("svc-pics"), m = S.settings.svcImg || {}; box.innerHTML = "";
+  for (const sv of S.settings.services || []) {
+    const r = document.createElement("div"); r.className = "row";
+    const t = document.createElement("span"); t.className = "hint"; t.style.flex = "1"; t.textContent = (m[sv] ? "✓ " : "") + sv;
+    const l = document.createElement("label"); l.className = "btn s"; l.textContent = "Επιλογή";
+    const f = document.createElement("input"); f.type = "file"; f.accept = "image/*"; f.hidden = true; l.appendChild(f);
+    f.addEventListener("change", async () => { const x = f.files[0]; f.value = ""; if (!x) return;
+      try { S.settings.svcImg = Object.assign({}, S.settings.svcImg, { [sv]: await addPhotoFile(x) }); changed(); await sweepPhotos(); renderSvcPics(); } catch (er) { alert(er.message); } });
+    r.append(t, l);
+    if (m[sv]) { const d = document.createElement("button"); d.className = "btn s d"; d.textContent = "Αφαίρεση";
+      d.onclick = async () => { const n = Object.assign({}, S.settings.svcImg); delete n[sv]; S.settings.svcImg = n; changed(); await sweepPhotos(); renderSvcPics(); }; r.append(d); }
+    box.appendChild(r);
+  }
+}
+$("s-sd").addEventListener("input", e => { S.settings.svcDim = +e.target.value; changed(); });
+$("s-services").addEventListener("input", e => { S.settings.services = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 12); changed(); renderProjects(); renderSvcPics(); });
 $("s-badges").addEventListener("input", e => { S.settings.badges = e.target.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 4); changed(); });
 const PALETTE = ["#e5a33b", "#f2c200", "#e0533b", "#c0392b", "#2e86de", "#16a085", "#27ae60", "#8e44ad", "#7f8c8d", "#ffffff"];
 function renderLook() {
